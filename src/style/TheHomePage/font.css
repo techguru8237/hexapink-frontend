@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 'kanit-medium';
+    src: url('../../assets/TheHomePage/font/Kanit-Medium.ttf') format('truetype'); 
+    font-weight: medium; 
+    font-style: normal; 
+}
+@font-face {
+    font-family: 'kanit-bold';
+    src: url('../../assets/TheHomePage/font/Kanit-Bold.ttf') format('truetype'); 
+    font-weight: bold; 
+    font-style: normal; 
+}
+@font-face {
+    font-family: 'kanit-semibold';
+    src: url('../../assets/TheHomePage/font/Kanit-SemiBold.ttf') format('truetype'); 
+    font-weight: bold; 
+    font-style: normal; 
+}
+@font-face {
+    font-family: 'raleway-medium';
+    src: url('../../assets/TheHomePage/font/Raleway-Medium.ttf') format('truetype'); 
+    font-weight: 500; 
+    font-style: normal;
+}
+@font-face {
+    font-family: 'raleway-semibold';
+    src: url('../../assets/TheHomePage/font/Raleway-SemiBold.ttf') format('truetype'); 
+    font-weight: 500; 
+    font-style: normal;
+}

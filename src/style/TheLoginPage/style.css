@@ -1,0 +1,55 @@
+.login-button {
+    position: relative;
+    display: block;
+    background: var(--hexagon-background-color);
+    width: 150px;
+    height: 22px;
+    line-height: 45px;
+    text-align: center;
+    font-size: 21px;
+    text-decoration: none;
+    color: white;
+    box-sizing: border-box;
+    border-style: none;
+  }
+  .login-button:before,
+  .login-button:after {
+    background: #FF6699;
+    position: absolute;
+    content: "";
+    width: 150px;
+    left: 0px;
+    height: 21px;
+    z-index: -1;
+    box-sizing: unset;
+    border-radius: 5px;
+  }
+  
+  .login-button:before {
+    transform: perspective(10px) rotateX(3deg);
+  }
+  .login-button:after {
+    top: 22px;
+    transform: perspective(10px) rotateX(-3deg);
+  }
+  
+  /* button border style */
+  .login-button.border:before,
+  .login-button.border:after {
+    border: 2px solid #FF6699;
+  }
+  .login-button.border:before {
+    border-bottom: none;
+  }
+  .login-button.border:after {
+    border-top: none;
+  }
+  /* button hover styles */
+  .login-button.border:hover:before,
+  .login-button.border:hover:after {
+    background: white;
+  }
+  .login-button.border:hover {
+    color: #FF6699;
+    cursor: pointer;
+  }

@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Redacted+Script:wght@300;400;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --light-gray: #d9d9f2;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+} */
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0 auto
+}
+
+.redacted-script-light {
+  font-family: "Redacted Script", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.redacted-script-regular {
+  font-family: "Redacted Script", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.redacted-script-bold {
+  font-family: "Redacted Script", serif;
+  font-weight: 700;
+  font-style: normal;
+}
