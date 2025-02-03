@@ -46,7 +46,7 @@ const CountryCombobox = () => {
       }}
     >
       <label
-        className={`block text-sm font-[raleway-semibold] ${
+        className={`block text-sm text-left font-[raleway-semibold] ${
           isOpen ? "text-pink-500" : "text-gray-900"
         }`}
       >
@@ -60,7 +60,7 @@ const CountryCombobox = () => {
           displayValue={(country: Country) => country?.name}
         />
         <Combobox.Button
-          className="absolute inset-y-0 right-0 flex items-center px-2 focus:outline-none"
+          className="absolute inset-y-0 right-0 flex items-center px-2 bg-transparent focus:outline-none hover:bg-transparent hover:border-none"
           onClick={() => setIsOpen(!isOpen)}
         >
           <ChevronDownIcon

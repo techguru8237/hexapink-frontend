@@ -7,9 +7,7 @@ import {
   PiDownloadSimpleLight,
 } from "react-icons/pi";
 import { GiPositionMarker } from "react-icons/gi";
-
 import samlpeImg from "../../assets/TheHomePage/image/HP.png";
-// import Image from "next/image";
 import Checkbox from "../Checkbox";
 
 interface FileListItemProps {

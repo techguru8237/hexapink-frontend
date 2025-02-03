@@ -56,7 +56,7 @@ export default function CountryCodeCombobox({ countryName }: CountryCodeCombobox
       }}
     >
       <label
-        className={`block text-sm font-[raleway-semibold] ${
+        className={`block text-sm text-left font-[raleway-semibold] ${
           isOpen ? "text-pink-500" : "text-gray-900"
         }`}
       >
@@ -73,11 +73,11 @@ export default function CountryCodeCombobox({ countryName }: CountryCodeCombobox
             }
           />
           <Combobox.Button
-            className="absolute inset-y-0 right-0 flex items-center px-2 focus:outline-none"
+            className="absolute inset-y-0 right-0 flex items-center px-2 focus:outline-none bg-transparent hover:bg-transparent hover:border-none"
             onClick={() => setIsOpen(!isOpen)}
           >
             <ChevronDownIcon
-              className="h-5 w-5 text-gray-400"
+              className="h-5 w-5 text-gray-400 "
               aria-hidden="true"
             />
           </Combobox.Button>

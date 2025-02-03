@@ -2,11 +2,9 @@ import React from "react";
 import {PiDatabaseLight} from "react-icons/pi";
 import { FaRegFolderOpen } from "react-icons/fa";
 import { CiCircleInfo } from "react-icons/ci";
-// import { GiPositionMarker } from "react-icons/gi";
 import { PiMapPinLight } from "react-icons/pi";
 
 import samlpeImg from "../../assets/collection.png";
-// import Image from "next/image";
 import Checkbox from "../Checkbox";
 
 interface CollectionListItemProps {

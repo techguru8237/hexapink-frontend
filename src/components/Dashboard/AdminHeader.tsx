@@ -1,9 +1,6 @@
 import React, { JSX } from "react";
-// import Link from "next/link";
 import { Link } from 'react-router-dom';
-
 import { PiPlusCircle } from "react-icons/pi";
-// import { usePathname } from 'next/navigation'
 import { useLocation } from 'react-router-dom';
 import {
   PiWalletLight,
