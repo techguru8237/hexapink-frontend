@@ -5,10 +5,14 @@ import EyeSlash from "../../../assets/TheSignupPage/image/EyeSlash.png";
 interface PasswordFieldProps {
   title: string;
   placeholder: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 const PasswordField: React.FC<PasswordFieldProps> = ({
   title,
   placeholder,
+  value,
+  onChange,
 }) => {
   const [type, setType] = useState<string>("password");
   return (
@@ -18,7 +22,9 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
           id={title}
           name={title}
           type={type}
+          value={value}
           placeholder={placeholder}
+          onChange={(e) => onChange(e)}
           className="peer block w-full bg-transparent px-3 py-1.5 text-gray-900 placeholder:text-gray-500 focus:outline-none sm:text-[16px] font-[raleway-medium] tracking-wider"
         />
         <label

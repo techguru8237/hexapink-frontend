@@ -3,8 +3,16 @@ interface InputFieldProps {
   title: string;
   placeholder: string;
   type: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
-const InputField: React.FC<InputFieldProps> = ({ type, title, placeholder }) => {
+const InputField: React.FC<InputFieldProps> = ({
+  type,
+  title,
+  value,
+  onChange,
+  placeholder,
+}) => {
   return (
     <div className="lg:w-[300px] w-full">
       <div className="relative mt-2 w-full">
@@ -12,7 +20,9 @@ const InputField: React.FC<InputFieldProps> = ({ type, title, placeholder }) => 
           id={title}
           name={title}
           type={type}
+          value={value}
           placeholder={placeholder}
+          onChange={(e) => onChange(e)}
           className="peer block w-full bg-transparent px-3 py-1.5 text-gray-900 placeholder:text-gray-500 focus:outline-none sm:text-[16px] font-[raleway-medium] tracking-wider"
         />
         <label

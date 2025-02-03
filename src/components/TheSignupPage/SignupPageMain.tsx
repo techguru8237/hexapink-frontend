@@ -1,7 +1,5 @@
 import { useState, useRef, KeyboardEvent, ChangeEvent } from "react";
-// import Link from "next/link";
-import { Link } from 'react-router-dom';
-// import Image from "next/image";
+import { Link, useNavigate } from "react-router-dom";
 import StepOne from "../../assets/TheSignupPage/image/step1.png";
 import StepTwo from "../../assets/TheSignupPage/image/step2.png";
 import StepThree from "../../assets/TheSignupPage/image/step3.png";
@@ -17,46 +15,82 @@ import CreateAccountButton from "./elements/CreateAccountButton";
 import CheckBox from "../TheHomePage/elements/desktop/CheckBox";
 import BackButton from "./elements/BackButton";
 import VerifyAccountButton from "./elements/VerifyAccountButton";
+import { signup, verifyEmail } from "../../actions/user";
+import VerificationCodeInput from "./elements/VerificationCodeInput";
+
 export default function SignupPageMain() {
-  const countryName = "United States";
+  const navigate = useNavigate()
   const [stepKey, setStepKey] = useState<string>("profile");
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const handleKeyUp = (
-    index: number,
-    event: KeyboardEvent<HTMLInputElement>
-  ) => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    secondName: "",
+    country: "",
+    phone: "",
+    industry: "",
+    company: "",
+    email: "",
+    password: "",
+    passwordConfirm: "",
+    verificationCode: "",
+  });
+
+  const handleCountrySelect = (country: string) => {
+    setFormData({ ...formData, country });
+  };
+
+  const validateProfileStep = () => {
+    const { firstName, secondName, country, phone, industry, company } =
+      formData;
+
     if (
-      event.key !== "Backspace" &&
-      index < inputRefs.current.length - 1 &&
-      event.currentTarget.value
+      !firstName ||
+      !secondName ||
+      !country ||
+      !phone ||
+      !industry ||
+      !company
     ) {
-      inputRefs.current[index + 1]?.focus();
+      alert("Please fill in all required fields.");
+      return false;
     }
-    if (event.key === "Backspace" && index > 0 && !event.currentTarget.value) {
-      inputRefs.current[index - 1]?.focus();
-    }
+
+    return true;
   };
 
-  const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (!/[0-9]/.test(event.key)) {
-      event.preventDefault();
-    }
-  };
+  const validateInformationStep = () => {
+    const { email, password, passwordConfirm } = formData;
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    if (value && !/^[0-9]$/.test(value)) {
-      event.target.value = "";
+    if (!email || !password || !passwordConfirm) {
+      alert("Please fill in all required fields.");
+      return false;
     }
+
+    if (password !== passwordConfirm) {
+      alert("Passwords do not match.");
+      return false;
+    }
+
+    return true;
   };
 
   const handleContinue = () => {
-    setStepKey("information");
+    if (validateProfileStep()) {
+      setStepKey("information");
+    }
   };
-  const handleCreateAccount = () => {
-    setStepKey("verification");
+
+  const handleVerifyEmail = () => {
+    if (validateInformationStep()) {
+      if (!formData.email) {
+        alert("Please provide an email address.");
+      } else {
+        setStepKey("verification");
+        verifyEmail(formData.email);
+      }
+    }
   };
+
   const handleBack = () => {
     if (stepKey == "information") {
       setStepKey("profile");
@@ -64,9 +98,16 @@ export default function SignupPageMain() {
       setStepKey("information");
     }
   };
+
+  const handleSignup = () => {
+    signup(formData, () => {
+      navigate('/login')
+    });
+  };
+
   return (
     <div className="w-full h-full flex flex-col justify-between items-center gap-16 p-4">
-      <div className="w-[80%] lg:mt-10 mt-5 justify-start items-start flex flex-col gap-5">
+      <div className="w-[80%] lg:mt-10 mt-5 justify-start items-start flex flex-col gap-6">
         <div className="flex justify-center items-center lg:hidden w-full">
           <img src={StepOne_M} alt="" hidden={stepKey != "profile"} />
           <img src={StepTwo_M} alt="" hidden={stepKey != "information"} />
@@ -136,27 +177,48 @@ export default function SignupPageMain() {
                   type="text"
                   title="FIRST NAME *"
                   placeholder="Jaune"
+                  value={formData.firstName}
+                  onChange={(e) => {
+                    setFormData({ ...formData, firstName: e.target.value });
+                  }}
                 />
                 <InputField
                   type="text"
                   title="LAST NAME *"
                   placeholder="Though"
+                  value={formData.secondName}
+                  onChange={(e) => {
+                    setFormData({ ...formData, secondName: e.target.value });
+                  }}
                 />
               </div>
               <div className="w-full flex lg:flex-row flex-col justify-start items-start lg:gap-20 gap-5">
-                <CountryCombobox />
-                <CountryCodeCombobox countryName={countryName} />
+                <CountryCombobox onCountrySelect={handleCountrySelect} />
+                <CountryCodeCombobox
+                  countryName={formData.country}
+                  setPhoneNumber={(phoneNumber) => {
+                    setFormData({ ...formData, phone: phoneNumber });
+                  }}
+                />
               </div>
               <div className="w-full flex lg:flex-row flex-col justify-start items-start lg:gap-20 gap-5">
                 <InputField
                   type="text"
                   title="INDUSTRY *"
                   placeholder="Select a industry"
+                  value={formData.industry}
+                  onChange={(e) => {
+                    setFormData({ ...formData, industry: e.target.value });
+                  }}
                 />
                 <InputField
                   type="text"
                   title="COMPANY *"
                   placeholder="Select a company"
+                  value={formData.company}
+                  onChange={(e) => {
+                    setFormData({ ...formData, company: e.target.value });
+                  }}
                 />
               </div>
             </div>
@@ -174,21 +236,39 @@ export default function SignupPageMain() {
                 type="text"
                 title="EMAIL *"
                 placeholder="jaune.though@earth.planet"
+                value={formData.email}
+                onChange={(e) => {
+                  setFormData({ ...formData, email: e.target.value });
+                }}
               />
               <div className="flex lg:flex-row flex-col justify-between items-center lg:gap-5 gap-10 lg:w-[60%] w-full ">
-                <PasswordField title="PASSWORD *" placeholder="Password" />
+                <PasswordField
+                  title="PASSWORD *"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={(e) => {
+                    setFormData({ ...formData, password: e.target.value });
+                  }}
+                />
                 <PasswordField
                   title="CONFIRM PASSWORD *"
                   placeholder="Confirm Password"
+                  value={formData.passwordConfirm}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      passwordConfirm: e.target.value,
+                    });
+                  }}
                 />
               </div>
             </div>
-            <CheckBox text="J’accepte les conditions générales d’utilisation"></CheckBox>
+            <CheckBox text="I agree to the terms of use"></CheckBox>
             <div className="w-full lg:flex justify-start items-start gap-10 hidden">
               <BackButton onClick={handleBack}>
                 <span>Back</span>
               </BackButton>
-              <CreateAccountButton onClick={handleCreateAccount}>
+              <CreateAccountButton onClick={handleVerifyEmail}>
                 <span>Create Account</span>
               </CreateAccountButton>
             </div>
@@ -200,33 +280,17 @@ export default function SignupPageMain() {
               <h1 className="font-[raleway-semibold] text-[12px] text-[#333333]">
                 VERIFICATION CODE
               </h1>
-              <div className=" flex gap-3 justify-center items-center">
-                {[...Array(6)].map((_, index) => (
-                  <input
-                    key={index}
-                    ref={(el) => {
-                      inputRefs.current[index] = el;
-                    }}
-                    type="text"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    onKeyPress={handleKeyPress}
-                    onKeyUp={(e) => handleKeyUp(index, e)}
-                    onChange={handleChange}
-                    className="lg:w-[50px] w-[40px] font-[raleway-semibold] bg-transparent text-[20px] outline-none border-b border-[#666666] text-center"
-                    placeholder="#"
-                    maxLength={1}
-                  />
-                ))}
-              </div>
+              <VerificationCodeInput
+                onChange={(code) =>
+                  setFormData({ ...formData, verificationCode: code })
+                }
+              />
             </div>
             <div className="w-full lg:flex justify-start items-start gap-10 hidden">
               <BackButton onClick={handleBack}>
                 <span>Back</span>
               </BackButton>
-              <VerifyAccountButton
-                onClick={() => alert("Verification is success!")}
-              >
+              <VerifyAccountButton onClick={handleSignup}>
                 <span>Verify Account</span>
               </VerifyAccountButton>
             </div>
@@ -249,7 +313,7 @@ export default function SignupPageMain() {
           <BackButton onClick={handleBack}>
             <span>Back</span>
           </BackButton>
-          <CreateAccountButton onClick={handleCreateAccount}>
+          <CreateAccountButton onClick={handleVerifyEmail}>
             <span>Create Account</span>
           </CreateAccountButton>
         </div>
@@ -259,9 +323,7 @@ export default function SignupPageMain() {
           <BackButton onClick={handleBack}>
             <span>Back</span>
           </BackButton>
-          <VerifyAccountButton
-            onClick={() => alert("Verification is success!")}
-          >
+          <VerifyAccountButton onClick={handleSignup}>
             <span>Verify Account</span>
           </VerifyAccountButton>
         </div>

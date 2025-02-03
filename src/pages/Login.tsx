@@ -5,7 +5,7 @@ import LoginPageMain from "../components/TheLoginPage/LoginPageMain";
 
 export default function LoginPage() {
   return (
-    <div className="w-full h-[calc(100vh-100px)] relative">
+    <div className="w-full relative">
       <div className="absolute left-0 top-0 -z-10">
         <img src={BackgroundImage1} alt="" />
       </div>
