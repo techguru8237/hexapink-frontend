@@ -5,7 +5,7 @@ import PasswordField from "./elements/PasswordField";
 import CheckBox from "../../components/TheHomePage/elements/desktop/CheckBox";
 import LoginButton from "../../components/TheLoginPage/elements/LoginButton";
 import { useState } from 'react';
-import { login } from '../../actions/user';
+import { login } from '../../actions/auth';
 
 export default function LoginPageMain() {
   const navigate = useNavigate()
