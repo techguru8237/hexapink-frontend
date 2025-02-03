@@ -1,6 +1,4 @@
 import React from "react";
-// import Image from "next/image";
-// import Link from "next/link";
 import { Link } from 'react-router-dom';
 
 import { PiDatabaseLight, PiDatabaseFill, PiPackage, PiPackageFill, PiBinoculars, PiBinocularsFill, PiTableLight, PiTableFill, PiBankLight, PiBankFill } from "react-icons/pi";

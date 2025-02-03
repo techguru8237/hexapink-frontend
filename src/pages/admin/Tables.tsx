@@ -6,7 +6,8 @@ import Pagination from "../../components/Pagination";
 import NewTableSkeleton from "../../components/Table/NewTableSkeleton"
 import TableListHeader from "../../components/Table/TableListHeader";
 import { TableListItem } from "../../components/Table/TableListItem";
-import AdminCard from "../../components/Dashboard/AdminCard";
+// import AdminCard from "../../components/Dashboard/AdminCard";
+import NewSidebar from "../../components/NewSidebar"
 
 // import FilterPanel from "../../components/File/FilterPanel";
 
@@ -108,7 +109,7 @@ export default function Tables() {
           </div>
         </div>
         {isNewTablePanelVisible && (<div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray1 flex justify-center">
-          <AdminCard />
+          <NewSidebar />
         </div>)}
         {/* {isFilterPanelVisible && (
           <div className="p-6">

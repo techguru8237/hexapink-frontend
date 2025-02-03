@@ -61,7 +61,7 @@ const CountryCombobox = ({ onCountrySelect }: CountryComboboxProps) => {
           displayValue={(country: Country) => country?.name}
         />
         <Combobox.Button
-          className="absolute inset-y-0 right-0 flex items-center px-2 focus:outline-none"
+          className="absolute inset-y-0 right-0 flex items-center px-2 bg-transparent focus:outline-none hover:bg-transparent hover:border-none"
           onClick={() => setIsOpen(!isOpen)}
         >
           <ChevronDownIcon

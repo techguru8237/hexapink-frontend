@@ -1,8 +1,6 @@
-// import Link from "next/link";
 import { Link } from 'react-router-dom';
 import React from "react";
 import { SidebarItemType } from "./types";
-// import { usePathname } from "next/navigation";
 import { useLocation } from 'react-router-dom';
 
 export default function SidebarItem(data: SidebarItemType) {

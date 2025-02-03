@@ -1,4 +1,3 @@
-// import { Link } from 'react-router-dom';
 import { PiTableLight } from "react-icons/pi";
 import { CiCircleInfo } from "react-icons/ci";
 import Checkbox from "../Checkbox";
