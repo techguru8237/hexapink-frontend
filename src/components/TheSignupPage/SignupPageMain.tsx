@@ -1,4 +1,4 @@
-import { useState, useRef, KeyboardEvent, ChangeEvent } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import StepOne from "../../assets/TheSignupPage/image/step1.png";
 import StepTwo from "../../assets/TheSignupPage/image/step2.png";
@@ -15,7 +15,7 @@ import CreateAccountButton from "./elements/CreateAccountButton";
 import CheckBox from "../TheHomePage/elements/desktop/CheckBox";
 import BackButton from "./elements/BackButton";
 import VerifyAccountButton from "./elements/VerifyAccountButton";
-import { signup, verifyEmail } from "../../actions/user";
+import { signup, verifyEmail } from "../../actions/auth";
 import VerificationCodeInput from "./elements/VerificationCodeInput";
 
 export default function SignupPageMain() {
