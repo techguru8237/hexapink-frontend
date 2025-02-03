@@ -13,6 +13,10 @@ interface CountryData {
   // Add other properties if needed
 }
 
+interface CountryComboboxProps {
+  onCountrySelect: (country: string) => void;
+}
+
 // Convert countries object to an array of countries
 const countryArray: Country[] = Object.keys(countries).map((key, index) => {
   const country = countries[key as keyof typeof countries] as CountryData;
@@ -22,7 +26,7 @@ const countryArray: Country[] = Object.keys(countries).map((key, index) => {
   };
 });
 
-const CountryCombobox = () => {
+const CountryCombobox = ({ onCountrySelect }: CountryComboboxProps) => {
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(
     countryArray[0]
   );
@@ -35,18 +39,15 @@ const CountryCombobox = () => {
           country.name.toLowerCase().includes(query.toLowerCase())
         );
 
+  const handleCountrySelect = (country: Country) => {
+    setSelectedCountry(country);
+    onCountrySelect(country.name);
+  };
+
   return (
-    <Combobox
-      as="div"
-      value={selectedCountry}
-      onChange={(country: Country) => {
-        setQuery("");
-        setSelectedCountry(country);
-        setIsOpen(false); 
-      }}
-    >
+    <Combobox as="div" value={selectedCountry} onChange={handleCountrySelect}>
       <label
-        className={`block text-sm text-left font-[raleway-semibold] ${
+        className={`block text-sm font-[raleway-semibold] text-start ${
           isOpen ? "text-pink-500" : "text-gray-900"
         }`}
       >
@@ -91,6 +92,6 @@ const CountryCombobox = () => {
       </div>
     </Combobox>
   );
-}
+};
 
 export default CountryCombobox;

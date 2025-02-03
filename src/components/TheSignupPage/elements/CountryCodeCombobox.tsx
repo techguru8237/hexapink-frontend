@@ -21,15 +21,21 @@ const countryArray: Country[] = Object.entries(countries).map(
 
 interface CountryCodeComboboxProps {
   countryName: string;
+  setPhoneNumber: (phoneNumber: string) => void;
 }
 
-export default function CountryCodeCombobox({ countryName }: CountryCodeComboboxProps) {
+export default function CountryCodeCombobox({
+  countryName,
+  setPhoneNumber,
+}: CountryCodeComboboxProps) {
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const country = countryArray.find(c => c.name.toLowerCase() === countryName.toLowerCase());
+    const country = countryArray.find(
+      (c) => c.name.toLowerCase() === countryName.toLowerCase()
+    );
     if (country) {
       setSelectedCountry(country);
     }
@@ -56,7 +62,7 @@ export default function CountryCodeCombobox({ countryName }: CountryCodeCombobox
       }}
     >
       <label
-        className={`block text-sm text-left font-[raleway-semibold] ${
+        className={`block text-sm text-start font-[raleway-semibold] ${
           isOpen ? "text-pink-500" : "text-gray-900"
         }`}
       >
@@ -105,11 +111,15 @@ export default function CountryCodeCombobox({ countryName }: CountryCodeCombobox
         <input
           type="text"
           inputMode="numeric"
+          name="phone-number"
           pattern="[0-9]*"
           onKeyPress={(event) => {
             if (!/[0-9]/.test(event.key)) {
               event.preventDefault();
             }
+          }}
+          onChange={(event) => {
+            setPhoneNumber(selectedCountry?.phone + event.target.value);
           }}
           className="block w-[200px] border-gray-300 text-[15px] font-[raleway-medium] border-b focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none p-0 m-0 leading-none align-bottom"
         />

@@ -18,7 +18,7 @@ const HomeHeader = () => {
   // const pathname = usePathname();
   const location = useLocation();
   return (
-    <div className="flex justify-around  items-center w-full lg:h-[130px] h-[100px] border-b-2 border-[#FFCCDD] dark:border-[#FFCCDD]  gap-20">
+    <div className="flex justify-between items-center w-full lg:h-[130px] h-[100px] px-8 sm:px-12 md:px-20 lg:px-28 xl:px-36 2xl:px-48 border-b-2 border-[#FFCCDD] dark:border-[#FFCCDD]">
       <div className="absolute top-0 left-0 -z-50   bg-[#fff5f8] dark:bg-[#fff5f8] opacity-50"></div>
       <div
         className=" flex justify-center items-center gap-2 cursor-pointer"
