@@ -1,13 +1,13 @@
 import React, { useRef } from "react";
 import HexapinkPaper from "./elements/desktop/HexapinkPaper";
-import OneTopImage from "../../assets/TheHomePage/image/one.png";
-import TwoTopImage from "../../assets/TheHomePage/image/two.png";
-import ThreeTopImage from "../../assets/TheHomePage/image/three.png";
-import FourTopImage from "../../assets/TheHomePage/image/four.png";
-import OneBottomImg from "../../assets/TheHomePage/image/paper-img-one.png";
-import TwoBottomImg from "../../assets/TheHomePage/image/paper-img-two.png";
-import ThreeBottomImg from "../../assets/TheHomePage/image/paper-img-three.png";
-import FourBottomImg from "../../assets/TheHomePage/image/paper-img-four.png";
+import OneTopImage from "../../assets/TheHomePage/image/one.svg";
+import TwoTopImage from "../../assets/TheHomePage/image/two.svg";
+import ThreeTopImage from "../../assets/TheHomePage/image/three.svg";
+import FourTopImage from "../../assets/TheHomePage/image/four.svg";
+import OneBottomImg from "../../assets/TheHomePage/image/paper-img-one.svg";
+import TwoBottomImg from "../../assets/TheHomePage/image/paper-img-two.svg";
+import ThreeBottomImg from "../../assets/TheHomePage/image/paper-img-three.svg";
+import FourBottomImg from "../../assets/TheHomePage/image/paper-img-four.svg";
 import HexapinkPaperOneButton from "./elements/desktop/HexapinkPaperOneButton";
 import HexapinkPaperOneButton_M from "./elements/mobile/HexapinkPaperOneButton_M";
 import HexapinkPaperTwoFrame from "./elements/desktop/HexapinkPaperTwoFrame";
@@ -46,21 +46,21 @@ export default function HomeSectionSix() {
 
   return (
     <div
-      className="flex xl:flex-row lg:justify-start lg:items-start flex-col justify-center items-center gap-5 lg:my-5 px-5 min-w-full max-w-full lg:overflow-x-auto scrollbar-hide  "
+      className="w-full px-8 sm:px-12 md:px-20 lg:px-28 xl:px-36 2xl:px-48 py-8 flex lg:flex-row lg:justify-start lg:items-start flex-col justify-center items-center gap-6 lg:my-5 min-w-full max-w-full lg:overflow-x-auto scrollbar-hide"
       ref={scrollContainerRef}
       onMouseDown={handleMouseDown}
       onMouseLeave={handleMouseLeave}
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
     >
-      <div className="flex flex-col w-[80%] justify-start items-start lg:hidden mt-5">
-        <div className="flex w-[70%] justify-start items-center">
-          <h1 className="font-[kanit-bold] text-[24px]">
+      <div className="flex flex-col justify-start items-start gap-2 sm:gap-4 lg:hidden mt-6">
+        <div className="flex justify-start items-center">
+          <h1 className="text-left font-kanit font-bold text-2xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl text-dark">
             Get what you want in easy steps
           </h1>
         </div>
-        <div className="flex w-[90%] justify-start items-center">
-          <p className="font-[raleway-medium] text-[12px] tracking-wider ">
+        <div className="flex justify-start items-center">
+          <p className="font-raleway font-medium text-sm sm:text-xl text-left tracking-wider text-light-dark">
             If you have a specific need in mind? sent an email to &nbsp;{" "}
             <a href="" className="border-b border-[#333333]">
               Contact@hexapink.com

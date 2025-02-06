@@ -13,8 +13,10 @@ const CofounderTab: React.FC<CofounderTabProps> = ({ smallText, bigText }) => {
           <span>{smallText}</span>
         </div>
         <div className="bg-[#262626] sm:w-[420px] sm:h-[40px] w-[320px] h-[30px] cofoundertab-big-clip  flex justify-center items-center absolute sm:-left-[200px] -left-[150px] top-0 z-0"></div>
-        <div className="bg-[#333333] sm:w-[418px] sm:h-[38px] w-[318px] h-[28px] cofoundertab-big-clip  flex justify-center items-center absolute sm:-left-[199px] -left-[149px] top-[1px] z-10"></div>
-        <div className=" absolute font-[raleway-medium] text-[#FFCCDD] sm:text-[16px] text-[12px] sm:w-[400px] w-[350px]  z-10 sm:-left-[55px] -left-[40px] sm:top-[8px] top-[5px]">{bigText}</div>
+        <div className="bg-dark sm:w-[418px] sm:h-[38px] w-[318px] h-[28px] cofoundertab-big-clip  flex justify-center items-center absolute sm:-left-[199px] -left-[149px] top-[1px] z-10"></div>
+        <div className=" absolute font-[raleway-medium] text-[#FFCCDD] sm:text-[16px] text-[12px] sm:w-[400px] w-[350px]  z-10 -left-[120px] sm:-left-[140px] sm:top-[8px] top-[5px]">
+          {bigText}
+        </div>
       </div>
     </div>
   );

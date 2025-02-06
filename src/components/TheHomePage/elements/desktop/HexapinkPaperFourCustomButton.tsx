@@ -5,7 +5,7 @@ export default function HexapinkPaperFourCustomButton() {
     alert("My Custom File Buttton clicked");
   };
   return (
-    <CustomFileButton onClick={handleCustomFileButton}>
+    <CustomFileButton onClick={handleCustomFileButton} active={false}>
       <span>Make My Custom File</span>
     </CustomFileButton>
   );

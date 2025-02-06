@@ -4,10 +4,11 @@ import "../../../../style/TheHomePage/style.css";
 const CustomFileButton: React.FC<{
   onClick: () => void;
   children: React.ReactNode;
-}> = ({ onClick, children }) => {
+  active: boolean
+}> = ({ onClick, children, active }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const handleMouseEnterCustom = () => {
-    if (svgRef.current) {
+    if (svgRef.current && active) {
       const paths = svgRef.current.querySelectorAll("path");
       paths.forEach((path) => {
         path.setAttribute("stroke", "#FF6699"); // Change to your desired hover color
@@ -23,7 +24,7 @@ const CustomFileButton: React.FC<{
     }
   };
   return (
-    <div className="custom-file-button border" onClick={onClick}>
+    <div className={`custom-file-button ${active ? "border" : ""}`} onClick={onClick}>
       <div
         className="flex justify-center items-center gap-2"
         onMouseEnter={handleMouseEnterCustom}

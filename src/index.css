@@ -69,6 +69,14 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.text-pattern {
+  background: url('src/assets/TheHomePage/image/bw-textile.png');
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-position: center;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

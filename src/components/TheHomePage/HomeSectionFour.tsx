@@ -1,10 +1,10 @@
+import slashImg from "../../assets/TheHomePage/image/line.svg";
+import Backgroundimage4 from "../../assets/TheHomePage/image/bg4.svg";
+import Backgroundimage4_M from "../../assets/TheHomePage/image/bg4_m.svg";
+import CustomFileButton from "./elements/desktop/CustomFileButton";
 import "../../style/TheHomePage/font.css";
 import "../../style/TheHomePage/style.css";
-// import Image from "next/image";
-import Backgroundimage4 from "../../assets/TheHomePage/image/bg4.png";
-import Backgroundimage4_M from "../../assets/TheHomePage/image/bg4_m.png";
-import CustomFileButton from "./elements/desktop/CustomFileButton";
-import CustomFileButton_M from "./elements/mobile/CustomFileButton_M";
+
 export default function HomeSectionFour() {
   const handleCustomFileButton = () => {
     alert("Make Custome File Button Clicked");
@@ -15,28 +15,22 @@ export default function HomeSectionFour() {
         <img src={Backgroundimage4} alt="" className="ml-auto" />
       </div>
       <div className="lg:hidden absolute right-0 bottom-0 z-10">
-        <img src={Backgroundimage4_M} alt="" /> 
+        <img src={Backgroundimage4_M} alt="" />
       </div>
-      <div className="absolute lg:-top-[63px] -top-[25px] z-20">
-        <div className="lg:flex justify-center items-center hidden">
-          <CustomFileButton onClick={handleCustomFileButton}>
-            <span className=" font-[kanit-medium] text-[24px]">
+      <div className="absolute lg:-top-[63px] -top-[25px] z-20 hidden lg:flex">
+          <CustomFileButton onClick={handleCustomFileButton} active={true}>
+            <span className=" font-kanit font-medium text-[24px]">
               Make My Custom File
             </span>
           </CustomFileButton>
-        </div>
-        <div className="lg:hidden flex justify-center items-center">
-          <CustomFileButton_M onClick={handleCustomFileButton}>
-            <span className=" font-[kanit-medium]">Make My Custom File</span>
-          </CustomFileButton_M>
-        </div>
       </div>
-      <div className="absolute w-[80%] flex justify-start items-center z-20  top-20">
-        <div className="lg:w-[50%] w-[80%] flex flex-col justify-start items-center gap-5">
-          <h1 className="font-[kanit-bold] lg:text-[40px] text-[24px]">
+      <div className="absolute w-full px-8 sm:px-12 md:px-20 lg:px-28 xl:px-36 2xl:px-48 flex justify-start items-center top-10 lg:top-20 z-20">
+        <div className="lg:w-[60%] w-[80%] flex flex-col justify-start items-center gap-2 sm:gap-8">
+          <img src={slashImg} alt="slash image" className="mr-auto" />
+          <h1 className="text-left font-kanit font-bold text-2xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl text-dark">
             Hexapink helps you find the leads you need in few clicks
           </h1>
-          <p className="font-[raleway-medium] lg:text-xl text-[14px]">
+          <p className="text-left font-raleway font-medium lg:text-xl text-[14px] text-light-dark">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam.

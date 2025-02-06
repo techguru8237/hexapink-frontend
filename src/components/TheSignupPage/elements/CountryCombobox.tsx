@@ -55,13 +55,13 @@ const CountryCombobox = ({ onCountrySelect }: CountryComboboxProps) => {
       </label>
       <div className="relative mt-2">
         <Combobox.Input
-          className="peer block w-[300px] font-[raleway-medium] bg-transparent py-1.5 pl-3 pr-12 text-base text-gray-900 placeholder:text-gray-400 border-b-2 border-gray-300 focus:border-pink-500 focus:outline-none sm:text-sm"
+          className="peer block w-[300px] font-raleway font-medium bg-transparent py-1.5 pr-12 text-base text-gray-900 placeholder:text-gray-400 border-b-2 border-gray-300 focus:border-pink-500 focus:outline-none sm:text-sm"
           onChange={(event) => setQuery(event.target.value)}
           onBlur={() => setQuery("")}
           displayValue={(country: Country) => country?.name}
         />
         <Combobox.Button
-          className="absolute inset-y-0 right-0 flex items-center px-2 bg-transparent focus:outline-none hover:bg-transparent hover:border-none"
+          className="absolute inset-y-0 right-0 bg-white border-none outline-none flex items-center px-2 bg-transparent focus:outline-none hover:bg-transparent hover:border-none hover:outline-none mb-1"
           onClick={() => setIsOpen(!isOpen)}
         >
           <ChevronDownIcon
@@ -76,9 +76,9 @@ const CountryCombobox = ({ onCountrySelect }: CountryComboboxProps) => {
               <Combobox.Option
                 key={country.id}
                 value={country}
-                className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-pink-500 data-[focus]:text-white data-[focus]:outline-none"
+                className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-pink-500 data-[focus]:text-gray-600 data-[focus]:outline-none"
               >
-                <span className="block font-[raleway-medium] truncate group-data-[selected]:font-[raleway-semibold]">
+                <span className="block font-raleway font-medium truncate group-data-[selected]:font-[raleway-semibold]">
                   {country.name}
                 </span>
 

@@ -71,7 +71,7 @@ export default function CountryCodeCombobox({
       <div className="flex justify-center items-bottom">
         <div className="relative mt-2">
           <Combobox.Input
-            className="peer block w-[100px] font-[raleway-medium] bg-transparent py-1.5 pl-3 pr-12 text-base text-gray-900 placeholder:text-gray-400 border-b-2 border-gray-300 focus:border-pink-500 focus:outline-none sm:text-sm"
+            className="peer block w-[100px] font-raleway font-medium bg-transparent py-1.5 pl-3 pr-12 text-base text-gray-900 placeholder:text-gray-400 border-b-2 border-gray-300 focus:border-pink-500 focus:outline-none sm:text-sm"
             onChange={(event) => setQuery(event.target.value)}
             onBlur={() => setQuery("")}
             displayValue={(country: Country) =>
@@ -79,7 +79,7 @@ export default function CountryCodeCombobox({
             }
           />
           <Combobox.Button
-            className="absolute inset-y-0 right-0 flex items-center px-2 focus:outline-none bg-transparent hover:bg-transparent hover:border-none"
+            className="absolute inset-y-0 right-0 flex items-center px-2 focus:outline-none bg-transparent hover:bg-transparent hover:border-none outline-none border-none"
             onClick={() => setIsOpen(!isOpen)}
           >
             <ChevronDownIcon
@@ -94,9 +94,9 @@ export default function CountryCodeCombobox({
                 <Combobox.Option
                   key={country.id}
                   value={country}
-                  className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-pink-500 data-[focus]:text-white data-[focus]:outline-none"
+                  className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-pink-500 data-[focus]:text-gray-600 data-[focus]:outline-none"
                 >
-                  <span className="block font-[raleway-medium] truncate group-data-[selected]:font-[raleway-semibold]">
+                  <span className="block font-raleway font-medium truncate group-data-[selected]:font-[raleway-semibold]">
                     +{country.phone}
                   </span>
 
@@ -121,7 +121,7 @@ export default function CountryCodeCombobox({
           onChange={(event) => {
             setPhoneNumber(selectedCountry?.phone + event.target.value);
           }}
-          className="block w-[200px] border-gray-300 text-[15px] font-[raleway-medium] border-b focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none p-0 m-0 leading-none align-bottom"
+          className="bg-white block w-[200px] border-gray-300 text-[15px] font-raleway font-medium border-b focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none p-0 m-0 leading-none align-bottom"
         />
       </div>
     </Combobox>

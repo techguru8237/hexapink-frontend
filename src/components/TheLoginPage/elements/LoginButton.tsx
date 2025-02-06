@@ -23,7 +23,7 @@ const LoginButton: React.FC<{
     }
   };
   return (
-    <div className="login-button border m-3" onClick={onClick}>
+    <div className="login-button border" onClick={onClick}>
       <div
         className="flex justify-center items-center gap-2"
         onMouseEnter={handleMouseEnterCustom}

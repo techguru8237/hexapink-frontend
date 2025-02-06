@@ -10,7 +10,7 @@ const CreateAccountButton: React.FC<{
     if (svgRef.current) {
       const paths = svgRef.current.querySelectorAll("path");
       paths.forEach((path) => {
-        path.setAttribute("stroke", "#FF6699"); // Change to your desired hover color
+        path.setAttribute("stroke", "#333333"); // Change to your desired hover color
       });
     }
   };
@@ -18,12 +18,12 @@ const CreateAccountButton: React.FC<{
     if (svgRef.current) {
       const paths = svgRef.current.querySelectorAll("path");
       paths.forEach((path) => {
-        path.setAttribute("stroke", "white"); // Change to your desired hover color
+        path.setAttribute("stroke", "#333333"); // Change to your desired hover color
       });
     }
   };
   return (
-    <div className="createaccount-button border" onClick={onClick}>
+    <div className="create-account-button border" onClick={onClick}>
       <div
         className="flex justify-center items-center gap-2"
         onMouseEnter={handleMouseEnterCustom}
@@ -40,28 +40,28 @@ const CreateAccountButton: React.FC<{
           <g clipPath="url(#clip0_98_4989)">
             <path
               d="M18.8279 12.75H23.3279"
-              stroke="white"
+              stroke="#333333"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
             <path
               d="M21.0779 10.5V15"
-              stroke="white"
+              stroke="#333333"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
             <path
               d="M10.2029 15C13.3095 15 15.8279 12.4816 15.8279 9.375C15.8279 6.2684 13.3095 3.75 10.2029 3.75C7.09628 3.75 4.57788 6.2684 4.57788 9.375C4.57788 12.4816 7.09628 15 10.2029 15Z"
-              stroke="white"
+              stroke="#333333"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
             <path
               d="M2.32788 18.75C4.25444 16.4578 6.97413 15 10.2029 15C13.4316 15 16.1513 16.4578 18.0779 18.75"
-              stroke="white"
+              stroke="#333333"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"

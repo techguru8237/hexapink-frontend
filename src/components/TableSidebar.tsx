@@ -20,7 +20,7 @@ const NewSidebar = (): JSX.Element => {
           <Input label="Table Name" value="France Table 2" />
 
           {/* <div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
-            <div className="relative w-fit mt-[-1.00px] [font-family:'Raleway-Medium',Helvetica] font-medium text-[#666666] text-sm tracking-[0.24px] leading-[18px] whitespace-nowrap">
+            <div className="relative w-fit mt-[-1.00px] [font-family:'Raleway-Medium',Helvetica] font-medium text-light-dark text-sm tracking-[0.24px] leading-[18px] whitespace-nowrap">
               Selected File
             </div>
 

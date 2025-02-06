@@ -4,11 +4,12 @@ import "../../../../style/TheHomePage/style.css";
 const HexagonSignupButton: React.FC<{
   onClick: () => void;
   children: React.ReactNode;
-}> = ({ onClick, children }) => {
+  active: boolean
+}> = ({ onClick, children, active }) => {
   const svgRef = useRef<SVGSVGElement>(null);
 
   const handleMouseEnterSignup = () => {
-    if (svgRef.current) {
+    if (svgRef.current && active) {
       const paths = svgRef.current.querySelectorAll("path");
       paths.forEach((path) => {
         path.setAttribute("stroke", "#333333"); // Change to your desired hover color
@@ -24,7 +25,7 @@ const HexagonSignupButton: React.FC<{
     }
   };
   return (
-    <div className="hexagon-signup-button border" onClick={onClick}>
+    <div className={`hexagon-signup-button ${active ? "border" : ""}`} onClick={onClick}>
       <div
         className="flex justify-center items-center gap-2"
         onMouseEnter={handleMouseEnterSignup}

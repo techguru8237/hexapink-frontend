@@ -10,8 +10,8 @@ export default function HexapinkPaperOneButton() {
       };
   return (
     <>
-        <HexagonSignupButton onClick={handleSignup}><span>Create Account</span></HexagonSignupButton>
-        <HexagonLoginButton onClick={handleLogin}><span>Log in</span></HexagonLoginButton>
+        <HexagonSignupButton onClick={handleSignup} active={true}><span>Create Account</span></HexagonSignupButton>
+        <HexagonLoginButton onClick={handleLogin} active={true}><span>Log in</span></HexagonLoginButton>
     </>
   )
 }

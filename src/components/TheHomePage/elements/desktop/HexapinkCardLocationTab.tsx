@@ -5,7 +5,7 @@ interface HexapinkCardLocationTabProps {
 }
 const HexapinkCardLocationTab: React.FC<HexapinkCardLocationTabProps> = ({ text }) =>  {
   return (
-    <div className="w-[225px] h-[40px] bg-[#FFE5EE] hexapink-card-locationtab font-[raleway-medium] flex justify-end items-center gap-2">
+    <div className="w-[225px] h-[40px] bg-[#FFE5EE] hexapink-card-locationtab font-raleway font-medium flex justify-end items-center gap-2">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <g clipPath="url(#clip0_43_903)">
           <path

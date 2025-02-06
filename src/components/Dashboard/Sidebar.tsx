@@ -7,7 +7,7 @@ import { FaRegUserCircle, FaUserCircle, FaRegFolderOpen, FaFolderOpen } from "re
 
 
 import { SidebarItemType } from "./types";
-import logo from "../../assets/TheHomePage/image/logo.png";
+import logo from "../../assets/TheHomePage/image/logo.svg";
 import SidebarItem from "./SidebarItem";
 
 const items: SidebarItemType[] = [

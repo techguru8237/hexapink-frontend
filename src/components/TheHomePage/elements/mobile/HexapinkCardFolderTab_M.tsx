@@ -5,7 +5,7 @@ interface HexapinkCardFolderTabProps {
 }
 const HexapinkCardFolderTab_M: React.FC<HexapinkCardFolderTabProps> = ({ text }) =>  {
   return (
-    <div className="w-[98px] h-[40px] bg-[#FFCCDD] hexapink-card-foldertab font-[raleway-medium] flex justify-center items-center gap-2">
+    <div className="w-[98px] h-[40px] bg-[#FFCCDD] hexapink-card-foldertab font-raleway font-medium flex justify-center items-center gap-2">
       {" "}
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <g clipPath="url(#clip0_327_9)">

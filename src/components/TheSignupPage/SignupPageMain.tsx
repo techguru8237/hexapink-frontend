@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import StepOne from "../../assets/TheSignupPage/image/step1.png";
-import StepTwo from "../../assets/TheSignupPage/image/step2.png";
-import StepThree from "../../assets/TheSignupPage/image/step3.png";
-import StepOne_M from "../../assets/TheSignupPage/image/step1_m.png";
-import StepTwo_M from "../../assets/TheSignupPage/image/step2_m.png";
-import StepThree_M from "../../assets/TheSignupPage/image/step3_m.png";
+import StepOne from "../../assets/TheSignupPage/image/step1.svg";
+import StepTwo from "../../assets/TheSignupPage/image/step2.svg";
+import StepThree from "../../assets/TheSignupPage/image/step3.svg";
+import StepOne_M from "../../assets/TheSignupPage/image/step1_m.svg";
+import StepTwo_M from "../../assets/TheSignupPage/image/step2_m.svg";
+import StepThree_M from "../../assets/TheSignupPage/image/step3_m.svg";
 import InputField from "../TheLoginPage/elements/InputField";
 import PasswordField from "../TheLoginPage/elements/PasswordField";
 import ContinueButton from "./elements/ContinueButton";
@@ -17,6 +17,7 @@ import BackButton from "./elements/BackButton";
 import VerifyAccountButton from "./elements/VerifyAccountButton";
 import { signup, verifyEmail } from "../../actions/auth";
 import VerificationCodeInput from "./elements/VerificationCodeInput";
+import CreateAccountButton_M from "../TheHomePage/elements/desktop/CreateAccountButton_M";
 
 export default function SignupPageMain() {
   const navigate = useNavigate()
@@ -106,58 +107,58 @@ export default function SignupPageMain() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-between items-center gap-16 p-4">
-      <div className="w-[80%] lg:mt-10 mt-5 justify-start items-start flex flex-col gap-6">
-        <div className="flex justify-center items-center lg:hidden w-full">
+    <div className="w-full h-full flex flex-col justify-between items-center gap-8 sm:gap-16">
+      <div className="w-full px-8 sm:px-12 md:px-20 lg:px-28 xl:px-36 2xl:px-48 lg:mt-10 mt-5 justify-start items-start flex flex-col gap-2 sm:gap-6">
+        <div className="flex justify-center items-center lg:hidden w-full mb-4">
           <img src={StepOne_M} alt="" hidden={stepKey != "profile"} />
           <img src={StepTwo_M} alt="" hidden={stepKey != "information"} />
           <img src={StepThree_M} alt="" hidden={stepKey != "verification"} />
         </div>
         <h1
-          className="lg:text-[40px] text-[24px] font-[kanit-bold]"
+          className="text-left lg:text-[40px] text-[24px] font-kanit font-bold"
           hidden={stepKey != "profile"}
         >
           Complete your user profile
         </h1>
         <h1
-          className="lg:text-[40px] text-[24px] font-[kanit-bold]"
+          className="text-left lg:text-[40px] text-[24px] font-kanit font-bold"
           hidden={stepKey != "information"}
         >
           Fill your Log In Information
         </h1>
         <h1
-          className="lg:text-[40px] text-[24px] font-[kanit-bold]"
+          className="text-left lg:text-[40px] text-[24px] font-kanit font-bold"
           hidden={stepKey != "verification"}
         >
           Check your email and Fill the Verification Code
         </h1>
         <p
-          className="lg:text-[20px] text-[14px] font-[raleway-medium] text-[#666666] mb-7"
+          className="lg:text-[20px] text-[14px] font-raleway font-medium text-light-dark sm:mb-7"
           hidden={stepKey != "profile" && stepKey != "information"}
         >
           Already have an account?{" "}
           <Link
             to="/login"
-            className="text-[#666666] border-b-2 font-[raleway-semibold] border-[#666666]"
+            className="text-light-dark border-b-2 font-[raleway-semibold] border-[#666666]"
           >
             Log In
           </Link>
         </p>
         <p
-          className="lg:text-[20px] text-[14px] font-[raleway-medium] text-[#666666] tracking-wider"
+          className="text-left lg:text-[20px] text-[14px] font-raleway font-medium text-light-dark tracking-wider"
           hidden={stepKey != "verification"}
         >
           You didn&apos;t receive any code in your email? <br />
           <Link
             to="/resend"
-            className="text-[#666666] border-b-2 font-[raleway-semibold] border-[#666666] tracking-wider"
+            className="text-light-dark border-b-2 font-[raleway-semibold] border-[#666666] tracking-wider"
           >
             Resend Code &nbsp;
           </Link>
           or
           <Link
             to="/login"
-            className="text-[#666666] border-b-2 font-[raleway-semibold] border-[#666666] tracking-wider"
+            className="text-light-dark border-b-2 font-[raleway-semibold] border-[#666666] tracking-wider"
           >
             &nbsp;Change Email
           </Link>
@@ -171,8 +172,8 @@ export default function SignupPageMain() {
         </div>
         {stepKey == "profile" && (
           <div className="flex lg:w-[80%] h-[90%] justify-start items-start flex-col gap-5">
-            <div className="w-full flex justify-start items-start gap-10 flex-col">
-              <div className="w-full flex lg:flex-row flex-col justify-start items-start lg:gap-20 gap-5">
+            <div className="w-full flex justify-start items-start gap-8 flex-col">
+              <div className="w-full flex lg:flex-row flex-col justify-start items-start lg:gap-20 gap-8">
                 <InputField
                   type="text"
                   title="FIRST NAME *"
@@ -201,7 +202,7 @@ export default function SignupPageMain() {
                   }}
                 />
               </div>
-              <div className="w-full flex lg:flex-row flex-col justify-start items-start lg:gap-20 gap-5">
+              <div className="w-full flex lg:flex-row flex-col justify-start items-start lg:gap-20 gap-8">
                 <InputField
                   type="text"
                   title="INDUSTRY *"
@@ -230,8 +231,8 @@ export default function SignupPageMain() {
           </div>
         )}
         {stepKey == "information" && (
-          <div className="flex lg:w-[80%] h-[90%] justify-start items-start flex-col gap-10">
-            <div className="w-full flex justify-start items-start gap-10 flex-col">
+          <div className="flex w-full lg:w-[80%] h-[90%] justify-start items-start flex-col gap-10">
+            <div className="w-full flex justify-start items-start gap-8 flex-col">
               <InputField
                 type="text"
                 title="EMAIL *"
@@ -264,7 +265,7 @@ export default function SignupPageMain() {
               </div>
             </div>
             <CheckBox text="I agree to the terms of use"></CheckBox>
-            <div className="w-full lg:flex justify-start items-start gap-10 hidden">
+            <div className="w-full lg:flex justify-start items-start gap-8 hidden">
               <BackButton onClick={handleBack}>
                 <span>Back</span>
               </BackButton>
@@ -313,9 +314,9 @@ export default function SignupPageMain() {
           <BackButton onClick={handleBack}>
             <span>Back</span>
           </BackButton>
-          <CreateAccountButton onClick={handleVerifyEmail}>
+          <CreateAccountButton_M onClick={handleVerifyEmail}>
             <span>Create Account</span>
-          </CreateAccountButton>
+          </CreateAccountButton_M>
         </div>
       )}
       {stepKey == "verification" && (

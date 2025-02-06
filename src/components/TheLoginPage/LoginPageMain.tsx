@@ -1,11 +1,12 @@
-import { Link, useNavigate } from 'react-router-dom';
-import "../../style/TheHomePage/style.css";
-import InputField from "../../components/TheLoginPage/elements/InputField";
-import PasswordField from "./elements/PasswordField";
-import CheckBox from "../../components/TheHomePage/elements/desktop/CheckBox";
-import LoginButton from "../../components/TheLoginPage/elements/LoginButton";
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../actions/auth';
+import PasswordField from "./elements/PasswordField";
+import LoginButton from "../../components/TheLoginPage/elements/LoginButton";
+import InputField from "../../components/TheLoginPage/elements/InputField";
+import CheckBox from "../../components/TheHomePage/elements/desktop/CheckBox";
+import "../../style/TheHomePage/style.css";
+import HomeButton from '../TheHomePage/elements/desktop/HomeButton';
 
 export default function LoginPageMain() {
   const navigate = useNavigate()
@@ -20,22 +21,22 @@ export default function LoginPageMain() {
   }
 
   return (
-    <div className="relative w-full h-full flex justify-between flex-col  items-center">
+    <div className="relative w-full flex justify-between flex-col items-center">
       <div className="lg:w-[80%] w-[90%] lg:mt-24 mt-10 justify-start items-start flex flex-col gap-6">
-        <h1 className="lg:text-[40px] text-[30px] font-[kanit-bold]">
+        <h1 className="lg:text-[40px] text-[30px] font-kanit font-bold text-dark">
           Welcome Back!
         </h1>
-        <p className="lg:text-[20px] text-[18px] font-[raleway-medium] text-[#666666]">
+        <p className="text-left text-md lg:text-xl font-raleway font-medium text-light-dark">
           You don&apos;t have an account?{" "}
           <Link
             to="/signup"
-            className="text-[#666666] border-b-2 font-[raleway-semibold] border-[#666666]"
+            className="text-light-dark border-b-2 font-[raleway-semibold] border-[#666666]"
           >
             Register Now
           </Link>
         </p>
-        <div className="2xl:w-[50%] lg:w-[75%] w-[90%] flex flex-col justify-center items-center gap-2">
-          <div className="w-full flex lg:flex-row flex-col lg:justify-between justify-center items-center gap-10 lg:mt-24 mt-10">
+        <div className="2xl:w-[50%] lg:w-[75%] w-full flex flex-col justify-center items-center gap-2">
+          <div className="w-full flex lg:flex-row flex-col lg:justify-start gap-10 lg:mt-24 mt-10">
             <InputField
               type="text"
               title="EMAIL *"
@@ -55,23 +56,23 @@ export default function LoginPageMain() {
             />
           </div>
           <div
-            className="w-full flex lg:flex-row flex-col lg:justify-between justify-start lg:items-center items-start gap-10"
+            className="w-full flex sm:flex-row flex-col lg:justify-between justify-start lg:items-center items-start gap-10"
             style={{ marginTop: "50px" }}
           >
             <CheckBox text="Stay Connected" />
-            <div className="w-full flex flex-1 justify-start items-start gap-5">
-              <span className="lg:text-[20px] text-[14px] text-[#666666] font-[raleway-medium]">
+            <div className="flex flex-1 justify-end items-start gap-4 text-lg lg:text-xl text-light-dark">
+              <span className="font-raleway font-medium">
                 Forgot Password?
               </span>
               <Link
                 to="/ChangePassword"
-                className="border-b-2 font-[raleway-semibold] border-[#666666] lg:text-[20px] text-[14px] text-[#666666]"
+                className="border-b-2 font-raleway font-semibold border-[#666666] text-dark"
               >
                 Change Password
               </Link>
             </div>
           </div>
-          <div className="w-full lg:flex justify-start items-center mt-10">
+          <div className="w-full sm:flex justify-start items-center mt-10 hidden">
             <LoginButton onClick={handleLogin}>
               <span>Log In</span>
             </LoginButton>
@@ -79,14 +80,14 @@ export default function LoginPageMain() {
         </div>
       </div>
       {/* <div className="w-full h-[80px] absolute -bottom-[30px] -z-10 bg-[#FFE5EE] flex lg:hidden"></div> */}
-      {/* <div className="flex justify-center items-center w-full">
+      <div className="mt-10 flex justify-center gap-8 items-center w-full sm:hidden">
         <HomeButton onClick={() => navigate("/")}>
           <span>Home</span>
         </HomeButton>
         <LoginButton onClick={() => alert("login button is clicked")}>
           <span>Log In</span>
         </LoginButton>
-      </div> */}
+      </div>
     </div>
   );
 }

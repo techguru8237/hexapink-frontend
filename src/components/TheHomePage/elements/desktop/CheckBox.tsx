@@ -6,7 +6,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({ text }) => {
   return (
     <fieldset>
       <div className="space-y-9">
-        <div className="flex gap-6">
+        <div className="flex items-center gap-4 lg:gap-6">
           <div className="flex h-8 shrink-0 items-center">
             <div className="group grid size-5 grid-cols-1">
               <input
@@ -39,15 +39,16 @@ const CheckBox: React.FC<CheckBoxProps> = ({ text }) => {
               </svg>
             </div>
           </div>
-          <div className="text-[20px]">
-            <label htmlFor="comments" className="font-[raleway-medium] text-[#333333]">
-              {text}
-            </label>{" "}
-          </div>
+          <label
+            htmlFor="comments"
+            className="w-full font-raleway font-medium text-dark text-left text-md lg:text-xl"
+          >
+            {text}
+          </label>{" "}
         </div>
       </div>
     </fieldset>
   );
-}
+};
 
 export default CheckBox;

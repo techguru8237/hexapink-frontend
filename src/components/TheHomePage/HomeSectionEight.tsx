@@ -27,32 +27,39 @@ export default function HomeSectionEight() {
     console.log("---------------faq is clicked------------------")
   };
   return (
-    <div className="w-full bg-[#FFF5F8] h-[700px] flex justify-center items-center">
-      <div className="lg:w-[70%] w-[90%] flex flex-col justify-start items-start">
-        <div className="w-full flex flex-col justify-start items-start">
-          <h1 className="font-[kanit-bold] lg:text-[40px] text-[24px] select-none tracking-wider">
+    <div className="w-full px-8 sm:px-12 md:px-20 lg:px-28 xl:px-36 2xl:px-48 bg-[#FFF5F8] h-[600px] lg:h-[700px] flex justify-center items-center">
+      <div className="w-full sm:w-3/4 flex flex-col justify-start items-start">
+        <div className="w-full flex flex-col justify-start items-start gap-4">
+          <h1 className="text-left font-kanit font-bold text-2xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl text-dark select-none tracking-wider">
             Any questions? Here some answers
           </h1>
-          <p className="font-[raleway-medium] lg:text-[20px] text-[12px] text-[#666666] select-none tracking-wider">
+          <p className="text-left font-raleway font-medium text-sm lg:text-xl text-light-dark select-none tracking-wider">
             If you have more questions, send an email to Contact@hexapink.com
           </p>
         </div>
-        <div className="lg:p-4 p-2 w-full">
+        <div className="w-full mt-8">
           {faqData.map((faq, index) => (
-            <div key={index} className="mb-4">
-              <button
-                className="w-full text-left lg:p-4 p-2 bg-transparent border-b border-[#E6E6E6] focus:outline-none flex justify-between items-center"
+            <div
+              key={index}
+              className={`${
+                activeIndex === index ? "border-b border-pink" : ""
+              }`}
+            >
+              <div
+                className="w-full text-left bg-transparent border-b border-[#E6E6E6] focus:outline-none flex justify-between items-center cursor-pointer"
                 onClick={() => toggleFaq(index)}
               >
-                <span className="font-[raleway-semibold] lg:text-[24px] text-[14px]">{faq.question}</span>
-                <img src={FaqIcon} alt="faqicon" />   
-              </button>
+                <span className="font-raleway font-semibold text-md lg:text-2xl">
+                  {faq.question}
+                </span>
+                <img src={FaqIcon} alt="faqicon" />
+              </div>
               <div
                 className={`overflow-hidden transition-all duration-300 ${
                   activeIndex === index ? "max-h-screen" : "max-h-0"
                 }`}
               >
-                <div className="lg:p-4 p-2 bg-transparent mt-2 lg:text-[20px] text-[12px] text-[#666666] font-[raleway-medium]">
+                <div className="bg-transparent py-2 text-sm lg:text-xl text-light-dark text-left font-raleway font-medium">
                   {faq.answer}
                 </div>
               </div>

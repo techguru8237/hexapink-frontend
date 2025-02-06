@@ -12,7 +12,7 @@ interface HexapinkCardProps {
 }
 const HexapinkCard: React.FC<HexapinkCardProps> = ({img_1, img_2, location, folder}) => {
   return (
-    <div className="min-w-[480px] min-h-[260px] max-w-[480px] max-h-[260px] m-8 rounded-2xl bg-[#FFE5EE] relative -z-20">
+    <div className="min-w-[480px] min-h-[260px] max-w-[480px] max-h-[260px] rounded-2xl bg-[#FFE5EE] relative -z-20">
       <div className="absolute right-0 top-7 w-[20%] h-auto -z-10">
         <img src={img_1} alt="MaisonsImg" className=" select-none "/>
       </div>
@@ -20,10 +20,10 @@ const HexapinkCard: React.FC<HexapinkCardProps> = ({img_1, img_2, location, fold
         <img src={img_2} alt="Hp" className=" select-none"/>
       </div>
       <div className="flex flex-col justify-start items-center gap-3 w-[58%] h-full ml-7 mt-12">
-        <h1 className="text-2xl font-[kanit-bold] text-[#333333] select-none">
+        <h1 className="text-2xl font-kanit font-bold text-[#333333] select-none">
           Propriétaires de Maisons
         </h1>
-        <p className="text-sm font-[raleway-medium] text-[#666666] select-none">
+        <p className="text-sm text-left font-raleway font-medium text-light-dark select-none">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam.

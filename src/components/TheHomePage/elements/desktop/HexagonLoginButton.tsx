@@ -4,7 +4,8 @@ import "../../../../style/TheHomePage/style.css";
 const HexagonLoginButton: React.FC<{
   onClick: () => void;
   children: React.ReactNode;
-}> = ({ onClick, children }) => {
+  active: boolean //set this value since at HomeSectionSix component require buttons are not actived
+}> = ({ onClick, children, active }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const handleMouseEnterLogin = () => {
     if (svgRef.current) {
@@ -23,7 +24,7 @@ const HexagonLoginButton: React.FC<{
     }
   };
   return (
-    <div className="hexagon-login-button border" onClick={onClick}>
+    <div className={`hexagon-login-button ${active ? "border" : ""}`} onClick={onClick}>
       <div
         className="flex justify-center items-center gap-2"
         onMouseEnter={handleMouseEnterLogin}

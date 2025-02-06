@@ -3,7 +3,7 @@
     display: block;
     background: var(--hexagon-background-color);
     width: 150px;
-    height: 20px;
+    height: 50px;
     line-height: 50px;
     text-align: center;
     font-size: 15px;
@@ -19,7 +19,7 @@
     content: "";
     width: 150px;
     left: 0px;
-    height: 23px;
+    height: 25px;
     z-index: -1;
     box-sizing: unset;
     border-radius: 5px;
@@ -60,8 +60,8 @@
     display: block;
     background: var(--hexagon-background-color);
     width: 150px;
-    height: 20px;
-    line-height: 45px;
+    height: 50px;
+    line-height: 50px;
     text-align: center;
     font-size: 15px;
     text-decoration: none;
@@ -76,7 +76,7 @@
     content: "";
     width: 150px;
     left: 0px;
-    height: 23px;
+    height: 25px;
     z-index: -1;
     box-sizing: unset;
     border-radius: 5px;
@@ -116,7 +116,7 @@
     display: block;
     background: var(--hexagon-background-color);
     width: 150px;
-    height: 20px;
+    height: 50px;
     line-height: 50px;
     text-align: center;
     font-size: 15px;
@@ -131,7 +131,7 @@
     content: "";
     width: 150px;
     left: 0px;
-    height: 23px;
+    height: 25px;
     z-index: -1;
     box-sizing: unset;
     border-radius: 5px;

@@ -13,7 +13,7 @@ const InputField: React.FC<InputFieldProps> = ({ type, title, placeholder }) => 
           name="name"
           type={type}
           placeholder={placeholder}
-          className="peer block w-full bg-transparent px-3 py-1.5 text-gray-900 placeholder:text-gray-500 focus:outline-none sm:text-[16px] font-[raleway-medium]"
+          className="peer block w-full bg-transparent py-1.5 text-gray-900 placeholder:text-gray-500 focus:outline-none sm:text-[16px] font-raleway font-medium"
         />
         <label
           htmlFor="name"

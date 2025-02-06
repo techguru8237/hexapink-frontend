@@ -7,10 +7,12 @@ export default function HexapinkPaperThreeCheckboxs() {
             <div className="flex h-6 shrink-0 items-center">
               <div className="group grid size-5 grid-cols-1">
                 <input
-                  defaultChecked
                   id="comments"
                   name="comments"
                   type="checkbox"
+                  checked
+                  readOnly
+                  aria-readonly
                   aria-describedby="comments-description"
                   className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-[#FF6699] checked:bg-[#FF6699] indeterminate:border-[#FF6699] indeterminate:bg-[#FF6699] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF6699] disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
                 />
@@ -37,9 +39,12 @@ export default function HexapinkPaperThreeCheckboxs() {
               </div>
             </div>
             <div className="text-sm/6">
-              <label htmlFor="comments" className="font-medium text-[#666666] text-[20px]">
+              <label
+                htmlFor="comments"
+                className="font-medium text-light-dark text-[20px]"
+              >
                 Balance
-              </label>{' '}
+              </label>{" "}
             </div>
           </div>
           <div className="flex gap-3">
@@ -49,6 +54,8 @@ export default function HexapinkPaperThreeCheckboxs() {
                   id="candidates"
                   name="candidates"
                   type="checkbox"
+                  checked
+                  readOnly
                   aria-describedby="candidates-description"
                   className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-[#FF6699] checked:bg-[#FF6699] indeterminate:border-[#FF6699] indeterminate:bg-[#FF6699] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF6699] disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
                 />
@@ -75,9 +82,12 @@ export default function HexapinkPaperThreeCheckboxs() {
               </div>
             </div>
             <div className="text-sm/6">
-              <label htmlFor="candidates" className="font-medium text-[#666666] text-[20px]">
+              <label
+                htmlFor="candidates"
+                className="font-medium text-light-dark text-[20px]"
+              >
                 Credit Card
-              </label>{' '}
+              </label>{" "}
             </div>
           </div>
           <div className="flex gap-3">
@@ -87,6 +97,8 @@ export default function HexapinkPaperThreeCheckboxs() {
                   id="offers"
                   name="offers"
                   type="checkbox"
+                  checked
+                  readOnly
                   aria-describedby="offers-description"
                   className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-[#FF6699] checked:bg-[#FF6699] indeterminate:border-[#FF6699] indeterminate:bg-[#FF6699] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF6699] disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
                 />
@@ -113,13 +125,16 @@ export default function HexapinkPaperThreeCheckboxs() {
               </div>
             </div>
             <div className="text-sm/6">
-              <label htmlFor="offers" className="font-medium text-[#666666] text-[20px]">
+              <label
+                htmlFor="offers"
+                className="font-medium text-light-dark text-[20px]"
+              >
                 Bank Transfer
-              </label>{' '}
+              </label>{" "}
             </div>
           </div>
         </div>
       </fieldset>
-    )
+    );
   }
   
