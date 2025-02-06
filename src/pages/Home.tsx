@@ -1,5 +1,4 @@
 import HomeHeader from "../components/TheHomePage/HomeHeader";
-// import Image from "next/image";
 import BackgroundImage1 from "../assets/TheHomePage/image/bg1.svg";
 import HomeSectionOne from "../components/TheHomePage/HomeSectionOne";
 import HomeSectionTwo from "../components/TheHomePage/HomeSectionTwo";

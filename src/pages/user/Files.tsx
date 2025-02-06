@@ -7,7 +7,6 @@ import Pagination from "../../components/Pagination";
 import NewFileSkeleton from "../../components/File/NewFileSkeleton";
 import FileListHeader from "../../components/File/FileListHeader";
 import { FileListItem } from "../../components/File/FileListItem";
-// import FilterPanel from "../../components/File/FilterPanel";
 
 const dummyData = Array.from({ length: 25 }, (_, index) => ({
   id: index,

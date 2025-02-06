@@ -1,5 +1,4 @@
 import React from "react";
-// import Image, { StaticImageData } from "next/image";
 import "../../../../style/TheHomePage/style.css";
 interface HexapinkPaperProps {
   topImage: string;

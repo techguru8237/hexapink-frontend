@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 
-// import { FaRegFolderOpen } from "react-icons/fa";
 import { CiFilter } from "react-icons/ci";
 import AdminHeader from "../../components/Dashboard/AdminHeader";
 import Pagination from "../../components/Pagination";
@@ -8,7 +7,6 @@ import OrderListHeader from "../../components/AdminOrder/OrderListHeader";
 import { OrderListItem } from "../../components/AdminOrder/OrderListItem";
 
 import { PiPackage } from "react-icons/pi";
-// import FilterPanel from "../../components/File/FilterPanel";
 
 const dummyData = Array.from({ length: 25 }, (_, index) => ({
   id: index,

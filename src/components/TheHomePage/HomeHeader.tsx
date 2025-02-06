@@ -1,5 +1,3 @@
-// import Image from "next/image";
-// import { useRouter, usePathname } from "next/navigation";
 import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from "../../assets/TheHomePage/image/logo.svg";
 import HexagonLoginButton from "./elements/desktop/HexagonLoginButton";
@@ -14,9 +12,7 @@ import CreateAccountButton_M from './elements/desktop/CreateAccountButton_M';
 import CreateAccountButton from '../TheSignupPage/elements/CreateAccountButton';
 
 const HomeHeader = () => {
-  // const router = useRouter();
   const navigate = useNavigate();
-  // const pathname = usePathname();
   const location = useLocation();
   return (
     <div className="flex justify-between items-center w-full h-24 px-8 sm:px-12 md:px-20 lg:px-28 xl:px-36 2xl:px-48 border-b border-[#FFCCDD] dark:border-[#FFCCDD]">

@@ -1,12 +1,7 @@
 import React from "react";
-// import {PiDatabaseLight} from "react-icons/pi";
-// import { PiPackage } from "react-icons/pi";
 import { CiCircleInfo } from "react-icons/ci";
 import { FaRegUserCircle } from "react-icons/fa";
 import { PiPencilSimpleLight } from "react-icons/pi";
-// import { GoPaperclip } from "react-icons/go";
-// import samlpeImg from "../../assets/collection.png";
-// import Image from "next/image";
 import Checkbox from "../Checkbox";
 
 interface UserListItemProps {

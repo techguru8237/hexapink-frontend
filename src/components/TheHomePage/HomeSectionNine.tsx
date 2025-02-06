@@ -1,4 +1,3 @@
-// import Image from "next/image";
 import Pattern from "../../assets/TheHomePage/image/pattern.png";
 import BottomLogo from "../../assets/TheHomePage/image/footer-logo.svg";
 import Phone from "../../assets/TheHomePage/image/phone.svg";

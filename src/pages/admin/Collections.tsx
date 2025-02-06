@@ -7,8 +7,6 @@ import Pagination from "../../components/Pagination";
 import NewCollectionSkeleton from "../../components/Collection/NewCollectionSkeleton";
 import CollectionListHeader from "../../components/Collection/CollectionListHeader";
 import {CollectionListItem} from "../../components/Collection/CollectionListItem";
-// import FilterPanel from "../../components/File/FilterPanel";
-
 
 const dummyData = Array.from({ length: 25 }, (_, index) => ({
   id: index,

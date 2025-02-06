@@ -1,6 +1,5 @@
 import { useState } from "react";
 import FaqIcon from "../../assets/TheHomePage/image/feq_icon.png"
-// import Image from "next/image";
 import "../../style/TheHomePage/font.css";
 const faqData = [
   {

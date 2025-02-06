@@ -1,4 +1,3 @@
-// import Image from "next/image";
 import HomeHeader from "../components/TheHomePage/HomeHeader";
 import BackgroundImage1 from "../assets/TheHomePage/image/bg1.svg";
 import SignupPageMain from "../components/TheSignupPage/SignupPageMain";

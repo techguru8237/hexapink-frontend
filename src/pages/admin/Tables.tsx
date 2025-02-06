@@ -8,8 +8,6 @@ import TableListHeader from "../../components/Table/TableListHeader";
 import { TableListItem } from "../../components/Table/TableListItem";
 import TableSideBar from "../../components/TableSidebar"
 
-// import FilterPanel from "../../components/File/FilterPanel";
-
 const dummyData = Array.from({ length: 25 }, (_, index) => ({
   id: index,
   name: `file_${index + 1}`,

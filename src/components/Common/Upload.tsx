@@ -1,11 +1,8 @@
 import { VscAdd } from "react-icons/vsc";
-// import { TfiReload } from "react-icons/tfi";
 
 interface HeaderProps {
   label: string;
   value: string;
-  // onAddClick: () => void; 
-  // showReload: boolean;
 }
 
 export default function Input({ label, value }: HeaderProps) {
@@ -20,7 +17,6 @@ export default function Input({ label, value }: HeaderProps) {
           {value}
         </div>
         <div className="flex flex-row">
-          {/* <TfiReload className="text-[#4040BF] p-1.5 w-7 h-7 border border-[#4040BF] rounded-lg mr-1" /> */}
           <VscAdd className="text-[#4040BF] p-1.5 w-7 h-7 border border-[#4040BF] rounded-lg " />
         </div>
       </div>

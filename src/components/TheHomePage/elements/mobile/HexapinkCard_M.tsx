@@ -1,6 +1,4 @@
 import React from "react";
-// import Image, { StaticImageData } from "next/image";
-
 import "../../../../style/TheHomePage/font.css";
 import HexapinkCardFolderTab_M from "./HexapinkCardFolderTab_M";
 import HexapinkCardLocationTab_M from "./HexapinkCardLocationTab_M";

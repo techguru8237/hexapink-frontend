@@ -10,7 +10,6 @@ interface Country {
 
 interface CountryData {
   name: string;
-  // Add other properties if needed
 }
 
 interface CountryComboboxProps {

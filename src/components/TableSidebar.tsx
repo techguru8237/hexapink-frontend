@@ -1,6 +1,3 @@
-// import frame48096154 from "./frame-48096154.svg";
-// import plusCircle from "./plus-circle.svg";
-// import { VscAdd } from "react-icons/vsc";
 import { JSX } from "react";
 import Input from "../components/Common/Input";
 import Upload from "../components/Common/Upload";

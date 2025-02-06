@@ -1,4 +1,3 @@
-// import Image from 'next/image'
 import ImageFrame from "../../../../assets/TheHomePage/image/paper-frame-2.svg";
 import "../../../../style/TheHomePage/font.css"
 export default function HexapinkPaperTwoFrame() {
