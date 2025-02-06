@@ -54,7 +54,7 @@ const CountryCombobox = ({ onCountrySelect }: CountryComboboxProps) => {
       </label>
       <div className="relative mt-2">
         <Combobox.Input
-          className="peer block w-[300px] font-raleway font-medium bg-transparent py-1.5 pr-12 text-base text-gray-900 placeholder:text-gray-400 border-b-2 border-gray-300 focus:border-pink-500 focus:outline-none sm:text-sm"
+          className="peer block w-[300px] font-raleway font-medium bg-transparent py-1.5 pr-12 text-base text-gray-900 placeholder:text-gray-400 border-b border-gray-300 focus:border-pink-500 focus:outline-none sm:text-sm"
           onChange={(event) => setQuery(event.target.value)}
           onBlur={() => setQuery("")}
           displayValue={(country: Country) => country?.name}
@@ -77,7 +77,7 @@ const CountryCombobox = ({ onCountrySelect }: CountryComboboxProps) => {
                 value={country}
                 className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-pink-500 data-[focus]:text-gray-600 data-[focus]:outline-none"
               >
-                <span className="block font-raleway font-medium truncate group-data-[selected]:font-[raleway-semibold]">
+                <span className="block font-raleway font-medium truncate group-data-[selected]:font-raleway text-left">
                   {country.name}
                 </span>
 

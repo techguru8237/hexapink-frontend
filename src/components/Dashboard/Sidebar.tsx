@@ -90,7 +90,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ type }) => {
   return (
     <div className="h-screen w-72 bg-white text-dark border-r border-light-gray3">
-      <div className="dashboard-header h-20 border-b border-dashed border-pink p-2">
+      <div className="dashboard-header h-20 border-b border-dashed p-2">
         <Link
           to="/"
           className="flex items-center gap-2 p-4 text-2xl font-bold cursor-pointer"

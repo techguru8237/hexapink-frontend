@@ -1,54 +1,69 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Bounce, ToastContainer } from "react-toastify";
+import "./App.css";
 
-import './App.css';
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
-import Login from './pages/Login';
-import Signup from './pages/Signup';
+import AdminLayout from "./pages/admin/AdminLayout";
+import PaymentMethods from "./pages/admin/PaymentMethods";
+import Dashboard from "./pages/admin/Dashboard";
+import Collections from "./pages/admin/Collections";
+import Tables from "./pages/admin/Tables";
+import Orders from "./pages/admin/Orders";
+import Users from "./pages/admin/Users";
 
-import AdminLayout from './pages/admin/AdminLayout';
-import PaymentMethods from './pages/admin/PaymentMethods';
-import Dashboard from './pages/admin/Dashboard';
-import Collections from './pages/admin/Collections';
-import Tables from './pages/admin/Tables';
-import Orders from './pages/admin/Orders';
-import Users from './pages/admin/Users';
+import Files from "./pages/user/Files";
+import Lookup from "./pages/user/Lookup";
 
-import Files from './pages/user/Files';
-import Lookup from './pages/user/Lookup';
-
-import HomePage from './pages/Home';
+import HomePage from "./pages/Home";
 
 function App() {
   return (
-    <Routes>
-      {/* Public Routes */}
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+    <>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={true}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        theme="light"
+        transition={Bounce}
+      />
 
-      {/* Admin Routes */}
-      <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<Navigate to="dashboard" />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="orders" element={<Orders />} />
-        <Route path="paymentMethod" element={<PaymentMethods />} />
-        <Route path="collections" element={<Collections />} />
-        <Route path="tables" element={<Tables />} />
-        <Route path="users" element={<Users />} />
-      </Route>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
 
-      {/* User Routes */}
-      <Route path="/user" element={<AdminLayout />}>
-        <Route index element={<Navigate to="dashboard" />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="files" element={<Files />} />
-        <Route path="ordersw" element={<Orders />} />
-        <Route path="lookup" element={<Lookup />} />
-      </Route>
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Navigate to="dashboard" />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="orders" element={<Orders />} />
+          <Route path="paymentMethod" element={<PaymentMethods />} />
+          <Route path="collections" element={<Collections />} />
+          <Route path="tables" element={<Tables />} />
+          <Route path="users" element={<Users />} />
+        </Route>
 
-      {/* Fallback Route */}
-      <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
+        {/* User Routes */}
+        <Route path="/user" element={<AdminLayout />}>
+          <Route index element={<Navigate to="dashboard" />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="files" element={<Files />} />
+          <Route path="ordersw" element={<Orders />} />
+          <Route path="lookup" element={<Lookup />} />
+        </Route>
+
+        {/* Fallback Route */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </>
   );
 }
 

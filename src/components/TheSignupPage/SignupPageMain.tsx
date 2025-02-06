@@ -18,6 +18,7 @@ import VerifyAccountButton from "./elements/VerifyAccountButton";
 import { signup, verifyEmail } from "../../actions/auth";
 import VerificationCodeInput from "./elements/VerificationCodeInput";
 import CreateAccountButton_M from "../TheHomePage/elements/desktop/CreateAccountButton_M";
+import { toast } from "react-toastify";
 
 export default function SignupPageMain() {
   const navigate = useNavigate()
@@ -52,7 +53,7 @@ export default function SignupPageMain() {
       !industry ||
       !company
     ) {
-      alert("Please fill in all required fields.");
+      toast.warn("Please fill in all required fields.");
       return false;
     }
 
@@ -63,12 +64,12 @@ export default function SignupPageMain() {
     const { email, password, passwordConfirm } = formData;
 
     if (!email || !password || !passwordConfirm) {
-      alert("Please fill in all required fields.");
+      toast.warning("Please fill in all required fields.");
       return false;
     }
 
     if (password !== passwordConfirm) {
-      alert("Passwords do not match.");
+      toast.warning("Passwords do not match.");
       return false;
     }
 
@@ -84,10 +85,12 @@ export default function SignupPageMain() {
   const handleVerifyEmail = () => {
     if (validateInformationStep()) {
       if (!formData.email) {
-        alert("Please provide an email address.");
+        toast.warning("Please provide an email address.");
       } else {
-        setStepKey("verification");
-        verifyEmail(formData.email);
+        verifyEmail(formData.email, (response: {message: string}) => {
+          toast.success(response.message)
+          setStepKey("verification");
+        });
       }
     }
   };

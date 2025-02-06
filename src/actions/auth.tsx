@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import api from "./api";
 
 interface SignupData {
@@ -13,27 +14,45 @@ interface SignupData {
   verificationCode?: string;
 }
 
-export const verifyEmail = async (email: string) => {
+interface VerifyEmailResponse {
+  message: string;
+}
+
+interface LoginResponse {
+  message: string;
+  token: string;
+  user: {
+    id: string
+  }
+} 
+
+export const verifyEmail = async (email: string, onSuccess: (data: VerifyEmailResponse) => void) => {
   try {
-    await api.post("/api/users/verify-email", { email });
+    const response = await api.post("/api/auth/verify-email", { email });
+    
+    if(response.status === 200) {
+      onSuccess(response.data);
+    }
+
+    console.log('response.data', response.data)
   } catch (error: any) {
     console.error("Error verifying email:", error);
     if (error.response) {
       // Server responded with a status other than 200 range
-      alert(`Error: ${error.response.data.message}`);
+      toast.error(`Error: ${error.response.data.message}`);
     } else if (error.request) {
       // Request was made but no response received
-      alert("Error: No response from server. Please try again later.");
+      toast.error("Error: No response from server. Please try again later.");
     } else {
       // Something else happened while setting up the request
-      alert("Error: Unable to verify email. Please try again.");
+      toast.error("Error: Unable to verify email. Please try again.");
     }
   }
 };
 
 export const signup = async (formData: SignupData, onSuccess: () => void) => {
   try {
-    const response = await api.post("/api/users/signup", formData);
+    const response = await api.post("/api/auth/signup", formData);
     if (response.status === 201) {
       onSuccess();
     }
@@ -55,18 +74,18 @@ export const signup = async (formData: SignupData, onSuccess: () => void) => {
 export const login = async (
   email: string,
   password: string,
-  onSuccess: () => void
+  onSuccess: (data: LoginResponse) => void
 ) => {
   try {
-    const response = await api.post("/api/users/login", { email, password });
-    if (response.status === 201) {
-      onSuccess();
+    const response = await api.post("/api/auth/login", { email, password });
+    if (response.status === 200) {
+      onSuccess(response.data);
     }
   } catch (error: any) {
     console.error("Error logging in:", error);
     if (error.response) {
       // Server responded with a status other than 200 range
-      alert(`Error: ${error.response.data.message}`);
+      toast.error(`Error: ${error.response.data.detail}`);
     } else if (error.request) {
       // Request was made but no response received
       alert("Error: No response from server. Please try again later.");
@@ -79,7 +98,7 @@ export const login = async (
 
 export const forgotPassword = async (email: string) => {
   try {
-    await api.post("/api/users/forgot-password", { email });
+    await api.post("/api/auth/forgot-password", { email });
     alert("Password reset link sent to your email.");
   } catch (error: any) {
     console.error("Error sending password reset link:", error);
@@ -95,7 +114,7 @@ export const forgotPassword = async (email: string) => {
 
 export const resetPassword = async (token: string, password: string) => {
   try {
-    await api.post("/api/users/reset-password", { token, password });
+    await api.post("/api/auth/reset-password", { token, password });
     alert("Password has been reset.");
   } catch (error: any) {
     console.error("Error resetting password:", error);

@@ -1,24 +1,43 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../../actions/auth';
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+
+import { login } from "../../actions/auth";
 import PasswordField from "./elements/PasswordField";
 import LoginButton from "../../components/TheLoginPage/elements/LoginButton";
 import InputField from "../../components/TheLoginPage/elements/InputField";
 import CheckBox from "../../components/TheHomePage/elements/desktop/CheckBox";
+import HomeButton from "../TheHomePage/elements/desktop/HomeButton";
+
 import "../../style/TheHomePage/style.css";
-import HomeButton from '../TheHomePage/elements/desktop/HomeButton';
 
 export default function LoginPageMain() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  useEffect(() => {
+    if(localStorage.getItem('token')) {
+      navigate('/')
+    }
+  })
+
   const handleLogin = () => {
-    login(email, password, () => {
-      navigate('/user')
-    })
-  }
+    if (!email) {
+      toast.error("Email is required");
+      return;
+    }
+    if (!password) {
+      toast.error("Password is required");
+      return;
+    }
+    login(email, password, (response) => {
+      toast.success(response.message);
+      localStorage.setItem("token", response.token)
+      navigate("/user");
+    });
+  };
 
   return (
     <div className="relative w-full flex justify-between flex-col items-center">
@@ -61,9 +80,7 @@ export default function LoginPageMain() {
           >
             <CheckBox text="Stay Connected" />
             <div className="flex flex-1 justify-end items-start gap-4 text-lg lg:text-xl text-light-dark">
-              <span className="font-raleway font-medium">
-                Forgot Password?
-              </span>
+              <span className="font-raleway font-medium">Forgot Password?</span>
               <Link
                 to="/ChangePassword"
                 className="border-b-2 font-raleway font-semibold border-[#666666] text-dark"
