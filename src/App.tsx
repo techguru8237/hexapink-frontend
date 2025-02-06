@@ -17,6 +17,8 @@ import Files from "./pages/user/Files";
 import Lookup from "./pages/user/Lookup";
 
 import HomePage from "./pages/Home";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPasswordPage from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
 
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>

@@ -41,7 +41,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({ text }) => {
           </div>
           <label
             htmlFor="comments"
-            className="w-full font-raleway font-medium text-dark text-left text-md lg:text-xl"
+            className="w-full font-raleway font-medium text-dark text-left text-md lg:text-lg"
           >
             {text}
           </label>{" "}

@@ -1,6 +1,6 @@
 import HomeHeader from "../components/TheHomePage/HomeHeader";
 import BackgroundImage1 from "../assets/TheHomePage/image/bg1.svg";
-import LoginPageMain from "../components/TheLoginPage/LoginPageMain";
+import LoginPageMain from "../components/Login/LoginPageMain";
 
 export default function LoginPage() {
   return (

@@ -60,9 +60,10 @@ export default function CountryCodeCombobox({
         setSelectedCountry(country);
         setIsOpen(false);
       }}
+      style={{width: "100%"}}
     >
       <label
-        className={`block text-sm text-start font-[raleway-semibold] ${
+        className={`block text-sm text-start font-raleway font-semibold ${
           isOpen ? "text-pink-500" : "text-gray-900"
         }`}
       >
@@ -96,7 +97,7 @@ export default function CountryCodeCombobox({
                   value={country}
                   className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-pink-500 data-[focus]:text-gray-600 data-[focus]:outline-none"
                 >
-                  <span className="block font-raleway font-medium truncate group-data-[selected]:font-[raleway-semibold]">
+                  <span className="block font-raleway font-medium truncate group-data-[selected]:font-raleway font-semibold">
                     +{country.phone}
                   </span>
 
@@ -121,7 +122,7 @@ export default function CountryCodeCombobox({
           onChange={(event) => {
             setPhoneNumber(selectedCountry?.phone + event.target.value);
           }}
-          className="bg-white block w-[200px] border-gray-300 text-[15px] font-raleway font-medium border-b focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none p-0 m-0 leading-none align-bottom"
+          className="bg-transparent block w-full border-gray-300 text-[15px] font-raleway font-medium border-b focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none p-0 m-0 leading-none align-bottom"
         />
       </div>
     </Combobox>

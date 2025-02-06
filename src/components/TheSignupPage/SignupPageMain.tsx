@@ -6,8 +6,8 @@ import StepThree from "../../assets/TheSignupPage/image/step3.svg";
 import StepOne_M from "../../assets/TheSignupPage/image/step1_m.svg";
 import StepTwo_M from "../../assets/TheSignupPage/image/step2_m.svg";
 import StepThree_M from "../../assets/TheSignupPage/image/step3_m.svg";
-import InputField from "../TheLoginPage/elements/InputField";
-import PasswordField from "../TheLoginPage/elements/PasswordField";
+import InputField from "../Login/elements/InputField";
+import PasswordField from "../Login/elements/PasswordField";
 import ContinueButton from "./elements/ContinueButton";
 import CountryCombobox from "./elements/CountryCombobox";
 import CountryCodeCombobox from "./elements/CountryCodeCombobox";
@@ -110,8 +110,8 @@ export default function SignupPageMain() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-between items-center gap-8 sm:gap-16">
-      <div className="w-full px-8 sm:px-12 md:px-20 lg:px-28 xl:px-36 2xl:px-48 lg:mt-10 mt-5 justify-start items-start flex flex-col gap-2 sm:gap-6">
+    <div className="w-full h-full flex flex-col justify-between items-center gap-8 sm:gap-12 xl:gap-16">
+      <div className="w-full px-8 sm:px-12 md:px-20 lg:px-28 xl:px-36 2xl:px-48 lg:mt-10 mt-5 justify-start items-start flex flex-col gap-2 sm:gap-6 text-dark">
         <div className="flex justify-center items-center lg:hidden w-full mb-4">
           <img src={StepOne_M} alt="" hidden={stepKey != "profile"} />
           <img src={StepTwo_M} alt="" hidden={stepKey != "information"} />
@@ -142,7 +142,7 @@ export default function SignupPageMain() {
           Already have an account?{" "}
           <Link
             to="/login"
-            className="text-light-dark border-b-2 font-[raleway-semibold] border-[#666666]"
+            className="text-light-dark border-b-2 font-raleway font-semibold border-[#666666]"
           >
             Log In
           </Link>
@@ -154,14 +154,14 @@ export default function SignupPageMain() {
           You didn&apos;t receive any code in your email? <br />
           <Link
             to="/resend"
-            className="text-light-dark border-b-2 font-[raleway-semibold] border-[#666666] tracking-wider"
+            className="text-light-dark border-b-2 font-raleway font-semibold border-[#666666] tracking-wider"
           >
             Resend Code &nbsp;
           </Link>
           or
           <Link
             to="/login"
-            className="text-light-dark border-b-2 font-[raleway-semibold] border-[#666666] tracking-wider"
+            className="text-light-dark border-b-2 font-raleway font-semibold border-[#666666] tracking-wider"
           >
             &nbsp;Change Email
           </Link>
@@ -174,7 +174,7 @@ export default function SignupPageMain() {
           <img src={StepThree} alt="" hidden={stepKey != "verification"} />
         </div>
         {stepKey == "profile" && (
-          <div className="flex lg:w-[80%] h-[90%] justify-start items-start flex-col gap-5">
+          <div className="w-full lg:w-[80%] h-[90%] flex justify-start items-start flex-col gap-5">
             <div className="w-full flex justify-start items-start gap-8 flex-col">
               <div className="w-full flex lg:flex-row flex-col justify-start items-start lg:gap-20 gap-8">
                 <InputField
@@ -235,7 +235,7 @@ export default function SignupPageMain() {
         )}
         {stepKey == "information" && (
           <div className="flex w-full lg:w-[80%] h-[90%] justify-start items-start flex-col gap-10">
-            <div className="w-full flex justify-start items-start gap-8 flex-col">
+            <div className="w-full lg:3/4 xl:w-2/3 flex justify-start items-start gap-8 flex-col">
               <InputField
                 type="text"
                 title="EMAIL *"
@@ -245,7 +245,7 @@ export default function SignupPageMain() {
                   setFormData({ ...formData, email: e.target.value });
                 }}
               />
-              <div className="flex lg:flex-row flex-col justify-between items-center lg:gap-5 gap-10 lg:w-[60%] w-full ">
+              <div className="w-full flex lg:flex-row flex-col justify-between items-center lg:gap-6 gap-10">
                 <PasswordField
                   title="PASSWORD *"
                   placeholder="Password"
@@ -281,7 +281,7 @@ export default function SignupPageMain() {
         {stepKey == "verification" && (
           <div className="flex lg:w-[80%] h-[90%] justify-start items-start flex-col gap-5">
             <div className="w-full flex justify-start items-start gap-5 flex-col">
-              <h1 className="font-[raleway-semibold] text-[12px] text-[#333333]">
+              <h1 className="font-raleway font-semibold text-[12px] text-[#333333]">
                 VERIFICATION CODE
               </h1>
               <VerificationCodeInput

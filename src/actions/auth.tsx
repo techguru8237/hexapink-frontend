@@ -22,19 +22,20 @@ interface LoginResponse {
   message: string;
   token: string;
   user: {
-    id: string
-  }
-} 
+    id: string;
+  };
+}
 
-export const verifyEmail = async (email: string, onSuccess: (data: VerifyEmailResponse) => void) => {
+export const verifyEmail = async (
+  email: string,
+  onSuccess: (data: VerifyEmailResponse) => void
+) => {
   try {
     const response = await api.post("/api/auth/verify-email", { email });
-    
-    if(response.status === 200) {
+
+    if (response.status === 200) {
       onSuccess(response.data);
     }
-
-    console.log('response.data', response.data)
   } catch (error: any) {
     console.error("Error verifying email:", error);
     if (error.response) {
@@ -60,7 +61,7 @@ export const signup = async (formData: SignupData, onSuccess: () => void) => {
     console.error("Error signing up:", error);
     if (error.response) {
       // Server responded with a status other than 200 range
-      alert(`Error: ${error.response.data.message}`);
+      toast.error(`Error: ${error.response.data.message}`);
     } else if (error.request) {
       // Request was made but no response received
       alert("Error: No response from server. Please try again later.");
@@ -85,7 +86,7 @@ export const login = async (
     console.error("Error logging in:", error);
     if (error.response) {
       // Server responded with a status other than 200 range
-      toast.error(`Error: ${error.response.data.detail}`);
+      toast.error(`Error: ${error.response.data.message}`);
     } else if (error.request) {
       // Request was made but no response received
       alert("Error: No response from server. Please try again later.");
@@ -96,34 +97,56 @@ export const login = async (
   }
 };
 
-export const forgotPassword = async (email: string) => {
+export const forgotPassword = async (
+  email: string,
+  onSuccess: (data: { message: string }) => void
+) => {
   try {
-    await api.post("/api/auth/forgot-password", { email });
-    alert("Password reset link sent to your email.");
+    const response = await api.post("/api/auth/forgot-password", { email });
+    if (response.status === 200) {
+      onSuccess(response.data);
+    }
   } catch (error: any) {
     console.error("Error sending password reset link:", error);
     if (error.response) {
-      alert(`Error: ${error.response.data.message}`);
+      // Server responded with a status other than 200 range
+      toast.error(`Error: ${error.response.data.message}`);
     } else if (error.request) {
-      alert("Error: No response from server. Please try again later.");
+      // Request was made but no response received
+      toast.error("Error: No response from server. Please try again later.");
     } else {
-      alert("Error: Unable to send password reset link. Please try again.");
+      // Something else happened while setting up the request
+      toast.error(
+        "Error: Unable to send password reset link. Please try again."
+      );
     }
   }
 };
 
-export const resetPassword = async (token: string, password: string) => {
+export const resetPassword = async (
+  token: string | undefined,
+  password: string,
+  onSuccess: (data: { message: string }) => void
+) => {
   try {
-    await api.post("/api/auth/reset-password", { token, password });
-    alert("Password has been reset.");
+    const response = await api.post("/api/auth/reset-password", {
+      token,
+      password,
+    });
+    if (response.status === 200) {
+      onSuccess(response.data);
+    }
   } catch (error: any) {
     console.error("Error resetting password:", error);
     if (error.response) {
-      alert(`Error: ${error.response.data.message}`);
+      // Server responded with a status other than 200 range
+      toast.error(`Error: ${error.response.data.message}`);
     } else if (error.request) {
-      alert("Error: No response from server. Please try again later.");
+      // Request was made but no response received
+      toast.error("Error: No response from server. Please try again later.");
     } else {
-      alert("Error: Unable to reset password. Please try again.");
+      // Something else happened while setting up the request
+      toast.error("Error: Unable to reset password. Please try again.");
     }
   }
 };

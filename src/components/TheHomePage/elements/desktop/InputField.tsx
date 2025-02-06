@@ -17,7 +17,7 @@ const InputField: React.FC<InputFieldProps> = ({ type, title, placeholder }) => 
         />
         <label
           htmlFor="name"
-          className="absolute left-0 -top-6 text-[14px] font-[raleway-semibold] text-gray-900 transition-colors peer-focus:text-pink-500"
+          className="absolute left-0 -top-6 text-[14px] font-raleway font-semibold text-gray-900 transition-colors peer-focus:text-pink-500"
         >
           {title}
         </label>

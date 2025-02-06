@@ -44,9 +44,9 @@ const CountryCombobox = ({ onCountrySelect }: CountryComboboxProps) => {
   };
 
   return (
-    <Combobox as="div" value={selectedCountry} onChange={handleCountrySelect}>
+    <Combobox as="div" value={selectedCountry} onChange={handleCountrySelect} style={{width: "100%"}}>
       <label
-        className={`block text-sm font-[raleway-semibold] text-start ${
+        className={`block text-sm font-raleway font-semibold] text-start ${
           isOpen ? "text-pink-500" : "text-gray-900"
         }`}
       >
@@ -54,7 +54,7 @@ const CountryCombobox = ({ onCountrySelect }: CountryComboboxProps) => {
       </label>
       <div className="relative mt-2">
         <Combobox.Input
-          className="peer block w-[300px] font-raleway font-medium bg-transparent py-1.5 pr-12 text-base text-gray-900 placeholder:text-gray-400 border-b border-gray-300 focus:border-pink-500 focus:outline-none sm:text-sm"
+          className="peer block w-full font-raleway font-medium bg-transparent py-1.5 pr-12 text-base text-gray-900 placeholder:text-gray-400 border-b border-gray-300 focus:border-pink-500 focus:outline-none sm:text-sm"
           onChange={(event) => setQuery(event.target.value)}
           onBlur={() => setQuery("")}
           displayValue={(country: Country) => country?.name}
