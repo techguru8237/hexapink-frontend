@@ -21,7 +21,7 @@ import CreateAccountButton_M from "../TheHomePage/elements/desktop/CreateAccount
 import { toast } from "react-toastify";
 
 export default function SignupPageMain() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [stepKey, setStepKey] = useState<string>("profile");
 
   const [formData, setFormData] = useState({
@@ -87,8 +87,8 @@ export default function SignupPageMain() {
       if (!formData.email) {
         toast.warning("Please provide an email address.");
       } else {
-        verifyEmail(formData.email, (response: {message: string}) => {
-          toast.success(response.message)
+        verifyEmail(formData.email, (response: { message: string }) => {
+          toast.success(response.message);
           setStepKey("verification");
         });
       }
@@ -104,8 +104,9 @@ export default function SignupPageMain() {
   };
 
   const handleSignup = () => {
-    signup(formData, () => {
-      navigate('/login')
+    signup(formData, (response: { message: string }) => {
+      toast.success(response.message);
+      navigate("/login");
     });
   };
 

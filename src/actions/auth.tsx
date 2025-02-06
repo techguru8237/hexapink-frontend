@@ -14,7 +14,7 @@ interface SignupData {
   verificationCode?: string;
 }
 
-interface VerifyEmailResponse {
+interface Responsetype {
   message: string;
 }
 
@@ -28,7 +28,7 @@ interface LoginResponse {
 
 export const verifyEmail = async (
   email: string,
-  onSuccess: (data: VerifyEmailResponse) => void
+  onSuccess: (data: Responsetype) => void
 ) => {
   try {
     const response = await api.post("/api/auth/verify-email", { email });
@@ -51,11 +51,14 @@ export const verifyEmail = async (
   }
 };
 
-export const signup = async (formData: SignupData, onSuccess: () => void) => {
+export const signup = async (
+  formData: SignupData,
+  onSuccess: (data: Responsetype) => void
+) => {
   try {
     const response = await api.post("/api/auth/signup", formData);
     if (response.status === 201) {
-      onSuccess();
+      onSuccess(response.data);
     }
   } catch (error: any) {
     console.error("Error signing up:", error);
