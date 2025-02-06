@@ -1,17 +1,23 @@
-import HexagonSignupButton from './HexagonSignupButton'
-import HexagonLoginButton from './HexagonLoginButton';
+import HexagonSignupButton from "./HexagonSignupButton";
+import HexagonLoginButton from "./HexagonLoginButton";
+import { useNavigate } from "react-router-dom";
 
 export default function HexapinkPaperOneButton() {
-    const handleLogin = () => {
-        alert("Login button is clicked");
-      };
-      const handleSignup = () => {
-        alert("Signup button is clicked");
-      };
+  const navigate = useNavigate();
+  const handleLogin = () => {
+    navigate("/login");
+  };
+  const handleSignup = () => {
+    navigate("/signup");
+  };
   return (
     <>
-        <HexagonSignupButton onClick={handleSignup} active={true}><span>Create Account</span></HexagonSignupButton>
-        <HexagonLoginButton onClick={handleLogin} active={true}><span>Log in</span></HexagonLoginButton>
+      <HexagonSignupButton onClick={handleSignup} active={true}>
+        <span>Create Account</span>
+      </HexagonSignupButton>
+      <HexagonLoginButton onClick={handleLogin} active={true}>
+        <span>Log in</span>
+      </HexagonLoginButton>
     </>
-  )
+  );
 }

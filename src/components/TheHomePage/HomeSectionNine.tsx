@@ -16,9 +16,13 @@ export default function HomeSectionNine() {
   return (
     <div className="relative w-full h-full flex flex-col justify-center items-center bg-[#FF6699]">
       <div className="w-full h-full absolute top-0 left-0 z-0">
-        <img src={Pattern} alt="" className="w-full xl:h-full object-cover object-top" />
+        <img
+          src={Pattern}
+          alt=""
+          className="w-full xl:h-full object-cover object-top"
+        />
       </div>
-      <div className="my-12 lg:mt-64 px-8 sm:px-12 md:px-20 lg:px-28 xl:px-36 2xl:px-48 z-10">
+      <div className="w-full my-12 lg:mt-64 px-8 sm:px-12 md:px-20 lg:px-28 xl:px-36 2xl:px-48 z-10">
         <div className="w-full sm:w-4/5 xl:w-3/4 mx-auto flex flex-col gap-8">
           <div className="flex flex-col gap-4">
             <h1 className="text-left lg:text-center font-kanit font-bold text-2xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl text-dark select-none">
@@ -32,11 +36,11 @@ export default function HomeSectionNine() {
           </div>
 
           <div className="w-full flex flex-col items-cemter lg:items-start lg:flex-row-reverse gap-[51px]">
-            <div className="w-full bg-white p-12 xl:p-16 flex flex-col gap-8 sm:gap-12 md:gap-16 xl:gap-20">
+            <div className="w-full bg-white p-8 md:p-12 xl:p-16 flex flex-col gap-8 sm:gap-12 md:gap-16 xl:gap-20">
               <h1 className="text-left text-dark lg:text-[40px] text-[24px] font-kanit font-semibold">
                 Are you interested? Let&apos;s talk Business
               </h1>
-              <p className="text-left text-light-dark font-raleway font-medium text-[20px]">
+              <p className="text-left text-light-dark font-raleway font-medium text-sm lg:text-md xl:text-lg">
                 Fill this form or send an email to Contact@hexapink.com
               </p>
 
@@ -81,9 +85,13 @@ export default function HomeSectionNine() {
             </div>
 
             <div className="flex flex-row lg:flex-col gap-4 justify-center items-center">
-              <img src={Phone} alt="phone icon" />
-              <img src={Email} alt="email icon" />
-              <img src={Location} alt="location icon" />
+              <img src={Phone} alt="phone icon" className="w-10 sm:w-auto" />
+              <img src={Email} alt="email icon" className="w-10 sm:w-auto" />
+              <img
+                src={Location}
+                alt="location icon"
+                className="w-10 sm:w-auto"
+              />
             </div>
           </div>
         </div>
