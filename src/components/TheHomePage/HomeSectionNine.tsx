@@ -8,6 +8,7 @@ import CustomFileButton_B from "./elements/desktop/CustomFileButton_B";
 import InputField from "./elements/desktop/InputField";
 import CheckBox from "./elements/desktop/CheckBox";
 import SendMessageButton from "./elements/desktop/SendMessageButton";
+import SendMessageButtonMobile from "./elements/desktop/SendMessageButtonMobile";
 
 export default function HomeSectionNine() {
   const handleCustomFile = () => {
@@ -74,12 +75,19 @@ export default function HomeSectionNine() {
                   />
                 </div>
                 <CheckBox text="I agree to receive emails from Hexapink *" />
-                <div className="w-full justify-start items-center z-10">
+                <div className="w-full justify-start items-center z-10 hidden lg:flex">
                   <SendMessageButton
                     onClick={() => alert("Send Message Button Clicked")}
                   >
                     <span>Send Message</span>{" "}
                   </SendMessageButton>
+                </div>
+                <div className="w-full justify-start items-center z-10 flex lg:hidden">
+                  <SendMessageButtonMobile
+                    onClick={() => alert("Send Message Button Clicked")}
+                  >
+                    <span>Send Message</span>{" "}
+                  </SendMessageButtonMobile>
                 </div>
               </form>
             </div>

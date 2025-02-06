@@ -743,3 +743,66 @@
   cursor: pointer;
 }
 
+
+/* ************************ Mobile Send message Button  ***********************/
+.send-message-button-mobile {
+  position: relative;
+  display: block;
+  background: var(--hexagon-background-color);
+  width: 200px;
+  height: 75px;
+  line-height: 50px;
+  text-align: center;
+  font-size: 16px;
+  text-decoration: none;
+  color: #333333;
+  box-sizing: border-box;
+  border-style: none;
+}
+
+.send-message-button-mobile:before,
+.send-message-button-mobile:after {
+  background: #FFCCDD;
+  position: absolute;
+  content: "";
+  width: 200px;
+  left: 0px;
+  height: 25px;
+  z-index: -1;
+  box-sizing: unset;
+  border-radius: 5px;
+}
+
+.send-message-button-mobile:before {
+  transform: perspective(20px) rotateX(5deg);
+}
+
+.send-message-button-mobile:after {
+  top: 25px;
+  transform: perspective(20px) rotateX(-5deg);
+}
+
+/* button border style */
+.send-message-button-mobile.border:before,
+.send-message-button-mobile.border:after {
+  border: 2px solid #FFCCDD;
+}
+
+.send-message-button-mobile.border:before {
+  border-bottom: none;
+}
+
+.send-message-button-mobile.border:after {
+  border-top: none;
+}
+
+/* button hover styles */
+.send-message-button-mobile.border:hover:before,
+.send-message-button-mobile.border:hover:after {
+  background: white;
+}
+
+.send-message-button-mobile.border:hover {
+  color: #333333;
+  cursor: pointer;
+}
