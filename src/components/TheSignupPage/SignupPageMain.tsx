@@ -95,6 +95,16 @@ export default function SignupPageMain() {
     }
   };
 
+  const handleClickResendCode = () => {
+    if (!formData.email) {
+      toast.warning("Please provide an email address.");
+    } else {
+      verifyEmail(formData.email, (response: { message: string }) => {
+        toast.success(response.message);
+      });
+    }
+  }
+
   const handleBack = () => {
     if (stepKey == "information") {
       setStepKey("profile");
@@ -153,19 +163,19 @@ export default function SignupPageMain() {
           hidden={stepKey != "verification"}
         >
           You didn&apos;t receive any code in your email? <br />
-          <Link
-            to="/resend"
-            className="text-light-dark border-b-2 font-raleway font-semibold border-[#666666] tracking-wider"
+          <span
+            onClick={handleClickResendCode}
+            className="text-light-dark border-b-2 font-raleway font-semibold border-[#666666] tracking-wider cursor-pointer"
           >
             Resend Code &nbsp;
-          </Link>
+          </span>
           or
-          <Link
-            to="/login"
-            className="text-light-dark border-b-2 font-raleway font-semibold border-[#666666] tracking-wider"
+          <span
+            onClick={() => setStepKey('information')}
+            className="text-light-dark border-b-2 font-raleway font-semibold border-[#666666] tracking-wider cursor-pointer"
           >
             &nbsp;Change Email
-          </Link>
+          </span>
         </p>
       </div>
       <div className="flex lg:flex-row flex-col w-[80%] justify-start items-center gap-20 h-[90%]">
