@@ -5,38 +5,61 @@ import AdminHeader from "../../components/Dashboard/AdminHeader";
 import Pagination from "../../components/Pagination";
 import UserListHeader from "../../components/User/UserListHeader";
 import { UserListItem } from "../../components/User/UserListItem";
-
-const dummyData = Array.from({ length: 25 }, (_, index) => ({
-  id: index,
-  name: `file_${index + 1}`,
-  date: "11 Nov 2024",
-  status: "Ready",
-  order: `ord_${index + 124}`,
-}));
+import NewUserSkeleton from "../../components/User/NewUserSkeleton";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import api from "../../actions/api";
+import { UserItem } from "../../types";
+import CreateUser from "../../components/User/CreateUser";
+import FilterPanel from "../../components/User/FilterPanel";
 
 export default function Users() {
-  const [selectedFiles, setSelectedFiles] = useState<number[]>([]);
-  const [filteredFiles, setFilteredFiles] = useState<
-    { id: number; name: string; date: string; status: string; order: string }[]
-  >([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const [users, setUsers] = useState<UserItem[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
   const [isFilterPanelVisible, setIsFilterPanelVisible] = useState(false);
-  const itemsPerPage = 3; // Number of items per page
-  const totalPages = Math.ceil(dummyData.length / itemsPerPage);
+  const [isNewUserPanelVisible, setIsNewUserPanelVisible] = useState(false);
 
-  useEffect(() => {
-    setFilteredFiles(dummyData);
-  }, []);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  const handleAddUserClick = () => {
+    setIsNewUserPanelVisible(!isNewUserPanelVisible);
   };
 
-  const handleCheckboxChange = (index: number) => {
-    setSelectedFiles((prevSelectedFiles) =>
-      prevSelectedFiles.includes(index)
-        ? prevSelectedFiles.filter((fileIndex) => fileIndex !== index)
-        : [...prevSelectedFiles, index]
+  const itemsPerPage = 5;
+  const currentPage = parseInt(searchParams.get("page") || "1");
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      // Construct the query string from all search params
+      const queryParams = new URLSearchParams(searchParams);
+
+      try {
+        const response = await api.get(
+          `/api/users?${queryParams.toString()}&limit=${itemsPerPage}`
+        );
+
+        setUsers(response.data.users);
+        setTotalPages(response.data.totalPages);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, [searchParams]); // Now depends on searchParams instead of just page
+
+  const handlePageChange = (page: number) => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set("page", page.toString());
+    navigate(`/admin/users?${newSearchParams.toString()}`);
+  };
+
+  const handleCheckboxChange = (id: string) => {
+    setSelectedUsers((prevSelectedUsers) =>
+      prevSelectedUsers.includes(id)
+        ? prevSelectedUsers.filter((tableId) => tableId !== id)
+        : [...prevSelectedUsers, id]
     );
   };
 
@@ -44,29 +67,41 @@ export default function Users() {
     setIsFilterPanelVisible(!isFilterPanelVisible);
   };
 
-  // Calculate the start and end indices for slicing the filteredFiles array
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentFiles = filteredFiles.slice(startIndex, endIndex);
+  // Calculate active filters count
+  const getActiveFiltersCount = () => {
+    const filterParams = [
+      "minColumns",
+      "maxColumns",
+      "minLeads",
+      "maxLeads",
+      "startDate",
+      "endDate",
+    ];
+    return filterParams.filter((param) => searchParams.has(param)).length;
+  };
 
   return (
     <div>
       <AdminHeader icon={<FaRegUserCircle />} label="Users" />
 
-      <div className="bg-light-gray border-b border-light-gray1 flex">
+      <div className="bg-light-gray border-b border-light-gray1 flex flex-row">
         <div className="flex flex-col flex-1 border-r border-light-gray1">
           <div className="px-8 py-4 border-b border-light-gray1 flex items-center justify-between text-light-dark">
-            {selectedFiles.length > 0 && (
-              <span>{selectedFiles.length} Selected</span>
+            {selectedUsers.length > 0 && (
+              <span>{selectedUsers.length} Selected</span>
             )}
             <div className="ml-auto flex items-center divide-x">
               <div className="pr-4 flex items-center gap-2">
-                {filteredFiles.length > 0 && (
-                  <span>{filteredFiles.length} Results</span>
+                {getActiveFiltersCount() > 0 && (
+                  <span>{getActiveFiltersCount()} Active Filters</span>
                 )}
                 <button
                   onClick={handleClickFilter}
-                  className="flex items-center border border-light-gray3 rounded-md px-2 py-1 text-dark cursor-pointer"
+                  className={`flex items-center border rounded-md px-2 py-1 text-dark cursor-pointer ${
+                    getActiveFiltersCount() > 0
+                      ? "border-dark-blue text-dark-blue"
+                      : "border-light-gray3"
+                  }`}
                 >
                   <CiFilter />
                   <span>Filter</span>
@@ -82,27 +117,36 @@ export default function Users() {
             </div>
           </div>
 
+          {/* Skeleton */}
+          <NewUserSkeleton onAddUserClick={handleAddUserClick} />
+
+          {/* Main Table */}
           <div className="p-8 flex flex-col gap-4">
             <UserListHeader />
-            {currentFiles.map((item) => (
+
+            {users.map((item: UserItem, index) => (
               <UserListItem
-                key={item.id}
-                index={item.id}
-                isSelected={selectedFiles.includes(item.id)}
+                key={item._id}
+                index={(currentPage - 1) * itemsPerPage + index + 1}
+                data={item}
+                isSelected={selectedUsers.includes(item._id)}
                 onCheckboxChange={handleCheckboxChange}
               />
             ))}
           </div>
         </div>
-        {/* {isFilterPanelVisible && (
-          <div className="p-6">
-            <FilterPanel
-              onClose={handleClickFilter}
-              items={dummyData}
-              setFilteredItems={setFilteredFiles}
-            />
+
+        {isNewUserPanelVisible && (
+          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray1 flex justify-center">
+            <CreateUser />
           </div>
-        )} */}
+        )}
+
+        {isFilterPanelVisible && (
+          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray1 flex justify-center">
+            <FilterPanel onClose={handleClickFilter} />
+          </div>
+        )}
       </div>
     </div>
   );

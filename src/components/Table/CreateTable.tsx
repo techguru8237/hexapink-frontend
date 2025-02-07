@@ -13,13 +13,9 @@ const CreateTable = (): JSX.Element => {
     file: "",
   });
 
-  const token = localStorage.getItem('token')
-  console.log('token', token)
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      console.log("Fiel Exist!")
       setFile(files[0]);
       setErrors((prev) => ({ ...prev, file: "" }));
     }
@@ -57,6 +53,7 @@ const CreateTable = (): JSX.Element => {
         <div className="w-full flex flex-col items-start gap-6 p-6 border-b border-dashed border-light-gray3">
           <Input
             label="Table Name"
+            type="text"
             value={tableName}
             onChange={(e) => {
               setTableName(e.target.value);

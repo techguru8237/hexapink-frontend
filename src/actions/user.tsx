@@ -1,20 +1,8 @@
+import { NewUserItem, UserItem } from "../types";
 import api from "./api";
 
-interface userData {
-  firstName: string;
-  secondName: string;
-  country: string;
-  phone: string;
-  industry: string;
-  company: string;
-  email: string;
-  password: string;
-  passwordConfirm: string;
-  verificationCode?: string;
-}
-
 export const createUser = async (
-  formData: userData,
+  formData: NewUserItem,
   onSuccess: () => void
 ) => {
   try {
@@ -36,7 +24,7 @@ export const createUser = async (
 
 export const updateUser = async (
   id: string,
-  formData: userData,
+  formData: UserItem,
   onSuccess: () => void
 ) => {
   try {

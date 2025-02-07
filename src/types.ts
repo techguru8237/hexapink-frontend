@@ -8,3 +8,25 @@ export interface TableItem {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface NewUserItem {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  phone: string | undefined;
+  country: string;
+}
+
+export interface UserItem {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  country: string;
+  status: string;
+  verified: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

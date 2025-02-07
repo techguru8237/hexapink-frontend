@@ -1,11 +1,18 @@
 interface InputProps {
   label: string;
+  type: string;
   value: string;
   error: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function Input ({ label, value, error, onChange }: InputProps) {
+export default function Input({
+  label,
+  type,
+  value,
+  error,
+  onChange,
+}: InputProps) {
   return (
     <div className="w-full flex flex-col items-start gap-2">
       <label htmlFor="input">{label}</label>
@@ -13,12 +20,10 @@ export default function Input ({ label, value, error, onChange }: InputProps) {
         value={value}
         onChange={onChange}
         id="input"
-        type="text"
-        className="w-full bg-white border border-light-gray3 focus:border-dark-blue rounded-lg p-2"
+        type={type || "text"}
+        className="w-full bg-white border border-light-gray3 focus:border-dark-blue rounded-lg p-2 transition duration-200 outline-none"
       />
       {error && <span className="text-red-500 text-sm">{error}</span>}
     </div>
   );
 }
-
-

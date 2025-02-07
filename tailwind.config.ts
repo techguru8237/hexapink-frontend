@@ -20,7 +20,7 @@ export default {
         "light-green": "#D9F2D9",
       },
       fontFamily: {
-        "redacted-script": ['"Redacted Script"', "cursive"],
+        "redacted-script": ["Redacted Script", "cursive"],
         kanit: ["Kanit", "sans-serif"],
         raleway: ["Raleway", "sans-serif"],
       },

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { CiFilter } from "react-icons/ci";
 import { PiTableLight } from "react-icons/pi";
@@ -9,44 +9,54 @@ import api from "../../actions/api";
 import { TableListItem } from "../../components/Table/TableListItem";
 import NewTableSkeleton from "../../components/Table/NewTableSkeleton";
 import TableListHeader from "../../components/Table/TableListHeader";
-import TableSideBar from "../../components/Table/CreateTable";
+import CreateTable from "../../components/Table/CreateTable";
+import FilterPanel from "../../components/Table/FilterPanel";
 import AdminHeader from "../../components/Dashboard/AdminHeader";
 import Pagination from "../../components/Pagination";
 
 import { TableItem } from "../../types";
 
 export default function Tables() {
-  const navigate = useNavigate()
-  const { page } = useParams(); // Get the page parameter from the URL
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const [tables, setTables] = useState([]);
+  const [tables, setTables] = useState<TableItem[]>([]);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
-  // const [filteredTables, setFilteredTables] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
-
   const [isFilterPanelVisible, setIsFilterPanelVisible] = useState(false);
   const [isNewTablePanelVisible, setIsNewTablePanelVisible] = useState(false);
 
   const handleAddTableClick = () => {
     setIsNewTablePanelVisible(!isNewTablePanelVisible);
   };
-  const itemsPerPage = 5; // Number of items per page
+
+  const itemsPerPage = 5;
+  const currentPage = parseInt(searchParams.get("page") || "1");
 
   useEffect(() => {
     const fetchTables = async () => {
-      const response = await api.get(
-        `/api/table?page=${page}&limit=${itemsPerPage}`
-      );
+      // Construct the query string from all search params
+      const queryParams = new URLSearchParams(searchParams);
 
-      setTables(response.data.tables);
-      setTotalPages(response.data.totalPages);
+      try {
+        const response = await api.get(
+          `/api/table?${queryParams.toString()}&limit=${itemsPerPage}`
+        );
+
+        setTables(response.data.tables);
+        setTotalPages(response.data.totalPages);
+      } catch (error) {
+        console.error("Error fetching tables:", error);
+      }
     };
 
     fetchTables();
-  }, [page]);
+  }, [searchParams]); // Now depends on searchParams instead of just page
 
   const handlePageChange = (page: number) => {
-    navigate(`/admin/tables/${page}`); // Update the URL with the new page
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set("page", page.toString());
+    navigate(`/admin/tables?${newSearchParams.toString()}`);
   };
 
   const handleCheckboxChange = (id: string) => {
@@ -61,6 +71,19 @@ export default function Tables() {
     setIsFilterPanelVisible(!isFilterPanelVisible);
   };
 
+  // Calculate active filters count
+  const getActiveFiltersCount = () => {
+    const filterParams = [
+      "minColumns",
+      "maxColumns",
+      "minLeads",
+      "maxLeads",
+      "startDate",
+      "endDate",
+    ];
+    return filterParams.filter((param) => searchParams.has(param)).length;
+  };
+
   return (
     <div>
       <AdminHeader icon={<PiTableLight />} label="Tables" />
@@ -73,12 +96,16 @@ export default function Tables() {
             )}
             <div className="ml-auto flex items-center divide-x">
               <div className="pr-4 flex items-center gap-2">
-                {/* {filteredTables.length > 0 && (
-                  <span>{filteredTables.length} Results</span>
-                )} */}
+                {getActiveFiltersCount() > 0 && (
+                  <span>{getActiveFiltersCount()} Active Filters</span>
+                )}
                 <button
                   onClick={handleClickFilter}
-                  className="flex items-center border border-light-gray3 rounded-md px-2 py-1 text-dark cursor-pointer"
+                  className={`flex items-center border rounded-md px-2 py-1 text-dark cursor-pointer ${
+                    getActiveFiltersCount() > 0
+                      ? "border-dark-blue text-dark-blue"
+                      : "border-light-gray3"
+                  }`}
                 >
                   <CiFilter />
                   <span>Filter</span>
@@ -86,7 +113,7 @@ export default function Tables() {
               </div>
               <div className="pl-4">
                 <Pagination
-                  currentPage={page ? parseInt(page) : 1}
+                  currentPage={currentPage}
                   totalPages={totalPages}
                   onPageChange={handlePageChange}
                 />
@@ -115,19 +142,15 @@ export default function Tables() {
 
         {isNewTablePanelVisible && (
           <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray1 flex justify-center">
-            <TableSideBar />
+            <CreateTable />
           </div>
         )}
 
-        {/* {isFilterPanelVisible && (
-          <div className="p-6">
-            <FilterPanel
-              onClose={handleClickFilter}
-              items={dummyData}
-              setFilteredItems={setFilteredTables}
-            />
+        {isFilterPanelVisible && (
+          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray1 flex justify-center">
+            <FilterPanel onClose={handleClickFilter} />
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );
