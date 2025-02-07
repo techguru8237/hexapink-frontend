@@ -6,7 +6,7 @@ const useAuth = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (token) {
       setIsAuthenticated(true);
     } else {
@@ -15,13 +15,13 @@ const useAuth = () => {
   }, []);
 
   const login = (token: string) => {
-    sessionStorage.setItem("token", token);
+    localStorage.setItem("token", token);
     setIsAuthenticated(true);
     navigate("/");
   };
 
   const logout = () => {
-    sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
     setIsAuthenticated(false);
     navigate("/login");
   };

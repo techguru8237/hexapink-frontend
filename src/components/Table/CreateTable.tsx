@@ -13,6 +13,9 @@ const CreateTable = (): JSX.Element => {
     file: "",
   });
 
+  const token = localStorage.getItem('token')
+  console.log('token', token)
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {

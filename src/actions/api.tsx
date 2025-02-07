@@ -6,7 +6,7 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const api = axios.create({
   baseURL: backendUrl,
   headers: {
-    authorization: `Bear ${sessionStorage.getItem("token")}`,
+    authorization: `Bear ${localStorage.getItem("token")}`,
     "Content-Type": "application/json",
   },
 });
@@ -14,7 +14,7 @@ const api = axios.create({
 export const formApi = axios.create({
   baseURL: backendUrl,
   headers: {
-    authorization: `Bear ${sessionStorage.getItem("token")}`,
+    authorization: `Bear ${localStorage.getItem("token")}`,
     "Content-Type": "multipart/form-data",
   },
 });
