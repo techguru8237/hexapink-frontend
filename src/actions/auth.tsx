@@ -14,7 +14,7 @@ interface SignupData {
   verificationCode?: string;
 }
 
-interface Responsetype {
+export interface Responsetype {
   message: string;
 }
 

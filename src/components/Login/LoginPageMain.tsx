@@ -10,18 +10,20 @@ import CheckBox from "../TheHomePage/elements/desktop/CheckBox";
 import HomeButton from "../TheHomePage/elements/desktop/HomeButton";
 
 import "../../style/TheHomePage/style.css";
+import useAuth from "../../hooks/useAuth";
 
 export default function LoginPageMain() {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if(localStorage.getItem('token')) {
-      navigate('/')
+    if (isAuthenticated) {
+      navigate("/");
     }
-  })
+  });
 
   const handleLogin = () => {
     if (!email) {
@@ -32,11 +34,21 @@ export default function LoginPageMain() {
       toast.error("Password is required");
       return;
     }
-    login(email, password, (response) => {
-      toast.success(response.message);
-      localStorage.setItem("token", response.token)
-      navigate("/user");
-    });
+    login(
+      email,
+      password,
+      (response: {
+        message: string;
+        token: string;
+        user: {
+          id: string;
+        };
+      }) => {
+        toast.success(response.message);
+        localStorage.setItem("token", response.token);
+        navigate("/user");
+      }
+    );
   };
 
   return (

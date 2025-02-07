@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { toast } from "react-toastify";
 import { resetPassword } from "../../actions/auth";
@@ -8,6 +8,7 @@ import ResetPasswordButton from "./elements/ResetPasswordButton";
 import ResetPasswordButtonM from "./elements/ResetPasswordButtonM";
 
 export default function ResetPasswordPageMain() {
+  const navigator = useNavigate()
   const { token } = useParams<{ token: string }>();
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -23,6 +24,7 @@ export default function ResetPasswordPageMain() {
     }
     resetPassword(token, password, (response) => {
       toast.success(response.message);
+      navigator("/login");
     });
   };
 
