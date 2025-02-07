@@ -21,7 +21,7 @@ export default function Tables() {
 
   const [tables, setTables] = useState([]);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
-  const [filteredTables, setFilteredTables] = useState([]);
+  // const [filteredTables, setFilteredTables] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
 
   const [isFilterPanelVisible, setIsFilterPanelVisible] = useState(false);
@@ -73,9 +73,9 @@ export default function Tables() {
             )}
             <div className="ml-auto flex items-center divide-x">
               <div className="pr-4 flex items-center gap-2">
-                {filteredTables.length > 0 && (
+                {/* {filteredTables.length > 0 && (
                   <span>{filteredTables.length} Results</span>
-                )}
+                )} */}
                 <button
                   onClick={handleClickFilter}
                   className="flex items-center border border-light-gray3 rounded-md px-2 py-1 text-dark cursor-pointer"
