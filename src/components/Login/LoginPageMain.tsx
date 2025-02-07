@@ -45,7 +45,7 @@ export default function LoginPageMain() {
         };
       }) => {
         toast.success(response.message);
-        localStorage.setItem("token", response.token);
+        sessionStorage.setItem("token", response.token);
         navigate("/user");
       }
     );
