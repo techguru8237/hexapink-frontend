@@ -1,10 +1,10 @@
 import { toast } from "react-toastify";
 import { formApi } from "./api";
 
-export const createTable = async (fileData: FormData) => {
+export const createTable = async (fileData: FormData, onSuccess: () => void) => {
   try {
     const response = await formApi.post("/api/table/create", fileData);
-
+    onSuccess()
     console.log("response.data", response.data);
     toast.success("Successfully created table.")
   } catch (error: any) {

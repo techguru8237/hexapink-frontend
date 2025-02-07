@@ -30,7 +30,7 @@ export const TableListItem: React.FC<TableListItemProps> = ({
           <div className="w-[50%] p-3 flex items-center justify-between">
             <div className="flex items-center">
               <PiTableLight className="text-2xl mr-2" />
-              <span className="overflow-x-clip">{data._id}</span>
+              <span className="overflow-x-clip">{data.tableName}</span>
             </div>
             <CiCircleInfo className="text-xl mr-2 border rounded-md p-1 box-content" />
           </div>

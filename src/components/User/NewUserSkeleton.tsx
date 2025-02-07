@@ -46,7 +46,7 @@ export default function NewUserSkeleton({
         onClick={onAddUserClick}
         className="absolute left-1/2 transform -translate-x-1/2 rounded-full px-4 py-2 flex items-center gap-2 bg-dark-blue text-white"
       >
-        <PiPlusCircle className="text-2xl" /> <span>Add Table</span>
+        <PiPlusCircle className="text-2xl" /> <span>Add User</span>
       </button>
     </div>
   );

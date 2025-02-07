@@ -4,8 +4,11 @@ import FileUpload from "../Common/FileUpload";
 
 import { PiPlusCircle } from "react-icons/pi";
 import { createTable } from "../../actions/table";
+import { useNavigate } from "react-router-dom";
 
 const CreateTable = (): JSX.Element => {
+  const navigate = useNavigate();
+
   const [tableName, setTableName] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [errors, setErrors] = useState({
@@ -36,7 +39,9 @@ const CreateTable = (): JSX.Element => {
     fileData.append("tableName", tableName);
     fileData.append("file", file);
 
-    createTable(fileData);
+    createTable(fileData, () => {
+      navigate('/admin/tables?page=0')
+    });
     setFile(null)
     setTableName("")
   };
@@ -76,7 +81,7 @@ const CreateTable = (): JSX.Element => {
             onClick={handleSubmit}
             disabled={!file || !tableName}
             className={`bg-dark-blue ${
-              file ? "" : "opacity-20 cursor-default read-only"
+              !file || !tableName ? "opacity-20 cursor-default read-only" : ""
             } text-white flex items-center justify-center gap-2 rounded-full w-full`}
           >
             <PiPlusCircle className="text-xl" />

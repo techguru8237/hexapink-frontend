@@ -34,10 +34,13 @@ export default function Tables() {
   const currentPage = parseInt(searchParams.get("page") || "1");
 
   useEffect(() => {
-    const fetchTables = async () => {
-      // Construct the query string from all search params
-      const queryParams = new URLSearchParams(searchParams);
+    if (searchParams.get("page") == "0") {
+      navigate("/admin/tables/1");
+      return;
+    }
 
+    const fetchTables = async () => {
+      const queryParams = new URLSearchParams(searchParams);
       try {
         const response = await api.get(
           `/api/table?${queryParams.toString()}&limit=${itemsPerPage}`

@@ -26,6 +26,14 @@ export default function Input({
       fileInputRef.current.value = "";
     }
   };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(event);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   return (
     <>
       <div className="w-full flex flex-col items-start gap-2">
@@ -35,7 +43,7 @@ export default function Input({
           <span className="text-left text-sm w-full">{fileName}</span>
           <input
             ref={fileInputRef}
-            onChange={onChange}
+            onChange={handleFileChange}
             type="file"
             className="hidden"
             id="file-input"
