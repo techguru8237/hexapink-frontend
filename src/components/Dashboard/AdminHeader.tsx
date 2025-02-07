@@ -13,10 +13,7 @@ interface HeaderProps {
 }
 
 export default function Header({ icon, label }: HeaderProps) {
-  // const pathname = usePathname();
   const location = useLocation();
-
-  console.log(location.pathname)
 
   return (
     <div className="h-20 px-8 py-4 border-b border-light-gray3 flex justify-between items-center">

@@ -1,22 +1,24 @@
-interface HeaderProps {
+interface InputProps {
   label: string;
   value: string;
+  error: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function Input ({ label, value }: HeaderProps) {
+export default function Input ({ label, value, error, onChange }: InputProps) {
   return (
-    <div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
-      <div className="relative w-fit mt-[-1.00px] [font-family:'Raleway-Medium',Helvetica] font-medium text-light-dark text-sm tracking-[0.24px] leading-[18px] whitespace-nowrap">
-        {label}
-      </div>
-
-      <div className="flex h-[42px] items-center gap-4 px-4 py-0 relative self-stretch w-full mb-[-1.00px] ml-[-1.00px] mr-[-1.00px] bg-white rounded-lg overflow-hidden border border-solid border-[#3f3fbf] shadow-[inset_0px_0px_0px_4px_#ebebf8]">
-        <div className="relative w-fit [font-family:'Raleway-SemiBold',Helvetica] font-semibold text-[#4040bf] text-md tracking-[0.28px] leading-[21px] whitespace-nowrap">
-          {value}
-        </div>
-      </div>
+    <div className="w-full flex flex-col items-start gap-2">
+      <label htmlFor="input">{label}</label>
+      <input
+        value={value}
+        onChange={onChange}
+        id="input"
+        type="text"
+        className="w-full bg-white border border-light-gray3 focus:border-dark-blue rounded-lg p-2"
+      />
+      {error && <span className="text-red-500 text-sm">{error}</span>}
     </div>
-  )
+  );
 }
 
 

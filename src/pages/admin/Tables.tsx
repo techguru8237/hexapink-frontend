@@ -1,62 +1,65 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
 import { CiFilter } from "react-icons/ci";
 import { PiTableLight } from "react-icons/pi";
+
+import api from "../../actions/api";
+
+import { TableListItem } from "../../components/Table/TableListItem";
+import NewTableSkeleton from "../../components/Table/NewTableSkeleton";
+import TableListHeader from "../../components/Table/TableListHeader";
+import TableSideBar from "../../components/Table/CreateTable";
 import AdminHeader from "../../components/Dashboard/AdminHeader";
 import Pagination from "../../components/Pagination";
-import NewTableSkeleton from "../../components/Table/NewTableSkeleton"
-import TableListHeader from "../../components/Table/TableListHeader";
-import { TableListItem } from "../../components/Table/TableListItem";
-import TableSideBar from "../../components/TableSidebar"
 
-const dummyData = Array.from({ length: 25 }, (_, index) => ({
-  id: index,
-  name: `file_${index + 1}`,
-  date: "11 Nov 2024",
-  status: "Ready",
-  order: `ord_${index + 124}`,
-}));
+import { TableItem } from "../../types";
 
 export default function Tables() {
-  const [selectedFiles, setSelectedFiles] = useState<number[]>([]);
-  const [filteredFiles, setFilteredFiles] = useState<
-    { id: number; name: string; date: string; status: string; order: string }[]
-  >([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate()
+  const { page } = useParams(); // Get the page parameter from the URL
+
+  const [tables, setTables] = useState([]);
+  const [selectedTables, setSelectedTables] = useState<string[]>([]);
+  const [filteredTables, setFilteredTables] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+
   const [isFilterPanelVisible, setIsFilterPanelVisible] = useState(false);
   const [isNewTablePanelVisible, setIsNewTablePanelVisible] = useState(false);
 
-  console.log(isNewTablePanelVisible)
-
   const handleAddTableClick = () => {
     setIsNewTablePanelVisible(!isNewTablePanelVisible);
-  }
-  const itemsPerPage = 4; // Number of items per page
-  const totalPages = Math.ceil(dummyData.length / itemsPerPage);
+  };
+  const itemsPerPage = 5; // Number of items per page
 
   useEffect(() => {
-    setFilteredFiles(dummyData);
-  }, []);
+    const fetchTables = async () => {
+      const response = await api.get(
+        `/api/table?page=${page}&limit=${itemsPerPage}`
+      );
+
+      setTables(response.data.tables);
+      setTotalPages(response.data.totalPages);
+    };
+
+    fetchTables();
+  }, [page]);
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    navigate(`/admin/tables/${page}`); // Update the URL with the new page
   };
 
-  const handleCheckboxChange = (index: number) => {
-    setSelectedFiles((prevSelectedFiles) =>
-      prevSelectedFiles.includes(index)
-        ? prevSelectedFiles.filter((fileIndex) => fileIndex !== index)
-        : [...prevSelectedFiles, index]
+  const handleCheckboxChange = (id: string) => {
+    setSelectedTables((prevSelectedTables) =>
+      prevSelectedTables.includes(id)
+        ? prevSelectedTables.filter((tableId) => tableId !== id)
+        : [...prevSelectedTables, id]
     );
   };
 
   const handleClickFilter = () => {
     setIsFilterPanelVisible(!isFilterPanelVisible);
   };
-
-  // Calculate the start and end indices for slicing the filteredFiles array
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentFiles = filteredFiles.slice(startIndex, endIndex);
 
   return (
     <div>
@@ -65,13 +68,13 @@ export default function Tables() {
       <div className="bg-light-gray border-b border-light-gray1 flex flex-row">
         <div className="flex flex-col flex-1 border-r border-light-gray1">
           <div className="px-8 py-4 border-b border-light-gray1 flex items-center justify-between text-light-dark">
-            {selectedFiles.length > 0 && (
-              <span>{selectedFiles.length} Selected</span>
+            {selectedTables.length > 0 && (
+              <span>{selectedTables.length} Selected</span>
             )}
             <div className="ml-auto flex items-center divide-x">
               <div className="pr-4 flex items-center gap-2">
-                {filteredFiles.length > 0 && (
-                  <span>{filteredFiles.length} Results</span>
+                {filteredTables.length > 0 && (
+                  <span>{filteredTables.length} Results</span>
                 )}
                 <button
                   onClick={handleClickFilter}
@@ -83,7 +86,7 @@ export default function Tables() {
               </div>
               <div className="pl-4">
                 <Pagination
-                  currentPage={currentPage}
+                  currentPage={page ? parseInt(page) : 1}
                   totalPages={totalPages}
                   onPageChange={handlePageChange}
                 />
@@ -91,34 +94,41 @@ export default function Tables() {
             </div>
           </div>
 
+          {/* Skeleton */}
           <NewTableSkeleton onAddTableClick={handleAddTableClick} />
 
+          {/* Main Table */}
           <div className="p-8 flex flex-col gap-4">
             <TableListHeader />
-            {currentFiles.map((item) => (
+
+            {tables.map((item: TableItem) => (
               <TableListItem
-                key={item.id}
-                index={item.id}
-                isSelected={selectedFiles.includes(item.id)}
+                key={item._id}
+                data={item}
+                index={item._id}
+                isSelected={selectedTables.includes(item._id)}
                 onCheckboxChange={handleCheckboxChange}
               />
             ))}
           </div>
         </div>
-        {isNewTablePanelVisible && (<div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray1 flex justify-center">
-          <TableSideBar />
-        </div>)}
+
+        {isNewTablePanelVisible && (
+          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray1 flex justify-center">
+            <TableSideBar />
+          </div>
+        )}
+
         {/* {isFilterPanelVisible && (
           <div className="p-6">
             <FilterPanel
               onClose={handleClickFilter}
               items={dummyData}
-              setFilteredItems={setFilteredFiles}
+              setFilteredItems={setFilteredTables}
             />
           </div>
         )} */}
       </div>
-
     </div>
   );
 }

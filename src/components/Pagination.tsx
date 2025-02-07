@@ -12,10 +12,21 @@ const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   onPageChange,
 }) => {
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      onPageChange(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if(currentPage < totalPages) {
+      onPageChange(currentPage + 1);
+    }
+  }
   return (
     <div className="flex items-center gap-2">
       <button
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={handlePreviousPage}
         disabled={currentPage === 1}
         className="cursor-pointer"
       >
@@ -25,7 +36,7 @@ const Pagination: React.FC<PaginationProps> = ({
         {currentPage} of {totalPages} Pages
       </span>
       <button
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={handleNextPage}
         disabled={currentPage === totalPages}
         className="cursor-pointer"
       >

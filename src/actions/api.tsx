@@ -6,7 +6,16 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const api = axios.create({
   baseURL: backendUrl,
   headers: {
+    authorization: `Bear ${localStorage.getItem("token")}`,
     "Content-Type": "application/json",
+  },
+});
+
+export const formApi = axios.create({
+  baseURL: backendUrl,
+  headers: {
+    authorization: `Bear ${localStorage.getItem("token")}`,
+    "Content-Type": "multipart/form-data",
   },
 });
 

@@ -4,7 +4,6 @@ import { SidebarItemType } from "./types";
 import { useLocation } from 'react-router-dom';
 
 export default function SidebarItem(data: SidebarItemType) {
-  // const pathName = usePathname();
   const location = useLocation();
   const isActive = location.pathname === `/${data.type}/${data.link}`;
 
@@ -22,7 +21,7 @@ export default function SidebarItem(data: SidebarItemType) {
             : React.cloneElement(data.icon, {
                 style: { color: "black" },
               })}
-        <span className={`${isActive ? "text-dark-blue" : ""} text-lg`}>
+        <span className={`${isActive ? "text-dark-blue" : "text-dark"} text-lg`}>
           {data.label}
         </span>
       </div>
