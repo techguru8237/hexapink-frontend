@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { formApi } from "./api";
+import api, { formApi } from "./api";
 
 export const createTable = async (fileData: FormData, onSuccess: () => void) => {
   try {
@@ -21,3 +21,21 @@ export const createTable = async (fileData: FormData, onSuccess: () => void) => 
     }
   }
 };
+
+export const deleteTableById = async (id: string, onSuccess: () => void) => {
+  try {
+    await api.delete(`/api/table/delete/${id}`);
+
+    onSuccess();
+  } catch (error: any) {
+    console.error("Error deleting table:", error);
+    if (error.response) {
+      alert(`Error: ${error.response.data.message}`);
+    } else if (error.request) {
+      alert("Error: No response from server. Please try again later.");
+    } else {
+      alert("Error: Unable to delete table. Please try again.");
+    }
+  }
+};
+

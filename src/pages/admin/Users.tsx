@@ -11,11 +11,12 @@ import api from "../../actions/api";
 import { UserItem } from "../../types";
 import CreateUser from "../../components/User/CreateUser";
 import FilterPanel from "../../components/User/FilterPanel";
+import LoadingElement from "../../components/Common/LoadingElement";
 
 export default function Users() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
+  const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<UserItem[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -35,6 +36,7 @@ export default function Users() {
       const queryParams = new URLSearchParams(searchParams);
 
       try {
+        setLoading(true);
         const response = await api.get(
           `/api/users?${queryParams.toString()}&limit=${itemsPerPage}`
         );
@@ -43,6 +45,8 @@ export default function Users() {
         setTotalPages(response.data.totalPages);
       } catch (error) {
         console.error("Error fetching users:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -84,7 +88,7 @@ export default function Users() {
     <div>
       <AdminHeader icon={<FaRegUserCircle />} label="Users" />
 
-      <div className="bg-light-gray border-b border-light-gray1 flex flex-row">
+      <div className="bg-light-gray flex flex-row">
         <div className="flex flex-col flex-1 border-r border-light-gray1">
           <div className="px-8 py-4 border-b border-light-gray1 flex items-center justify-between text-light-dark">
             {selectedUsers.length > 0 && (
@@ -124,15 +128,19 @@ export default function Users() {
           <div className="p-8 flex flex-col gap-4">
             <UserListHeader />
 
-            {users.map((item: UserItem, index) => (
-              <UserListItem
-                key={item._id}
-                index={(currentPage - 1) * itemsPerPage + index + 1}
-                data={item}
-                isSelected={selectedUsers.includes(item._id)}
-                onCheckboxChange={handleCheckboxChange}
-              />
-            ))}
+            {loading ? (
+              <LoadingElement width="32" color="#4040B" />
+            ) : (
+              users.map((item: UserItem, index) => (
+                <UserListItem
+                  key={item._id}
+                  index={(currentPage - 1) * itemsPerPage + index + 1}
+                  data={item}
+                  isSelected={selectedUsers.includes(item._id)}
+                  onCheckboxChange={handleCheckboxChange}
+                />
+              ))
+            )}
           </div>
         </div>
 

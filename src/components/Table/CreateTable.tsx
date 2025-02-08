@@ -5,9 +5,11 @@ import FileUpload from "../Common/FileUpload";
 import { PiPlusCircle } from "react-icons/pi";
 import { createTable } from "../../actions/table";
 import { useNavigate } from "react-router-dom";
+import LoadingElement from "../Common/LoadingElement";
 
 const CreateTable = (): JSX.Element => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const [tableName, setTableName] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -39,11 +41,14 @@ const CreateTable = (): JSX.Element => {
     fileData.append("tableName", tableName);
     fileData.append("file", file);
 
+    setLoading(true);
     createTable(fileData, () => {
-      navigate('/admin/tables?page=0')
+      navigate("/admin/tables?page=0");
+    }).finally(() => {
+      setLoading(false);
+      setFile(null);
+      setTableName("");
     });
-    setFile(null)
-    setTableName("")
   };
 
   return (
@@ -79,13 +84,21 @@ const CreateTable = (): JSX.Element => {
         <div className="w-full p-6">
           <button
             onClick={handleSubmit}
-            disabled={!file || !tableName}
+            disabled={!file || !tableName || loading}
             className={`bg-dark-blue ${
-              !file || !tableName ? "opacity-20 cursor-default read-only" : ""
+              !file || !tableName || loading
+                ? "opacity-20 cursor-default read-only"
+                : ""
             } text-white flex items-center justify-center gap-2 rounded-full w-full`}
           >
-            <PiPlusCircle className="text-xl" />
-            <span>Create Table</span>
+            {loading ? (
+              <LoadingElement width="24" color="white" />
+            ) : (
+              <div className="flex items-center gap-2">
+                <PiPlusCircle className="text-xl" />
+                <span>Create Table</span>
+              </div>
+            )}
           </button>
         </div>
       </div>

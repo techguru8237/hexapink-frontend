@@ -103,3 +103,22 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.loading-text {
+  font-size: 24px;
+  color: #000;
+  /* Adjust the color as needed */
+  animation: fade 1.5s ease-in-out infinite;
+}
+
+@keyframes fade {
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}

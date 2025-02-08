@@ -75,7 +75,7 @@ export const signup = async (
   }
 };
 
-export const login = async (
+export const handleLogin = async (
   email: string,
   password: string,
   onSuccess: (data: LoginResponse) => void
@@ -89,13 +89,13 @@ export const login = async (
     console.error("Error logging in:", error);
     if (error.response) {
       // Server responded with a status other than 200 range
-      toast.error(`Error: ${error.response.data.message}`);
+      toast.error(`${error.response.data.message}`);
     } else if (error.request) {
       // Request was made but no response received
-      alert("Error: No response from server. Please try again later.");
+      toast.error("No response from server. Please try again later.");
     } else {
       // Something else happened while setting up the request
-      alert("Error: Unable to log in. Please try again.");
+      toast.error("Unable to log in. Please try again.");
     }
   }
 };

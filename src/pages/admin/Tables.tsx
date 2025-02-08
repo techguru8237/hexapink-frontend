@@ -15,10 +15,12 @@ import AdminHeader from "../../components/Dashboard/AdminHeader";
 import Pagination from "../../components/Pagination";
 
 import { TableItem } from "../../types";
+import LoadingElement from "../../components/Common/LoadingElement";
 
 export default function Tables() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [loading, setLoading] = useState(false);
 
   const [tables, setTables] = useState<TableItem[]>([]);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
@@ -33,25 +35,28 @@ export default function Tables() {
   const itemsPerPage = 5;
   const currentPage = parseInt(searchParams.get("page") || "1");
 
+  const fetchTables = async () => {
+    const queryParams = new URLSearchParams(searchParams);
+    try {
+      setLoading(true);
+      const response = await api.get(
+        `/api/table?${queryParams.toString()}&limit=${itemsPerPage}`
+      );
+
+      setTables(response.data.tables);
+      setTotalPages(response.data.totalPages);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching tables:", error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (searchParams.get("page") == "0") {
       navigate("/admin/tables/1");
       return;
     }
-
-    const fetchTables = async () => {
-      const queryParams = new URLSearchParams(searchParams);
-      try {
-        const response = await api.get(
-          `/api/table?${queryParams.toString()}&limit=${itemsPerPage}`
-        );
-
-        setTables(response.data.tables);
-        setTotalPages(response.data.totalPages);
-      } catch (error) {
-        console.error("Error fetching tables:", error);
-      }
-    };
 
     fetchTables();
   }, [searchParams]); // Now depends on searchParams instead of just page
@@ -91,7 +96,7 @@ export default function Tables() {
     <div>
       <AdminHeader icon={<PiTableLight />} label="Tables" />
 
-      <div className="bg-light-gray border-b border-light-gray1 flex flex-row">
+      <div className="bg-light-gray flex flex-row">
         <div className="flex flex-col flex-1 border-r border-light-gray1">
           <div className="px-8 py-4 border-b border-light-gray1 flex items-center justify-between text-light-dark">
             {selectedTables.length > 0 && (
@@ -128,18 +133,23 @@ export default function Tables() {
           <NewTableSkeleton onAddTableClick={handleAddTableClick} />
 
           {/* Main Table */}
-          <div className="p-8 flex flex-col gap-4">
+          <div className="p-8 flex flex-col items-center gap-4">
             <TableListHeader />
 
-            {tables.map((item: TableItem) => (
-              <TableListItem
-                key={item._id}
-                data={item}
-                index={item._id}
-                isSelected={selectedTables.includes(item._id)}
-                onCheckboxChange={handleCheckboxChange}
-              />
-            ))}
+            {loading ? (
+              <LoadingElement width="32" color="#4040BF" />
+            ) : (
+              tables.map((item: TableItem) => (
+                <TableListItem
+                  key={item._id}
+                  data={item}
+                  index={item._id}
+                  isSelected={selectedTables.includes(item._id)}
+                  fetchTables={fetchTables}
+                  onCheckboxChange={handleCheckboxChange}
+                />
+              ))
+            )}
           </div>
         </div>
 

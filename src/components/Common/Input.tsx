@@ -15,11 +15,11 @@ export default function Input({
 }: InputProps) {
   return (
     <div className="w-full flex flex-col items-start gap-2">
-      <label htmlFor="input">{label}</label>
+      <label htmlFor={label}>{label}</label>
       <input
         value={value}
         onChange={onChange}
-        id="input"
+        id={label}
         type={type || "text"}
         className="w-full bg-white border border-light-gray3 focus:border-dark-blue rounded-lg p-2 transition duration-200 outline-none"
       />

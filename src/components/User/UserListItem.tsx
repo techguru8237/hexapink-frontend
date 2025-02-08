@@ -1,6 +1,6 @@
 import React from "react";
 import { CiCircleInfo } from "react-icons/ci";
-import { FaRegUserCircle } from "react-icons/fa";
+import { PiUserCircleLight } from "react-icons/pi";
 import { PiPencilSimpleLight } from "react-icons/pi";
 import Checkbox from "../Checkbox";
 import { UserItem } from "../../types";
@@ -32,8 +32,8 @@ export const UserListItem: React.FC<UserListItemProps> = ({
         onClick={() => onCheckboxChange(data._id)}
       >
         <div className="w-[15%] p-3 flex items-center">
-          <FaRegUserCircle className="text-2xl mr-2" />
-          <span>{index}</span>
+          <PiUserCircleLight className="text-2xl mr-2" />
+          <span>{`User_${index}`}</span>
           <CiCircleInfo className="text-xl ml-auto border rounded-md p-1 box-content" />
         </div>
         <div className="w-[15%] p-3 flex items-center border-l border-dashed border-light-gray3">

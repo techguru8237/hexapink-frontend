@@ -7,13 +7,13 @@ export default function OrderListHeader() {
         <PiCheckBold className="text-light-gray3" />
       </div>
       <div className="w-full bg-[#F7F7FC] border-2 border-light-gray3 rounded-lg flex justify-around items-center divide-x">
-        <span className="w-full p-2 flex">User Id</span>
-        <span className="w-full p-2 flex">Name</span>
-        <span className="w-full p-2 flex">Email</span>
-        <span className="w-full p-2 flex">Phone</span>
+        <span className="w-[15%] p-2 flex">User Id</span>
+        <span className="w-[15%] p-2 flex">Name</span>
+        <span className="w-[20%] p-2 flex">Email</span>
+        <span className="w-[20%] p-2 flex">Phone</span>
         {/* <span className="w-full p-2 flex">Balance</span> */}
-        <span className="w-full p-2 flex">Status</span>
-        <span className="w-full p-2 flex">Joined At</span>
+        <span className="w-[15%] p-2 flex">Status</span>
+        <span className="w-[15%] p-2 flex">Joined At</span>
       </div>
     </div>
   );

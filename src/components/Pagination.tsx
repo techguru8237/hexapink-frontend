@@ -28,7 +28,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         onClick={handlePreviousPage}
         disabled={currentPage === 1}
-        className="cursor-pointer"
+        className={`${currentPage === 1 ? "border-none" : ""} cursor-pointer`}
       >
         <GoArrowLeft />
       </button>
@@ -38,7 +38,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         onClick={handleNextPage}
         disabled={currentPage === totalPages}
-        className="cursor-pointer"
+        className={`${currentPage === totalPages ? "border-none" : ""} cursor-pointer`}
       >
         <GoArrowRight />
       </button>

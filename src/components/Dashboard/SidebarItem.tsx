@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 
 export default function SidebarItem(data: SidebarItemType) {
   const location = useLocation();
-  const isActive = location.pathname === `/${data.type}/${data.link}`;
+  const isActive = location.pathname.includes(`/${data.type}/${data.link}`);
 
   return (
     <Link to={`/${data.type}/${data.link}`}>

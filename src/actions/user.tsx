@@ -76,10 +76,11 @@ export const getUserById = async (id: string) => {
   }
 };
 
-export const deleteUserById = async (id: string) => {
+export const deleteUserById = async (id: string, onSuccess: () => void) => {
   try {
     await api.delete(`/api/users/delete/${id}`);
-    alert("User deleted successfully.");
+
+    onSuccess();
   } catch (error: any) {
     console.error("Error deleting user:", error);
     if (error.response) {
