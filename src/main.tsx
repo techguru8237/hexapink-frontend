@@ -23,9 +23,6 @@ const theme = createTheme({
             borderColor: "#4040BF", // Change this to your custom color when focused
           },
         },
-        notchedOutline: {
-          borderColor: "transparent", // Default border color
-        },
       },
     },
     MuiInputLabel: {
