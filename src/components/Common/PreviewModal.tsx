@@ -79,7 +79,7 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
           <DataGrid
             rows={filteredData}
             columns={columns}
-            pageSizeOptions={[10, 20, 50, 100]}
+            pageSizeOptions={[25, 100, 500, 1000]}
           />
         </Paper>
       </DialogContent>
