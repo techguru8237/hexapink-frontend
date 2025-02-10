@@ -148,6 +148,8 @@ export default function Tables() {
                   data={item}
                   index={item._id}
                   isSelected={selectedTables.includes(item._id)}
+                  setTables={setTables}
+                  tables={tables}
                   fetchTables={fetchTables}
                   onCheckboxChange={handleCheckboxChange}
                 />

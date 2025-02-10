@@ -2,26 +2,40 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+
+import { Badge, Tooltip } from "@mui/material";
+
+import { LuPlus } from "react-icons/lu";
+import { BsTrash3 } from "react-icons/bs";
+import { IoClose } from "react-icons/io5";
 import { PiTableLight } from "react-icons/pi";
 import { CiCircleInfo } from "react-icons/ci";
-import { BsTrash3 } from "react-icons/bs";
+import { MdOutlineModeEdit } from "react-icons/md";
+
+import Checkbox from "../Checkbox";
+import PreviewModal from "../Common/PreviewModal"; // Import the modal
+import LoadingElement from "../Common/LoadingElement";
+
 import { TableListItemProps } from "../../types";
 import { deleteTableById, updateTableName } from "../../actions/table"; // Import the update function
-import Checkbox from "../Checkbox";
-import LoadingElement from "../Common/LoadingElement";
-import PreviewModal from "../Common/PreviewModal"; // Import the modal
+import TagModal from "../Common/TagModal";
 
 export const TableListItem: React.FC<TableListItemProps> = ({
   data,
   index,
   isSelected,
   fetchTables,
+  tables,
+  setTables,
   onCheckboxChange,
 }) => {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [newTableName, setNewTableName] = useState(data.tableName);
+  const [isTagModalOpen, setIsTagModalOpen] = useState(false);
+  const [selectedTag, setSelectedTag] = useState("");
+  const [actionType, setActionType] = useState("");
 
   const handleDelete = () => {
     confirmAlert({
@@ -66,6 +80,26 @@ export const TableListItem: React.FC<TableListItemProps> = ({
     }
   };
 
+  const handleCreateTag = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActionType("create");
+    setIsTagModalOpen(true);
+  };
+
+  const handleEditTag = (e: React.MouseEvent, tag: string) => {
+    e.stopPropagation();
+    setSelectedTag(tag);
+    setActionType("edit");
+    setIsTagModalOpen(true);
+  };
+
+  const handleDeleteTag = (e: React.MouseEvent, tag: string) => {
+    e.stopPropagation();
+    setSelectedTag(tag);
+    setActionType("delete");
+    setIsTagModalOpen(true);
+  };
+
   return (
     <div className="w-full flex items-center gap-2 text-light-dark font-raleway">
       <Checkbox checked={isSelected} onChange={() => onCheckboxChange(index)} />
@@ -76,7 +110,7 @@ export const TableListItem: React.FC<TableListItemProps> = ({
         onClick={() => onCheckboxChange(index)}
       >
         <div className="w-full bg-white flex justify-around rounded-lg">
-          <div className="w-[50%] p-3 flex items-center justify-between">
+          <div className="w-[20%] p-3 flex items-center justify-between">
             <div className="flex items-center">
               <PiTableLight className="text-2xl mr-2" />
               {isEditing ? (
@@ -112,12 +146,48 @@ export const TableListItem: React.FC<TableListItemProps> = ({
           <div className="w-[15%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray3">
             <span>{data.leads}</span>
           </div>
-          <div className="w-[20%] p-3 flex items-center border-l border-dashed border-light-gray3">
+          <div className="w-[30%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray3">
+            <div className="flex flex-wrap gap-2">
+              {data.tags?.map((tag, index) => (
+                <div
+                  key={index}
+                  className="flex items-center bg-light-gray1 rounded-full px-2 gap-2"
+                >
+                  <span>{tag}</span>
+                  <div className="flex items-center gap-1">
+                    <Tooltip title="Edit Tag">
+                      <Badge>
+                        <MdOutlineModeEdit
+                          onClick={(e) => handleEditTag(e, tag)}
+                          className="cursor-pointer"
+                        />
+                      </Badge>
+                    </Tooltip>
+                    <Tooltip title="Delete Tag">
+                      <Badge>
+                        <IoClose
+                          onClick={(e) => handleDeleteTag(e, tag)}
+                          className="cursor-pointer"
+                        />
+                      </Badge>
+                    </Tooltip>
+                  </div>
+                </div>
+              ))}
+              <div
+                onClick={handleCreateTag}
+                className="flex items-center border-2 border-light-gray3 rounded-full px-2 gap-1 cursor-pointer"
+              >
+                <LuPlus />
+                <span>Add New</span>
+              </div>
+            </div>
+          </div>
+          <div className="w-[15%] p-3 flex items-center border-l border-dashed border-light-gray3">
             {data.createdAt.split("T")[0]}
           </div>
         </div>
       </div>
-
       {isSelected &&
         (loading ? (
           <LoadingElement width="32" color="blue" />
@@ -127,12 +197,22 @@ export const TableListItem: React.FC<TableListItemProps> = ({
             className="text-red-500 text-xl cursor-pointer"
           />
         ))}
-
       {/* Preview Modal */}
       <PreviewModal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
         data={data.data}
+      />
+
+      {/* Handle Tag Modal */}
+      <TagModal
+        tableId={data._id}
+        oldTag={selectedTag}
+        setTables={setTables}
+        tables={tables}
+        open={isTagModalOpen}
+        handleClose={() => setIsTagModalOpen(false)}
+        actionType={actionType} // Pass the action type here
       />
     </div>
   );

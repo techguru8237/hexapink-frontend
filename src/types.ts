@@ -3,8 +3,9 @@ export interface TableItem {
   userId: string;
   tableName: string;
   leads: number;
+  tags: string[];
   columns: [string];
-  data: [object];
+  data: RowData[];
   createdAt: string;
   updatedAt: string;
 }
@@ -35,12 +36,28 @@ export interface TableListItemProps {
   data: TableItem;
   index: string;
   isSelected: boolean;
-  onCheckboxChange: (index: string) => void;
   fetchTables: () => void;
+  tables: TableItem[];
+  setTables: (updatedTables: TableItem[]) => void;
+  onCheckboxChange: (index: string) => void;
 }
 
 export interface PreviewModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
   data: Array<object>; // Adjust according to your data structure
+}
+
+export interface RowData {
+  [key: string]: string; // Allow any string key for dynamic data
+}
+
+export interface TagModalProps {
+  tableId: string;
+  oldTag: string;
+  open: boolean;
+  actionType: string;
+  tables: TableItem[];
+  setTables: (updatedTables: TableItem[]) => void;
+  handleClose: () => void;
 }

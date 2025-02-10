@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Bounce, ToastContainer } from "react-toastify";
 import "./App.css";
+import "@mantine/core/styles.css";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -19,6 +20,7 @@ import Lookup from "./pages/user/Lookup";
 import HomePage from "./pages/Home";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPasswordPage from "./pages/ResetPassword";
+
 
 function App() {
   return (
