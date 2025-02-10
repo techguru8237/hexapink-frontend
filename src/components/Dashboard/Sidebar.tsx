@@ -26,7 +26,6 @@ import { SidebarItemType } from "./types";
 import logo from "../../assets/TheHomePage/image/logo.svg";
 import SidebarItem from "./SidebarItem";
 import useAuth from "../../hooks/useAuth";
-import IconButton from "../Common/IconButton";
 
 const items: SidebarItemType[] = [
   {
