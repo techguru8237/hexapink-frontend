@@ -1,24 +1,15 @@
+import { useState } from "react";
+import { toast } from "react-toastify";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
-
 import { PiTableLight } from "react-icons/pi";
 import { CiCircleInfo } from "react-icons/ci";
 import { BsTrash3 } from "react-icons/bs";
-
+import { TableListItemProps } from "../../types";
+import { deleteTableById, updateTableName } from "../../actions/table"; // Import the update function
 import Checkbox from "../Checkbox";
-import { TableItem } from "../../types";
-import { toast } from "react-toastify";
-import { useState } from "react";
 import LoadingElement from "../Common/LoadingElement";
-import { deleteTableById } from "../../actions/table";
-
-interface TableListItemProps {
-  data: TableItem;
-  index: string;
-  isSelected: boolean;
-  onCheckboxChange: (index: string) => void;
-  fetchTables: () => void; // Add this line
-}
+import PreviewModal from "../Common/PreviewModal"; // Import the modal
 
 export const TableListItem: React.FC<TableListItemProps> = ({
   data,
@@ -28,6 +19,9 @@ export const TableListItem: React.FC<TableListItemProps> = ({
   onCheckboxChange,
 }) => {
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [newTableName, setNewTableName] = useState(data.tableName);
 
   const handleDelete = () => {
     confirmAlert({
@@ -40,7 +34,7 @@ export const TableListItem: React.FC<TableListItemProps> = ({
             setLoading(true);
             deleteTableById(data._id, () => {
               toast.success("Table deleted successfully.");
-              fetchTables(); // Call fetchTables here
+              fetchTables();
               setLoading(false);
             }).finally(() => {
               setLoading(false);
@@ -57,10 +51,24 @@ export const TableListItem: React.FC<TableListItemProps> = ({
     });
   };
 
+  const handleEdit = async () => {
+    setLoading(true);
+    try {
+      await updateTableName(data._id, { tableName: newTableName }, () => {
+        toast.success("Table name updated successfully.");
+        fetchTables();
+      });
+    } catch (error) {
+      toast.error("Failed to update table name.");
+    } finally {
+      setLoading(false);
+      setIsEditing(false);
+    }
+  };
+
   return (
     <div className="w-full flex items-center gap-2 text-light-dark font-raleway">
       <Checkbox checked={isSelected} onChange={() => onCheckboxChange(index)} />
-      {/* Table Item */}
       <div
         className={`w-full bg-[#F7F7FC] flex justify-around border ${
           isSelected ? "border-dark-blue" : "border-light-gray3"
@@ -71,9 +79,32 @@ export const TableListItem: React.FC<TableListItemProps> = ({
           <div className="w-[50%] p-3 flex items-center justify-between">
             <div className="flex items-center">
               <PiTableLight className="text-2xl mr-2" />
-              <span className="overflow-x-clip">{data.tableName}</span>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={newTableName}
+                  onChange={(e) => setNewTableName(e.target.value)}
+                  onBlur={handleEdit} // Update on blur
+                  className="bg-white border rounded p-1"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleEdit(); // Update on Enter key
+                    }
+                  }}
+                />
+              ) : (
+                <span
+                  className="overflow-x-clip cursor-pointer"
+                  onClick={() => setIsEditing(true)}
+                >
+                  {data.tableName}
+                </span>
+              )}
             </div>
-            <CiCircleInfo className="text-xl mr-2 border rounded-md p-1 box-content" />
+            <CiCircleInfo
+              onClick={() => setIsModalOpen(true)}
+              className="text-xl mr-2 border rounded-md p-1 box-content cursor-pointer"
+            />
           </div>
           <div className="w-[15%] p-3 flex items-center divide-x border-l border-dashed border-light-gray3">
             <span>{data.columns.length}</span>
@@ -96,6 +127,13 @@ export const TableListItem: React.FC<TableListItemProps> = ({
             className="text-red-500 text-xl cursor-pointer"
           />
         ))}
+
+      {/* Preview Modal */}
+      <PreviewModal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        data={data.data}
+      />
     </div>
   );
 };

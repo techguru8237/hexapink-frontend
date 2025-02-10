@@ -26,7 +26,7 @@ export default function SignupPageMain() {
 
   const [formData, setFormData] = useState({
     firstName: "",
-    secondName: "",
+    lastName: "",
     country: "",
     phone: "",
     industry: "",
@@ -42,12 +42,12 @@ export default function SignupPageMain() {
   };
 
   const validateProfileStep = () => {
-    const { firstName, secondName, country, phone, industry, company } =
+    const { firstName, lastName, country, phone, industry, company } =
       formData;
 
     if (
       !firstName ||
-      !secondName ||
+      !lastName ||
       !country ||
       !phone ||
       !industry ||
@@ -201,9 +201,9 @@ export default function SignupPageMain() {
                   type="text"
                   title="LAST NAME *"
                   placeholder="Though"
-                  value={formData.secondName}
+                  value={formData.lastName}
                   onChange={(e) => {
-                    setFormData({ ...formData, secondName: e.target.value });
+                    setFormData({ ...formData, lastName: e.target.value });
                   }}
                 />
               </div>

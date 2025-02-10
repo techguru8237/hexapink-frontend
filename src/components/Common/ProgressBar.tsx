@@ -1,8 +1,14 @@
-const ProgressBar = ({ progress }: { progress: number }) => {
+import React from "react";
+
+interface ProgressBarProps {
+  progress: number;
+}
+
+const ProgressBar: React.FC<ProgressBarProps> = ({ progress }) => {
   return (
-    <div className="w-full h-2 bg-gray-200 rounded">
+    <div className="w-full bg-gray-200 rounded-full h-2">
       <div
-        className="h-full bg-dark-blue rounded"
+        className="bg-blue-500 h-full rounded-full"
         style={{ width: `${progress}%` }}
       />
     </div>

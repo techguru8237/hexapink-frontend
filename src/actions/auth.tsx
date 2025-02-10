@@ -3,7 +3,7 @@ import api from "./api";
 
 interface SignupData {
   firstName: string;
-  secondName: string;
+  lastName: string;
   country: string;
   phone: string;
   industry: string;

@@ -30,3 +30,17 @@ export interface UserItem {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface TableListItemProps {
+  data: TableItem;
+  index: string;
+  isSelected: boolean;
+  onCheckboxChange: (index: string) => void;
+  fetchTables: () => void;
+}
+
+export interface PreviewModalProps {
+  isOpen: boolean;
+  onRequestClose: () => void;
+  data: Array<object>; // Adjust according to your data structure
+}
