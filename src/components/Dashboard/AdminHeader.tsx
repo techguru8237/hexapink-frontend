@@ -13,7 +13,7 @@ export default function Header({ icon, label }: HeaderProps) {
   const location = useLocation();
 
   return (
-    <div className="h-20 px-8 py-4 border-b border-light-gray3 flex justify-between items-center">
+    <div className="h-20 px-4 sm:px-8 py-4 border-b border-light-gray3 flex justify-between items-center">
       <div className="flex items-center gap-2 text-xl">
         {React.cloneElement(icon, {
           style: { color: "#4040BF" },

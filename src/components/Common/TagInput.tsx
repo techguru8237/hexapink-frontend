@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 interface TagInputProps {
   tags: string[];
@@ -7,11 +8,33 @@ interface TagInputProps {
 
 export const TagInput: React.FC<TagInputProps> = ({ tags, setTags }) => {
   const [inputValue, setInputValue] = useState("");
+  const [existingTags, setExistingTags] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Fetch existing tags from the database on component mount
+    const fetchTags = async () => {
+      try {
+        const response = await axios.get("/api/tags"); // Adjust the endpoint as necessary
+        setExistingTags(response.data);
+      } catch (error) {
+        console.error("Error fetching tags:", error);
+      }
+    };
+
+    fetchTags();
+  }, []);
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" && inputValue) {
-      setTags([...tags, inputValue]);
-      setInputValue("");
+      const trimmedInput = inputValue.trim();
+      // Check for duplicates
+      if (
+        !tags.includes(trimmedInput) &&
+        !existingTags.includes(trimmedInput)
+      ) {
+        setTags([...tags, trimmedInput]);
+        setInputValue("");
+      }
     } else if (event.key === "Backspace" && !inputValue && tags.length) {
       setTags(tags.slice(0, -1));
     }
@@ -38,7 +61,6 @@ export const TagInput: React.FC<TagInputProps> = ({ tags, setTags }) => {
             </div>
           </span>
         ))}
-        {/* Input for adding new tags */}
         <input
           type="text"
           value={inputValue}
