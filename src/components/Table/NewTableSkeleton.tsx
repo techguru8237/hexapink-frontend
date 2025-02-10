@@ -1,9 +1,15 @@
 import { PiCheckBold, PiPlusCircle, PiTableLight } from "react-icons/pi";
 import { CiCircleInfo } from "react-icons/ci";
 
-export default function NewFileSkeleton({ onAddTableClick }: { onAddTableClick: () => void }) {
+export default function NewTableSkeleton({
+  onAddTableClick,
+  isNewTablePanelVisible,
+}: {
+  isNewTablePanelVisible: boolean;
+  onAddTableClick: () => void;
+}) {
   return (
-    <div className="w-full border-b border-light-gray1 relative px-8 py-4 flex items-center gap-2 text-light-gray3">
+    <div className="w-full border-b border-light-gray1 relative px-4 sm:px-8 py-4 flex items-center gap-2 text-light-gray3">
       <div className="w-6 h-6 border border-dashed rounded-md flex items-center justify-center">
         <PiCheckBold />
       </div>
@@ -27,12 +33,12 @@ export default function NewFileSkeleton({ onAddTableClick }: { onAddTableClick: 
         </div>
       </div>
 
-      <button
+      {!isNewTablePanelVisible && <button
         onClick={onAddTableClick}
         className="absolute left-1/2 transform -translate-x-1/2 rounded-full px-4 py-2 flex items-center gap-2 bg-dark-blue text-white"
       >
         <PiPlusCircle className="text-2xl" /> <span>Add Table</span>
-      </button>
+      </button>}
     </div>
   );
 }

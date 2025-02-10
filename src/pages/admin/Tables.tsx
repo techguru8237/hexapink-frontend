@@ -98,11 +98,11 @@ export default function Tables() {
 
       <div className="bg-light-gray flex flex-row">
         <div className="flex flex-col flex-1 border-r border-light-gray1">
-          <div className="px-8 py-4 border-b border-light-gray1 flex items-center justify-between text-light-dark">
+          <div className="px-4 sm:px-8 py-4 border-b border-light-gray1 flex items-center text-light-dark">
             {selectedTables.length > 0 && (
               <span>{selectedTables.length} Selected</span>
             )}
-            <div className="ml-auto flex items-center divide-x">
+            <div className="sm:ml-auto flex items-center divide-x">
               <div className="pr-4 flex items-center gap-2">
                 {getActiveFiltersCount() > 0 && (
                   <span>{getActiveFiltersCount()} Active Filters</span>
@@ -130,10 +130,13 @@ export default function Tables() {
           </div>
 
           {/* Skeleton */}
-          <NewTableSkeleton onAddTableClick={handleAddTableClick} />
+          <NewTableSkeleton
+            isNewTablePanelVisible={isNewTablePanelVisible}
+            onAddTableClick={handleAddTableClick}
+          />
 
           {/* Main Table */}
-          <div className="p-8 flex flex-col items-center gap-4">
+          <div className="min-w-full p-4 sm:p-8 flex flex-col items-center gap-4">
             <TableListHeader />
 
             {loading ? (
@@ -154,8 +157,8 @@ export default function Tables() {
         </div>
 
         {isNewTablePanelVisible && (
-          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray1 flex justify-center">
-            <CreateTable />
+          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray1 bg-white/80 flex justify-center">
+            <CreateTable onClose={() => setIsNewTablePanelVisible(false)} />
           </div>
         )}
 

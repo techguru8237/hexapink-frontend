@@ -46,7 +46,7 @@ export default function Header({ icon, label }: HeaderProps) {
         </div>
         <div className="flex items-center gap-2 cursor-pointer">
           <PiUserCircleLight className="text-2xl" />
-          <span>{localStorage.getItem("userName")}</span>
+          <span className="hidden sm:flex">{localStorage.getItem("userName")}</span>
         </div>
       </div>
     </div>

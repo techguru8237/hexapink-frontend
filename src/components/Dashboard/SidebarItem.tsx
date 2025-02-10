@@ -10,21 +10,26 @@ export default function SidebarItem(data: SidebarItemType) {
   return (
     <Link to={`/${data.type}/${data.link}`}>
       <div
-        className={`w-full flex items-center gap-2 p-2 ${
+        className={`flex items-center gap-2 p-2 ${
           isActive ? "border border-light-gray3 bg-light-gray rounded-lg" : ""
         }`}
       >
-          {isActive
-            ? React.cloneElement(data.selectedIcon, {
-                style: { color: "#4040BF" },
-              })
-            : React.cloneElement(data.icon, {
-                style: { color: "black" },
-              })}
-        <span className={`${isActive ? "text-dark-blue" : "text-dark"} text-lg`}>
+        {isActive
+          ? React.cloneElement(data.selectedIcon, {
+              style: { color: "#4040BF" },
+            })
+          : React.cloneElement(data.icon, {
+              style: { color: "black" },
+            })}
+        <span
+          className={`text-lg ${
+            isActive ? "text-dark-blue" : "text-dark"
+          } hidden lg:block`}
+        >
           {data.label}
         </span>
       </div>
     </Link>
   );
 }
+
