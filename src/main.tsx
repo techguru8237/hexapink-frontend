@@ -16,11 +16,23 @@ const theme = createTheme({
         root: {
           borderRadius: "8px",
           outline: "none",
-          "&:hover fieldset": {
+          "&:hover .MuiOutlinedInput-notchedOutline": {
             borderColor: "#4040BF", // Change border color on hover
           },
-          "&.Mui-focused fieldset": {
-            borderColor: "#4040BF", // Change border color when focused
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#4040BF", // Change this to your custom color when focused
+          },
+        },
+        notchedOutline: {
+          borderColor: "transparent", // Default border color
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          "&.Mui-focused": {
+            color: "#4040BF", // Change label color when focused
           },
         },
       },
@@ -28,6 +40,7 @@ const theme = createTheme({
   },
 });
 
+// Ensure that the custom theme is applied correctly
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
