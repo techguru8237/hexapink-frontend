@@ -40,13 +40,11 @@ const theme = createTheme({
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      <MantineProvider>
         <LoadingProvider>
           <ThemeProvider theme={theme}>
             <App />
           </ThemeProvider>
         </LoadingProvider>
-      </MantineProvider>
     </BrowserRouter>
   </StrictMode>
 );
