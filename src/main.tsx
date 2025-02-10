@@ -1,7 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { MantineProvider } from "@mantine/core"; // Import MantineProvider
 import { LoadingProvider } from "./contexts/Loading.tsx";
 import { ThemeProvider, createTheme } from "@mui/material"; // Import ThemeProvider and createTheme
 

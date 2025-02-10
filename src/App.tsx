@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Bounce, ToastContainer } from "react-toastify";
 import "./App.css";
-import "@mantine/core/styles.css";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
