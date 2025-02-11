@@ -198,11 +198,10 @@ export const TableListItem: React.FC<TableListItemProps> = ({
           />
         ))}
       {/* Preview Modal */}
-      <PreviewModal
-        isOpen={isModalOpen}
+      {isModalOpen && <PreviewModal
         onRequestClose={() => setIsModalOpen(false)}
         data={data.data}
-      />
+      />}
 
       {/* Handle Tag Modal */}
       <TagModal

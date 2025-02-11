@@ -1,94 +1,119 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PreviewModalProps } from "../../types";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import {
-  TextField,
-  Paper,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-} from "@mui/material";
-import { IconSearch } from "@tabler/icons-react";
+import { IoCloseCircleSharp } from "react-icons/io5";
+import Pagination from "../Pagination";
 
 const PreviewModal: React.FC<PreviewModalProps> = ({
-  isOpen,
-  onRequestClose,
   data,
+  onRequestClose,
 }) => {
-  const [search, setSearch] = useState<string>(""); // State for search input
+  const [search, setSearch] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
+
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = startIndex + rowsPerPage;
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
 
-  // Ensure data is not empty and has valid structure before mapping
-  const filteredData = data
-    .map((item, index) => ({
-      id: index + 1, // Generate unique ID starting from 1
-      ...item, // Spread the existing item properties
-    }))
-    .filter((item) =>
-      Object.values(item).some((value) =>
-        value.toString().toLowerCase().includes(search.toLowerCase())
-      )
-    );
+  const filteredData = data.filter((item) =>
+    Object.values(item).some((value) =>
+      value.toString().toLowerCase().includes(search.toLowerCase())
+    )
+  );
 
-  // Check if data has at least one item to define columns
-  const columns: GridColDef[] =
-    data.length > 0
-      ? [
-          { field: "id", headerName: "ID", width: 100 }, // New ID column
-          ...Object.keys(data[0]).map((key) => ({
-            field: key,
-            headerName: key.charAt(0).toUpperCase() + key.slice(1),
-            width: 150,
-          })),
-        ]
-      : [];
+  useEffect(() => {
+    setTotalPages(Math.ceil(filteredData.length / rowsPerPage));
+  }, [filteredData, rowsPerPage]);
+
+  const columns = data[0] ? Object.keys(data[0]).map((key) => key) : [];
 
   return (
-    <Dialog
-      open={isOpen}
-      onClose={onRequestClose}
-      aria-labelledby="modal-title"
-      aria-describedby="modal-description"
-      maxWidth={"lg"}
-    >
-      <DialogTitle id="modal-title">CSV Data Preview</DialogTitle>
-      <DialogContent>
-        <h2>
-          ({data.length} rows,{" "}
-          {data.length > 0 ? Object.keys(data[0]).length : 0} columns)
+    <div className="fixed inset-0 flex flex-col gap-4 bg-light-gray border border-dark-blue shadow-[0px_0px_0px_4px_#ececf8] max-w-7xl my-32 mx-auto p-8 rounded-lg overflow-x-auto z-10">
+      <div className="flex justify-between">
+        <h2 className="pb-4 text-xl font-bold font-kanit flex items-center gap-2">
+          File Data Preview (Columns: {columns.length}, Rows: {data.length})
         </h2>
-
-        <TextField
-          placeholder="Search by any field"
-          variant="outlined"
-          fullWidth
-          size="small"
-          value={search}
-          onChange={handleSearchChange}
-          InputProps={{
-            startAdornment: <IconSearch style={{ marginRight: 8 }} />,
-          }}
+        <IoCloseCircleSharp
+          onClick={onRequestClose}
+          className="text-2xl cursor-pointer"
         />
+      </div>
+      <div className="flex items-center justify-between">
+        <input
+          value={search}
+          placeholder="Search by any field"
+          onChange={handleSearchChange}
+          className="bg-white p-1 border border-gray-300 rounded-lg"
+        />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          rowsPerPage={rowsPerPage}
+          pageSizeOptions={[25, 100, 500, 1000]}
+          onPageChange={(value) => setCurrentPage(value)}
+          onPageSizeChange={(value) => setRowsPerPage(value)}
+        />
+      </div>
 
-        <Paper style={{ height: 500, width: "100%", marginTop: 16 }}>
-          <DataGrid
-            rows={filteredData}
-            columns={columns}
-            pageSizeOptions={[25, 100, 500, 1000]}
-          />
-        </Paper>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onRequestClose} color="primary">
-          Close
-        </Button>
-      </DialogActions>
-    </Dialog>
+      <div className="w-full flex flex-col gap-4 font-raleway">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="border border-gray-300 rounded-lg">
+              {columns.map((col, index) => (
+                <th
+                  className={`h-full bg-white px-2 py-1 text-center font-bold ${
+                    index == 0 ? "rounded-l-lg" : ""
+                  } ${
+                    index < columns.length - 1
+                      ? "border-r border-dashed border-gray-300"
+                      : "rounded-r-lg"
+                  }`}
+                  key={col}
+                >
+                  {col}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {filteredData.slice(startIndex, endIndex).map((row, index) => (
+              <tr
+                className="border border-gray-300 rounded-lg"
+                key={index}
+              >
+                {columns.map((col, colIndex) => (
+                  <td
+                    className={`h-full bg-white px-2 py-1 text-left ${
+                      colIndex == 0 ? "rounded-l-lg" : ""
+                    } ${
+                      colIndex < columns.length - 1
+                        ? "border-r border-dashed border-gray-300"
+                        : "rounded-r-lg"
+                    }`}
+                    key={col}
+                  >
+                    <span className="text-sm line-clamp-1">{row[col]}</span>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        rowsPerPage={rowsPerPage}
+        pageSizeOptions={[25, 100, 500, 1000]}
+        onPageChange={(value) => setCurrentPage(value)}
+        onPageSizeChange={(value) => setRowsPerPage(value)}
+      />
+    </div>
   );
 };
 

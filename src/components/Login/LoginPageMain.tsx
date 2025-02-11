@@ -4,9 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { handleLogin } from "../../actions/auth";
 import PasswordField from "./elements/PasswordField";
-import LoginButton from "./elements/LoginButton";
 import InputField from "./elements/InputField";
 import CheckBox from "../TheHomePage/elements/desktop/CheckBox";
+import LoginButton from "./elements/LoginButton";
 import HomeButton from "../TheHomePage/elements/desktop/HomeButton";
 
 import "../../style/TheHomePage/style.css";
