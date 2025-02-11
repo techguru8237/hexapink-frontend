@@ -21,7 +21,6 @@ export default function Tables() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
-
   const [tables, setTables] = useState<TableItem[]>([]);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
   const [totalPages, setTotalPages] = useState(0);

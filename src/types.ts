@@ -61,3 +61,12 @@ export interface TagModalProps {
   setTables: (updatedTables: TableItem[]) => void;
   handleClose: () => void;
 }
+
+export interface Tag {
+  name: string;
+}
+
+export interface TagOption {
+  inputValue?: string;
+  name: string;
+}

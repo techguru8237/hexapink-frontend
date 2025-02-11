@@ -9,6 +9,12 @@ import App from "./App.tsx";
 
 // Create a custom theme
 const theme = createTheme({
+  palette: {
+    secondary: {
+      main: "#FF6699",
+      contrastText: "#FFFFFF", // Set contrast text color to white
+    },
+  },
   components: {
     MuiOutlinedInput: {
       styleOverrides: {
@@ -32,7 +38,7 @@ const theme = createTheme({
           },
         },
       },
-    },
+    }
   },
 });
 
@@ -40,11 +46,11 @@ const theme = createTheme({
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-        <LoadingProvider>
-          <ThemeProvider theme={theme}>
-            <App />
-          </ThemeProvider>
-        </LoadingProvider>
+      <LoadingProvider>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </LoadingProvider>
     </BrowserRouter>
   </StrictMode>
 );

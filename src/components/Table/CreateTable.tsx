@@ -1,5 +1,6 @@
-import { JSX, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import Input from "../Common/Input";
 import FileUpload from "../Common/FileUpload";
@@ -11,7 +12,8 @@ import { PiPlusCircle } from "react-icons/pi";
 import { IoCloseCircleSharp } from "react-icons/io5";
 
 import { useUploadForm } from "../../hooks/useUploadForm";
-import { toast } from "react-toastify";
+import api from "../../actions/api";
+import { TagOption } from "../../types";
 
 interface CreateTableProps {
   onClose: () => void;
@@ -25,14 +27,30 @@ const CreateTable = ({onClose}: CreateTableProps): JSX.Element => {
     `${import.meta.env.VITE_BACKEND_URL}/api/table/create`
   );
 
+  const [existingTags, setExistingTags] = useState<TagOption[]>([])
+
   const [tableName, setTableName] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [delimiter, setDelimiter] = useState("comma"); // Default delimiter
-  const [tags, setTags] = useState<string[]>([]); // State for tags
+  const [tags, setTags] = useState<TagOption[]>([]); // State for tags
   const [errors, setErrors] = useState({
     tableName: "",
     file: "",
   });
+
+    useEffect(() => {
+      const fetchTags = async () => {
+        try {
+          const response = await api.get("/api/tag"); // Adjust the endpoint as necessary
+          console.log('response.data', response.data)
+          setExistingTags(response.data);
+        } catch (error) {
+          console.error("Error fetching tags:", error);
+        }
+      };
+  
+      fetchTags();
+    }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -51,13 +69,13 @@ const CreateTable = ({onClose}: CreateTableProps): JSX.Element => {
       setErrors((prev) => ({ ...prev, file: "File is required." }));
       return;
     }
-
+    const tagNames = tags.map((tag) => tag.name);
     // Create FormData
     const fileData = new FormData();
     fileData.append("tableName", tableName);
     fileData.append("file", file);
     fileData.append("delimiter", delimiter); // Include delimiter
-    fileData.append("tags", JSON.stringify(tags)); // Include tags
+    fileData.append("tags", JSON.stringify(tagNames)); // Include tags
 
     setLoading(true);
 
@@ -82,7 +100,10 @@ const CreateTable = ({onClose}: CreateTableProps): JSX.Element => {
           <div className="w-fit font-raleway font-semibold text-dark whitespace-nowrap">
             Create New Table
           </div>
-          <IoCloseCircleSharp onClick={onClose} className="text-2xl cursor-pointer" />          
+          <IoCloseCircleSharp
+            onClick={onClose}
+            className="text-2xl cursor-pointer"
+          />
         </div>
 
         <div className="w-full flex flex-col items-start gap-6 p-6 border-b border-dashed border-light-gray3">
@@ -122,7 +143,7 @@ const CreateTable = ({onClose}: CreateTableProps): JSX.Element => {
           {/* Tags Input */}
           <div className="w-full flex flex-col">
             <label className="text-left text-md">Add Tags</label>
-            <TagInput tags={tags} setTags={setTags} />
+            <TagInput existingTags={existingTags} tags={tags} setTags={setTags} />
           </div>
         </div>
 
