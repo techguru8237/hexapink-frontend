@@ -14,14 +14,14 @@ import FilterPanel from "../../components/Table/FilterPanel";
 import AdminHeader from "../../components/Dashboard/AdminHeader";
 import Pagination from "../../components/Pagination";
 
-import { TableItem } from "../../types";
+import { TableItem, Tag } from "../../types";
 import LoadingElement from "../../components/Common/LoadingElement";
 
 export default function Tables() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
-
+  const [tags, setTags] = useState<Tag[]>([])
   const [tables, setTables] = useState<TableItem[]>([]);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
   const [totalPages, setTotalPages] = useState(0);

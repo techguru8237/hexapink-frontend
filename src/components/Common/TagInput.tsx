@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Badge, Tooltip } from "@mui/material";
+import { MdOutlineModeEdit } from "react-icons/md";
+import { IoClose } from "react-icons/io5";
 
 interface TagInputProps {
   tags: string[];
@@ -48,18 +51,22 @@ export const TagInput: React.FC<TagInputProps> = ({ tags, setTags }) => {
     <div className="flex flex-col">
       <div className="bg-white border border-light-gray3 rounded-lg p-3 flex flex-wrap gap-2 mb-2">
         {tags.map((tag, index) => (
-          <span
+          <div
             key={index}
-            className="bg-gray-200 text-gray-800 rounded-full px-2 py-1 flex items-center"
+            className="flex items-center bg-light-gray1 rounded-full px-2 gap-2"
           >
-            {tag}
-            <div
-              onClick={() => handleDeleteTag(tag)}
-              className="w-6 h-6 bg-dark-blue rounded-full ml-2 text-white cursor-pointer"
-            >
-              x
+            <span>{tag}</span>
+            <div className="flex items-center gap-1">
+              <Tooltip title="Delete Tag">
+                <Badge>
+                  <IoClose
+                    onClick={() => handleDeleteTag(tag)}
+                    className="cursor-pointer"
+                  />
+                </Badge>
+              </Tooltip>
             </div>
-          </span>
+          </div>
         ))}
         <input
           type="text"

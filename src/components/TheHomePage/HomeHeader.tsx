@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import Logo from "../../assets/TheHomePage/image/logo.svg";
 import HexagonLoginButton from "./elements/desktop/HexagonLoginButton";
 import HexagonSignupButton from "./elements/desktop/HexagonSignupButton";
@@ -11,6 +11,7 @@ import LoginButton from "./elements/desktop/LoginButton";
 import CreateAccountButton_M from "./elements/desktop/CreateAccountButton_M";
 import CreateAccountButton from "../TheSignupPage/elements/CreateAccountButton";
 import useAuth from "../../hooks/useAuth";
+import { Button } from "@mui/material";
 
 const HomeHeader = () => {
   const navigate = useNavigate();
@@ -32,11 +33,16 @@ const HomeHeader = () => {
         <h2 className="flex text-4xl font-kanit font-medium lg:hidden"></h2>
       </div>
       {location.pathname == "/" && (
-        <div className=" flex justify-center items-center gap-3 lg:hidden z-10">
+        <div className="flex justify-center items-center gap-3 lg:hidden z-10">
           {isAuthenticated ? (
-            <button onClick={logout} className="text-dark">
-              Logout
-            </button>
+            <div className="flex items-center gap-4">
+              <Link to={"/admin"}>
+                <Button variant="contained">Dashboard</Button>
+              </Link>
+              <button onClick={logout} className="text-dark">
+                Logout
+              </button>
+            </div>
           ) : (
             <>
               <img
@@ -54,7 +60,7 @@ const HomeHeader = () => {
         </div>
       )}
       {location.pathname == "/login" && (
-        <div className=" flex justify-center items-center gap-3 lg:hidden z-10">
+        <div className="flex justify-center items-center gap-3 lg:hidden z-10">
           <CreateAccountButton_M onClick={() => navigate("/signup")}>
             <span>Create Account</span>
           </CreateAccountButton_M>
@@ -63,9 +69,14 @@ const HomeHeader = () => {
       {location.pathname == "/" && (
         <div className="lg:flex justify-center items-center gap-7 hidden">
           {isAuthenticated ? (
-            <button onClick={logout} className="text-dark">
-              Logout
-            </button>
+            <div className="flex items-center gap-4">
+              <Link to={"/admin"}>
+                <Button variant="contained" color="secondary">Dashboard</Button>
+              </Link>
+              <Button onClick={logout} className="text-dark" variant="outlined">
+                Logout
+              </Button>
+            </div>
           ) : (
             <>
               <HexagonLoginButton
