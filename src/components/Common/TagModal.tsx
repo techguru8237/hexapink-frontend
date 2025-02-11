@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -12,14 +12,11 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 
-import { TagModalProps } from "../../types";
-import { addTag, updateTag, deleteTag } from "../../actions/table"; // Import your tag actions
 import api from "../../actions/api";
+import { TagModalProps, TagOption } from "../../types";
+import { addTag, updateTag, deleteTag } from "../../actions/table"; // Import your tag actions
 
-interface TagOption {
-  inputValue?: string;
-  name: string;
-}
+
 
 const filter = createFilterOptions<TagOption>();
 
@@ -66,9 +63,9 @@ const TagModal = ({
         await updateTag(tableId, oldTag, newTag?.name || "", () => {
           const updatedTables = tables.map((table) => {
             if (table._id === tableId) {
-              const updatedTags = table.tags.map((tag) =>
-                tag === oldTag ? newTag?.name : tag
-              );
+              const updatedTags = table.tags
+                .map((tag) => (tag === oldTag ? newTag?.name : tag))
+                .filter((tag) => tag !== undefined); // Filter out undefined
               return { ...table, tags: updatedTags };
             }
             return table;
@@ -81,7 +78,12 @@ const TagModal = ({
         await addTag(tableId, newTag?.name || "", () => {
           const updatedTables = tables.map((table) => {
             if (table._id === tableId) {
-              return { ...table, tags: [...table.tags, newTag?.name] };
+              return {
+                ...table,
+                tags: [...table.tags, newTag?.name].filter(
+                  (tag) => tag !== undefined
+                ),
+              }; // Filter out undefined
             }
             return table;
           });
@@ -100,7 +102,9 @@ const TagModal = ({
       await deleteTag(tableId, oldTag, () => {
         const updatedTables = tables.map((table) => {
           if (table._id === tableId) {
-            const updatedTags = table.tags.filter((tag) => tag !== oldTag);
+            const updatedTags = table.tags.filter(
+              (tag) => tag !== oldTag && tag !== undefined
+            ); // Ensure no undefined values
             return { ...table, tags: updatedTags };
           }
           return table;
@@ -138,7 +142,7 @@ const TagModal = ({
 
             <Autocomplete
               value={newTag}
-              onChange={(event, newValue) => {
+              onChange={(_, newValue) => {
                 if (typeof newValue === "string") {
                   setNewTag({ name: newValue });
                 } else if (newValue && newValue.inputValue) {
@@ -185,7 +189,6 @@ const TagModal = ({
                   </li>
                 );
               }}
-              sx={{ width: 300 }}
               freeSolo
               renderInput={(params) => (
                 <TextField {...params} label="Input tag name" />

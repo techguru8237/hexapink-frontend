@@ -128,7 +128,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
           isOpen ? "flex" : "hidden"
         } sm:flex`}
       >
-        <div className="h-20 border-b border-dashed p-2 flex items-center justify-center">
+        <div className="h-20 border-b border-dashed p-2 flex items-center justify-center lg:justify-start">
           <Link
             to="/"
             className="flex items-center gap-2 lg:p-4 text-2xl font-bold cursor-pointer"

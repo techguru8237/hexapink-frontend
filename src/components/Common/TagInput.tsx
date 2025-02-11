@@ -1,61 +1,56 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Badge, Tooltip } from "@mui/material";
-import { MdOutlineModeEdit } from "react-icons/md";
+import React, { useState } from "react";
+import {
+  Autocomplete,
+  Badge,
+  createFilterOptions,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 import { IoClose } from "react-icons/io5";
+import { TagOption } from "../../types";
 
 interface TagInputProps {
-  tags: string[];
-  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  tags: TagOption[];
+  existingTags: TagOption[];
+  setTags: React.Dispatch<React.SetStateAction<TagOption[]>>;
 }
 
-export const TagInput: React.FC<TagInputProps> = ({ tags, setTags }) => {
-  const [inputValue, setInputValue] = useState("");
-  const [existingTags, setExistingTags] = useState<string[]>([]);
+const filter = createFilterOptions<TagOption>();
 
-  useEffect(() => {
-    // Fetch existing tags from the database on component mount
-    const fetchTags = async () => {
-      try {
-        const response = await axios.get("/api/tags"); // Adjust the endpoint as necessary
-        setExistingTags(response.data);
-      } catch (error) {
-        console.error("Error fetching tags:", error);
-      }
-    };
+export const TagInput: React.FC<TagInputProps> = ({
+  existingTags,
+  tags,
+  setTags,
+}) => {
+  const [newTag, setNewTag] = useState<TagOption | null>(null);
 
-    fetchTags();
-  }, []);
+  const handleNewTag = (tag: TagOption) => {
+    if (!tags.some((t) => t.name === tag.name)) {
+      setTags([...tags, tag]);
+    }
+    setNewTag(null); // Clear the input after adding the tag
+  };
+
+  const handleDeleteTag = (tagToDelete: TagOption) => {
+    setTags(tags.filter((tag) => tag.name !== tagToDelete.name));
+  };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter" && inputValue) {
-      const trimmedInput = inputValue.trim();
-      // Check for duplicates
-      if (
-        !tags.includes(trimmedInput) &&
-        !existingTags.includes(trimmedInput)
-      ) {
-        setTags([...tags, trimmedInput]);
-        setInputValue("");
-      }
-    } else if (event.key === "Backspace" && !inputValue && tags.length) {
-      setTags(tags.slice(0, -1));
+    if (event.key === "Enter" && newTag) {
+      handleNewTag(newTag);
+      event.preventDefault(); // Prevent form submission if inside a form
     }
   };
 
-  const handleDeleteTag = (tagToDelete: string) => {
-    setTags(tags.filter((tag) => tag !== tagToDelete));
-  };
-
   return (
-    <div className="flex flex-col">
-      <div className="bg-white border border-light-gray3 rounded-lg p-3 flex flex-wrap gap-2 mb-2">
+    <div className="w-full bg-white border border-light-gray3 rounded-lg p-3">
+      <div className="flex flex-wrap gap-2 mb-2">
         {tags.map((tag, index) => (
           <div
             key={index}
             className="flex items-center bg-light-gray1 rounded-full px-2 gap-2"
           >
-            <span>{tag}</span>
+            <span>{tag.name}</span>
             <div className="flex items-center gap-1">
               <Tooltip title="Delete Tag">
                 <Badge>
@@ -68,13 +63,58 @@ export const TagInput: React.FC<TagInputProps> = ({ tags, setTags }) => {
             </div>
           </div>
         ))}
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Input tag name"
-          className="bg-white border-none outline-none"
+      </div>
+
+      <div className="flex items-center justify-start">
+        <Autocomplete
+          value={newTag}
+          onChange={(_, newValue) => {
+            if (newValue && typeof newValue !== "string") {
+              setNewTag(newValue);
+            } else if (typeof newValue === "string") {
+              setNewTag({ name: newValue });
+            }
+          }}
+          onKeyDown={handleKeyDown} // Add the onKeyDown handler
+          filterOptions={(options, params) => {
+            const filtered = filter(options, params);
+            const { inputValue } = params;
+            const isExisting = options.some(
+              (option) => inputValue === option.name
+            );
+            if (inputValue !== "" && !isExisting) {
+              filtered.push({
+                inputValue,
+                name: `Add "${inputValue}"`,
+              });
+            }
+            return filtered;
+          }}
+          selectOnFocus
+          clearOnBlur
+          handleHomeEndKeys
+          id="free-solo-with-text-demo"
+          options={existingTags}
+          autoFocus
+          size="small"
+          getOptionLabel={(option) => {
+            if (typeof option === "string") return option;
+            if (option.inputValue) return option.inputValue;
+            return option.name;
+          }}
+          renderOption={(props, option) => {
+            const { key, ...optionProps } = props;
+            return (
+              <li key={key} {...optionProps}>
+                {option.name}
+              </li>
+            );
+          }}
+          sx={{ width: 300 }}
+          freeSolo
+          renderInput={(params) => (
+            <TextField {...params} label="Input tag name" />
+          )}
         />
       </div>
     </div>

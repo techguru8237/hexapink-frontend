@@ -65,3 +65,8 @@ export interface TagModalProps {
 export interface Tag {
   name: string;
 }
+
+export interface TagOption {
+  inputValue?: string;
+  name: string;
+}
