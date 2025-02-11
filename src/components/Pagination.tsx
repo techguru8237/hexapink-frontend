@@ -5,12 +5,18 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  rowsPerPage: number;
+  pageSizeOptions: number[];
+  onPageSizeChange: (size: number) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
   onPageChange,
+  rowsPerPage,
+  pageSizeOptions,
+  onPageSizeChange,
 }) => {
   const handlePreviousPage = () => {
     if (currentPage > 1) {
@@ -19,12 +25,19 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   const handleNextPage = () => {
-    if(currentPage < totalPages) {
+    if (currentPage < totalPages) {
       onPageChange(currentPage + 1);
     }
-  }
+  };
+
+  const handlePageSizeChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    onPageSizeChange(Number(event.target.value));
+  };
+
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-4">
       <button
         onClick={handlePreviousPage}
         disabled={currentPage === 1}
@@ -38,10 +51,23 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         onClick={handleNextPage}
         disabled={currentPage === totalPages}
-        className={`${currentPage === totalPages ? "border-none" : ""} cursor-pointer`}
+        className={`${
+          currentPage === totalPages ? "border-none" : ""
+        } cursor-pointer`}
       >
         <GoArrowRight />
       </button>
+      <select
+        value={rowsPerPage}
+        onChange={handlePageSizeChange}
+        className="bg-white border border-gray-300 rounded-md p-1"
+      >
+        {pageSizeOptions.map((size) => (
+          <option key={size} value={size}>
+            {size} per page
+          </option>
+        ))}
+      </select>
     </div>
   );
 };

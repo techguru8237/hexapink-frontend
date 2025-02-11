@@ -26,12 +26,12 @@ export default function Tables() {
   const [totalPages, setTotalPages] = useState(0);
   const [isFilterPanelVisible, setIsFilterPanelVisible] = useState(false);
   const [isNewTablePanelVisible, setIsNewTablePanelVisible] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleAddTableClick = () => {
     setIsNewTablePanelVisible(!isNewTablePanelVisible);
   };
 
-  const itemsPerPage = 5;
   const currentPage = parseInt(searchParams.get("page") || "1");
 
   const fetchTables = async () => {
@@ -39,7 +39,7 @@ export default function Tables() {
     try {
       setLoading(true);
       const response = await api.get(
-        `/api/table?${queryParams.toString()}&limit=${itemsPerPage}`
+        `/api/table?${queryParams.toString()}&limit=${rowsPerPage}`
       );
 
       setTables(response.data.tables);
@@ -122,7 +122,10 @@ export default function Tables() {
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}
+                  rowsPerPage={rowsPerPage}
+                  pageSizeOptions={[5, 10, 20]}
                   onPageChange={handlePageChange}
+                  onPageSizeChange={(value) => setRowsPerPage(value)}
                 />
               </div>
             </div>

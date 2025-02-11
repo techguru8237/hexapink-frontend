@@ -43,9 +43,8 @@ export interface TableListItemProps {
 }
 
 export interface PreviewModalProps {
-  isOpen: boolean;
   onRequestClose: () => void;
-  data: Array<object>; // Adjust according to your data structure
+  data: Array<RowData>; // Adjust according to your data structure
 }
 
 export interface RowData {
