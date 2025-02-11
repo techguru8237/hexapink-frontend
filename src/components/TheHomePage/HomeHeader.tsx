@@ -1,4 +1,4 @@
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Logo from "../../assets/TheHomePage/image/logo.svg";
 import HexagonLoginButton from "./elements/desktop/HexagonLoginButton";
 import HexagonSignupButton from "./elements/desktop/HexagonSignupButton";
@@ -8,11 +8,9 @@ import Home_M from "../../assets/TheHomePage/image/home.svg";
 import "../../style/TheHomePage/font.css";
 import HomeButton from "./elements/desktop/HomeButton";
 import LoginButton from "./elements/desktop/LoginButton";
-import DashboardButton from "../../components/Login/elements/LoginButton";
 import CreateAccountButton_M from "./elements/desktop/CreateAccountButton_M";
 import CreateAccountButton from "../TheSignupPage/elements/CreateAccountButton";
 import useAuth from "../../hooks/useAuth";
-import { Button } from "@mui/material";
 
 const HomeHeader = () => {
   const navigate = useNavigate();

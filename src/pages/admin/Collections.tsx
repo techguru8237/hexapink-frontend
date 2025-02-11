@@ -54,7 +54,7 @@ export default function Collections() {
   return (
     <div>
       <AdminHeader icon={<FaRegFolderOpen />} label="Collections" />
-      
+
       <div className="bg-light-gray border-b border-light-gray1 flex">
         <div className="flex flex-col flex-1 border-r border-light-gray1">
           <div className="px-8 py-4 border-b border-light-gray1 flex items-center justify-between text-light-dark">
@@ -76,6 +76,9 @@ export default function Collections() {
               </div>
               <div className="pl-4">
                 <Pagination
+                  onPageSizeChange={() => {}}
+                  rowsPerPage={itemsPerPage}
+                  pageSizeOptions={[5, 10, 20, 50]}
                   currentPage={currentPage}
                   totalPages={totalPages}
                   onPageChange={handlePageChange}

@@ -76,6 +76,9 @@ export default function Files() {
               </div>
               <div className="pl-4">
                 <Pagination
+                  onPageSizeChange={() => {}}
+                  rowsPerPage={itemsPerPage}
+                  pageSizeOptions={[5, 10, 20, 50]}
                   currentPage={currentPage}
                   totalPages={totalPages}
                   onPageChange={handlePageChange}
