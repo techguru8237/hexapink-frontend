@@ -1,15 +1,13 @@
-import React from "react";
 import Sidebar from "../../components/Dashboard/Sidebar";
+import { Outlet } from "react-router-dom";
 
-interface DashboardLayoutProps {
-  children: React.ReactNode;
-}
-
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+const DashboardLayout = () => {
   return (
     <div className="flex">
-      <Sidebar type="user"/>
-      <div className="flex-1 bg-white">{children}</div>
+      <Sidebar type="user" />
+      <div className="min-h-screen flex-1 bg-white">
+        <Outlet />
+      </div>
     </div>
   );
 };

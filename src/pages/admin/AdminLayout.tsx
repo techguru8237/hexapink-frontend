@@ -10,7 +10,11 @@ const DashboardLayout = () => {
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
-    } 
+    } else {
+      if (localStorage.getItem("userType") != "Manager") {
+        navigate('/user')
+      }
+    }
   }, [isAuthenticated]);
 
   return (

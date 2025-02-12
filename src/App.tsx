@@ -14,6 +14,8 @@ import PaymentMethods from "./pages/admin/PaymentMethods";
 import Collections from "./pages/admin/Collection/Collections";
 import CreateCollection from "./pages/admin/Collection/CreateCollection";
 
+import UserLayout from "./pages/user/UserLayout";
+
 import Files from "./pages/user/Files";
 import Lookup from "./pages/user/Lookup";
 
@@ -58,11 +60,11 @@ function App() {
         </Route>
 
         {/* User Routes */}
-        <Route path="/user" element={<AdminLayout />}>
+        <Route path="/user" element={<UserLayout />}>
           <Route index element={<Navigate to="dashboard" />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="files" element={<Files />} />
-          <Route path="ordersw" element={<Orders />} />
+          <Route path="orders" element={<Orders />} />
           <Route path="lookup" element={<Lookup />} />
         </Route>
 

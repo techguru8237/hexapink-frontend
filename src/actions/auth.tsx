@@ -111,6 +111,7 @@ export const handleLogin = async (
 ) => {
   try {
     const response = await api.post("/api/auth/login", { email, password });
+    console.log('response.data', response.data)
     if (response.status === 200) {
       onSuccess(response.data);
     }
