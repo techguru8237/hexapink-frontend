@@ -8,7 +8,7 @@ export default function HexapinkPaperOneButton_M() {
     navigate("/login");
   };
   const handleSignup = () => {
-    navigate("/signup");
+    navigate("/signup/1");
   };
   return (
     <>

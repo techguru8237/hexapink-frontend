@@ -1,19 +1,26 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+
 import { forgotPassword } from "../../actions/auth";
-import InputField from "../Login/elements/InputField";
+import { useLoading } from "../../contexts/Loading";
+
 import VerifyEmailButton from "./elements/VerifyEmailButton";
+import InputField from "../Login/elements/InputField";
 
 export default function ForgotPasswordPageMain() {
   const [email, setEmail] = useState("");
+  const { showLoading, hideLoading } = useLoading();
 
   const handleForgotPassword = () => {
     if (!email) {
       toast.error("Email is required");
       return;
     }
+    showLoading();
     forgotPassword(email, (response) => {
       toast.success(response.message);
+    }).finally(() => {
+      hideLoading();
     });
   };
 

@@ -28,10 +28,36 @@ interface LoginResponse {
 
 export const verifyEmail = async (
   email: string,
+  otp: string,
   onSuccess: (data: Responsetype) => void
 ) => {
   try {
-    const response = await api.post("/api/auth/verify-email", { email });
+    const response = await api.post("/api/auth/verify-email", { email, otp });
+
+    if (response.status === 200) {
+      onSuccess(response.data);
+    }
+  } catch (error: any) {
+    console.error("Error verifying email:", error);
+    if (error.response) {
+      // Server responded with a status other than 200 range
+      toast.error(`Error: ${error.response.data.message}`);
+    } else if (error.request) {
+      // Request was made but no response received
+      toast.error("Error: No response from server. Please try again later.");
+    } else {
+      // Something else happened while setting up the request
+      toast.error("Error: Unable to verify email. Please try again.");
+    }
+  }
+};
+
+export const requireResendCode = async (
+  email: string,
+  onSuccess: (data: Responsetype) => void
+) => {
+  try {
+    const response = await api.post("/api/auth/resend-otp", { email });
 
     if (response.status === 200) {
       onSuccess(response.data);
@@ -53,7 +79,8 @@ export const verifyEmail = async (
 
 export const signup = async (
   formData: SignupData,
-  onSuccess: (data: Responsetype) => void
+  onSuccess: (data: Responsetype) => void,
+  onError: (error: any) => void
 ) => {
   try {
     const response = await api.post("/api/auth/signup", formData);
@@ -62,23 +89,25 @@ export const signup = async (
     }
   } catch (error: any) {
     console.error("Error signing up:", error);
-    if (error.response) {
-      // Server responded with a status other than 200 range
-      toast.error(`Error: ${error.response.data.message}`);
-    } else if (error.request) {
-      // Request was made but no response received
-      alert("Error: No response from server. Please try again later.");
-    } else {
-      // Something else happened while setting up the request
-      alert("Error: Unable to sign up. Please try again.");
-    }
+    onError(error);
+    // if (error.response) {
+    //   // Server responded with a status other than 200 range
+    //   toast.error(`Error: ${error.response.data.message}`);
+    // } else if (error.request) {
+    //   // Request was made but no response received
+    //   alert("Error: No response from server. Please try again later.");
+    // } else {
+    //   // Something else happened while setting up the request
+    //   alert("Error: Unable to sign up. Please try again.");
+    // }
   }
 };
 
 export const handleLogin = async (
   email: string,
   password: string,
-  onSuccess: (data: LoginResponse) => void
+  onSuccess: (data: LoginResponse) => void,
+  onError: (error: any) => void
 ) => {
   try {
     const response = await api.post("/api/auth/login", { email, password });
@@ -87,16 +116,7 @@ export const handleLogin = async (
     }
   } catch (error: any) {
     console.error("Error logging in:", error);
-    if (error.response) {
-      // Server responded with a status other than 200 range
-      toast.error(`${error.response.data.message}`);
-    } else if (error.request) {
-      // Request was made but no response received
-      toast.error("No response from server. Please try again later.");
-    } else {
-      // Something else happened while setting up the request
-      toast.error("Unable to log in. Please try again.");
-    }
+    onError(error);    
   }
 };
 

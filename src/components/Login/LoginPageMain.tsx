@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 
-import { handleLogin } from "../../actions/auth";
+import { handleLogin, requireResendCode } from "../../actions/auth";
 import PasswordField from "./elements/PasswordField";
 import InputField from "./elements/InputField";
 import CheckBox from "../TheHomePage/elements/desktop/CheckBox";
@@ -42,6 +42,20 @@ export default function LoginPageMain() {
         toast.success(response.message);
         login(response.token, response.user);
         navigate("/admin");
+      },
+      (error) => {
+        if (error.response.data.errorType === "ACCOUNT_NOT_VERIFIED") {
+          toast.error(error.response.data.message);
+          showLoading();
+          requireResendCode(email, (response: { message: string }) => {
+            toast.success(response.message);
+            navigate("/signup/3", { state: { email } });
+          }).finally(() => {
+            hideLoading();
+          });
+        } else {
+          toast.error(error.response.data.message);
+        }
       }
     ).finally(hideLoading); // Ensure loading is hidden on completion
   };
@@ -49,13 +63,13 @@ export default function LoginPageMain() {
   return (
     <div className="relative w-full flex flex-col items-center">
       <div className="lg:w-[80%] w-[90%] lg:mt-24 mt-10 flex flex-col gap-6">
-        <h1 className="lg:text-[40px] text-[30px] font-kanit font-bold text-dark">
+        <h1 className="lg:text-[40px] text-[30px] text-left font-kanit font-bold text-dark">
           Welcome Back!
         </h1>
         <p className="text-left text-md lg:text-xl font-raleway font-medium text-light-dark">
           Don&apos;t have an account?{" "}
           <Link
-            to="/signup"
+            to="/signup/1"
             className="text-light-dark border-b-2 font-raleway font-semibold border-[#666666]"
           >
             Register Now

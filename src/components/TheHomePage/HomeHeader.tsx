@@ -55,7 +55,7 @@ const HomeHeader = () => {
               <img
                 src={Signup_M}
                 alt="Signup"
-                onClick={() => navigate("/signup")}
+                onClick={() => navigate("/signup/1")}
               />
             </>
           )}
@@ -63,7 +63,7 @@ const HomeHeader = () => {
       )}
       {location.pathname == "/login" && (
         <div className="flex justify-center items-center gap-3 lg:hidden z-10">
-          <CreateAccountButton_M onClick={() => navigate("/signup")}>
+          <CreateAccountButton_M onClick={() => navigate("/signup/1")}>
             <span>Create Account</span>
           </CreateAccountButton_M>
         </div>
@@ -92,7 +92,7 @@ const HomeHeader = () => {
               </HexagonLoginButton>
               <HexagonSignupButton
                 active={true}
-                onClick={() => navigate("/signup")}
+                onClick={() => navigate("/signup/1")}
               >
                 <span>Create Account</span>
               </HexagonSignupButton>
@@ -105,12 +105,12 @@ const HomeHeader = () => {
           <HomeButton onClick={() => navigate("/")}>
             <span>Home</span>
           </HomeButton>
-          <CreateAccountButton onClick={() => navigate("/signup")}>
+          <CreateAccountButton onClick={() => navigate("/signup/1")}>
             <span>Create Account</span>
           </CreateAccountButton>
         </div>
       )}
-      {location.pathname == "/signup" && (
+      {location.pathname == "/signup/1" && (
         <div className="lg:flex justify-center items-center gap-7 hidden">
           <HomeButton onClick={() => navigate("/")}>
             <span>Home</span>
@@ -120,7 +120,7 @@ const HomeHeader = () => {
           </LoginButton>
         </div>
       )}
-      {location.pathname == "/signup" && (
+      {location.pathname == "/signup/1" && (
         <div className="flex justify-center items-start lg:hidden gap-5">
           <img src={Home_M} alt="" width={50} onClick={() => navigate("/")} />
           <LoginButton onClick={() => navigate("/login")}>

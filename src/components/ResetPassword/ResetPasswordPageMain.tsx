@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
 import { toast } from "react-toastify";
+
+import { useLoading } from "../../contexts/Loading";
 import { resetPassword } from "../../actions/auth";
 import PasswordField from "../Login/elements/PasswordField";
 import ResetPasswordButton from "./elements/ResetPasswordButton";
 import ResetPasswordButtonM from "./elements/ResetPasswordButtonM";
 
 export default function ResetPasswordPageMain() {
-  const navigator = useNavigate()
+  const navigator = useNavigate();
+  const { showLoading, hideLoading } = useLoading();
   const { token } = useParams<{ token: string }>();
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -22,15 +24,19 @@ export default function ResetPasswordPageMain() {
       toast.error("Passwords do not match");
       return;
     }
+
+    showLoading();
     resetPassword(token, password, (response) => {
       toast.success(response.message);
       navigator("/login");
+    }).finally(() => {
+      hideLoading();
     });
   };
 
   return (
     <div className="relative w-full lg:w-3/4 xl:w-1/2 px-8 sm:px-12 md:px-20 lg:px-28 xl:px-36 2xl:px-48 flex justify-between flex-col items-start gap-12">
-      <div className="lg:mt-24 mt-10 justify-start items-start flex flex-col gap-12">
+      <div className="w-full lg:mt-24 mt-10 justify-start items-start flex flex-col gap-12">
         <div className="flex flex-col gap-2">
           <h1 className="text-left lg:text-[40px] text-[30px] font-kanit font-bold text-dark">
             Reset Password
