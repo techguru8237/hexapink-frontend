@@ -34,7 +34,12 @@ const userTypeOptions: UserTypeOption[] = [
   { value: "Manager", label: "Manager" },
 ];
 
-const EditUser = ({ onClose, userData, users, setUsers }: EditUserProps): JSX.Element => {
+const EditUser = ({
+  onClose,
+  userData,
+  users,
+  setUsers,
+}: EditUserProps): JSX.Element => {
   const options: CountryOption[] = useMemo(() => countryList().getData(), []);
 
   const [firstName, setFirstName] = useState<string>(userData?.firstName || "");
@@ -46,6 +51,8 @@ const EditUser = ({ onClose, userData, users, setUsers }: EditUserProps): JSX.El
   const [country, setCountry] = useState<CountryOption | null>(
     options.find((option) => option.label === userData?.country) || null
   );
+  const [industry, setIndustry] = useState(userData.industry);
+  const [company, setCompany] = useState(userData.company);
   const [userType, setUserType] = useState<UserTypeOption | null>(
     userTypeOptions.find((option) => option.value === userData?.type) ||
       userTypeOptions[0]
@@ -81,18 +88,22 @@ const EditUser = ({ onClose, userData, users, setUsers }: EditUserProps): JSX.El
       phone,
       country: country ? country.label : "",
       type: userType ? userType.value : "Customer", // Default to Customer
+      industry,
+      company,
     };
 
     await updateUser(userData._id, updatedUser, (updatedUser) => {
-      const updatedUsers = users.map(user => user._id === updatedUser._id ? updatedUser : user)
+      const updatedUsers = users.map((user) =>
+        user._id === updatedUser._id ? updatedUser : user
+      );
       setUsers(updatedUsers);
-      toast.success("User data udpated successfully.")
+      toast.success("User data udpated successfully.");
     });
     onClose(); // Close the edit panel after submission
   };
 
   return (
-    <div className="flex flex-col w-[350px] items-start relative">
+    <div className="flex flex-col w-[350px] overflow-y-auto items-start relative">
       <div className="flex flex-col items-center relative w-full bg-white rounded-lg overflow-hidden border border-solid border-[#3f3fbf] shadow-[0px_0px_0px_4px_#ececf8]">
         <div className="flex h-12 items-center justify-between gap-2 p-4 relative self-stretch w-full border-b [border-bottom-style:dashed] border-light-gray-3">
           <div className="relative w-fit [font-family:'Raleway-SemiBold',Helvetica] font-semibold text-[#333333] text-md tracking-[0.28px] leading-[21px] whitespace-nowrap">
@@ -158,23 +169,35 @@ const EditUser = ({ onClose, userData, users, setUsers }: EditUserProps): JSX.El
               className="text-left focus-within:border-dark-blue"
             />
           </div>
-          <div className="w-full flex flex-col">
-            <Input
-              label="Phone"
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              error=""
-            />
-          </div>
+          <Input
+            label="Phone"
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            error=""
+          />
+          <Input
+            label="Industry"
+            type="text"
+            value={industry}
+            onChange={(e) => setIndustry(e.target.value)}
+            error=""
+          />
+          <Input
+            label="Company"
+            type="text"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+            error=""
+          />
         </div>
 
         <div className="w-full p-6">
           <button
             onClick={handleSubmit}
-            disabled={!firstName || !lastName || !email || !password}
+            disabled={!firstName || !lastName || !email}
             className={`bg-dark-blue ${
-              !firstName || !lastName || !email || !password
+              !firstName || !lastName || !email
                 ? "opacity-20 cursor-default read-only"
                 : ""
             } text-white flex items-center justify-center gap-2 rounded-full w-full`}

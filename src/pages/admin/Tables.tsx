@@ -91,11 +91,11 @@ export default function Tables() {
   };
 
   return (
-    <div>
+    <div className="h-full flex flex-col">
       <AdminHeader icon={<PiTableLight />} label="Tables" />
 
-      <div className="bg-light-gray flex flex-row">
-        <div className="flex flex-col flex-1 border-r border-light-gray-1">
+      <div className="h-full bg-light-gray flex flex-row">
+        <div className="h-full flex flex-col flex-1 border-r border-light-gray-1">
           <div className="px-4 sm:px-8 py-4 border-b border-light-gray-1 flex items-center text-light-dark">
             {selectedTables.length > 0 && (
               <span>{selectedTables.length} Selected</span>
@@ -137,7 +137,7 @@ export default function Tables() {
           />
 
           {/* Main Table */}
-          <div className="min-w-full p-4 sm:p-8 flex flex-col items-center gap-4">
+          <div className="min-w-full h-full p-4 sm:p-8 flex flex-col items-center gap-4">
             <TableListHeader />
 
             {loading ? (
@@ -160,13 +160,13 @@ export default function Tables() {
         </div>
 
         {isNewTablePanelVisible && (
-          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray-1 bg-white/80 flex justify-center">
+          <div className="w-96 px-4 py-4 border-l-2 border-light-gray-1 bg-white/80 flex justify-center">
             <CreateTable onClose={() => setIsNewTablePanelVisible(false)} />
           </div>
         )}
 
         {isFilterPanelVisible && (
-          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray-1 flex justify-center">
+          <div className="w-96 px-4 py-4 border-l-2 border-light-gray-1 flex justify-center">
             <FilterPanel onClose={handleClickFilter} />
           </div>
         )}

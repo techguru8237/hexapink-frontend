@@ -30,7 +30,7 @@ export interface UserItem {
   company?: string;
   type?: string;
   status?: string;
-  verified?: boolean;
+  is_verified?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }

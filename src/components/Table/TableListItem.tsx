@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import {
-  Badge,
-  Tooltip,
-} from "@mui/material";
+import { Badge, IconButton, Tooltip } from "@mui/material";
 import { LuPlus } from "react-icons/lu";
 import { BsTrash3 } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
@@ -104,8 +101,8 @@ export const TableListItem: React.FC<TableListItemProps> = ({
         onClick={() => onCheckboxChange(index)}
       >
         <div className="w-full bg-white flex justify-around rounded-lg">
-          <div className="w-[20%] p-3 flex items-center justify-between">
-            <div className="flex items-center">
+          <div className="w-[20%] p-3 flex items-center flex-wrap justify-between">
+            <div className="flex flex-wrap items-center">
               <PiTableLight className="text-2xl mr-2" />
               {isEditing ? (
                 <input
@@ -129,13 +126,17 @@ export const TableListItem: React.FC<TableListItemProps> = ({
                 </span>
               )}
             </div>
-            <CiCircleInfo
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsModalOpen(true);
-              }}
-              className="text-xl mr-2 border rounded-md p-1 box-content cursor-pointer"
-            />
+            <Tooltip title="Table Preview">
+              <IconButton>
+                <CiCircleInfo
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsModalOpen(true);
+                  }}
+                  className="text-xl border rounded-md p-1 box-content cursor-pointer"
+                />
+              </IconButton>
+            </Tooltip>
           </div>
           <div className="w-[15%] p-3 flex items-center divide-x border-l border-dashed border-light-gray-3">
             <span>{data.columns.length}</span>

@@ -33,7 +33,7 @@ export default function NewTableSkeleton({
         <div className="w-[15%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
           <span>1500</span>
         </div>
-        <div className="w-[30%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
+        <div className="w-[30%] p-3 flex items-center flex-wrap gap-2 border-l border-dashed border-light-gray-3">
           <div
             className="flex items-center bg-light-gray-1 rounded-full px-2 gap-2"
           >

@@ -121,11 +121,11 @@ export default function Users() {
   };
 
   return (
-    <div>
+    <div className="h-full flex flex-col">
       <AdminHeader icon={<FaRegUserCircle />} label="Users" />
 
-      <div className="bg-light-gray flex flex-row">
-        <div className="flex flex-col flex-1 border-r border-light-gray-1">
+      <div className="h-full bg-light-gray flex flex-row">
+        <div className="h-full flex flex-col flex-1 border-r border-light-gray-1">
           <div className="px-8 py-4 border-b border-light-gray-1 flex items-center justify-between text-light-dark">
             {selectedUsers.length > 0 && (
               <span>{selectedUsers.length} Selected</span>
@@ -164,7 +164,7 @@ export default function Users() {
           <NewUserSkeleton onAddUserClick={handleAddUserClick} />
 
           {/* Main Table */}
-          <div className="min-w-fit p-8 flex flex-col gap-4">
+          <div className="min-w-fit p-8 flex flex-col gap-3">
             <UserListHeader />
 
             {loading ? (
@@ -186,13 +186,13 @@ export default function Users() {
         </div>
 
         {isNewUserPanelVisible && (
-          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray-1 flex justify-center">
+          <div className="w-96 px-4 py-4 border-l-2 border-light-gray-1 flex justify-center">
             <CreateUser onClose={() => setIsNewUserPanelVisible(false)} />
           </div>
         )}
 
         {isEditUserPanelVisible && editUser && (
-          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray-1 flex justify-center">
+          <div className="w-96 px-4 py-4 border-l-2 border-light-gray-1 flex justify-center">
             <EditUser
               userData={editUser}
               users={users}

@@ -88,12 +88,12 @@ export const UserListItem: React.FC<UserListItemProps> = ({
               <span className="text-wrap">{data.email}</span>
               <span
                 className={`rounded-lg px-2 py-1 text-sm border ${
-                  data.verified
+                  data.is_verified
                     ? "bg-light-green-2 border-light-green-1 text-green"
                     : "bg-light-red-2 border-light-red-1 text-red"
                 }`}
               >
-                {data.verified ? "Verified" : "Unverified"}
+                {data.is_verified ? "Verified" : "Unverified"}
               </span>
             </div>
             <div className="w-[20%] p-1 lg:p-2 xl:p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
@@ -120,7 +120,7 @@ export const UserListItem: React.FC<UserListItemProps> = ({
                   onClick={(e) => {
                     e.stopPropagation();
                     handleEditUserClick(data._id);
-                  }}                  
+                  }}
                 >
                   <PiPencilSimpleLight className="text-xl ml-auto border rounded-md p-1 box-content cursor-pointer" />
                 </IconButton>

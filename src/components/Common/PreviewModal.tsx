@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { PreviewModalProps } from "../../types";
-import { IoCloseCircleSharp } from "react-icons/io5";
+import { IoCloseCircleOutline } from "react-icons/io5";
 import Pagination from "../Pagination";
 
 const PreviewModal: React.FC<PreviewModalProps> = ({
@@ -37,7 +37,7 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
         <h2 className="pb-4 text-xl font-bold font-kanit flex items-center gap-2">
           File Data Preview (Columns: {columns.length}, Rows: {data.length})
         </h2>
-        <IoCloseCircleSharp
+        <IoCloseCircleOutline
           onClick={onRequestClose}
           className="text-2xl cursor-pointer"
         />

@@ -124,7 +124,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
 
       {/* Sidebar */}
       <div
-        className={`h-screen flex flex-col lg:w-72 bg-white text-dark border-r border-light-gray-3 ${
+        className={`min-h-screen h-full flex flex-col lg:w-72 bg-white text-dark border-r border-light-gray-3 ${
           isOpen ? "flex" : "hidden"
         } sm:flex`}
       >

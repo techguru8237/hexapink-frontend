@@ -29,7 +29,7 @@ const UserPreviewModal: React.FC<UserPreviewModalProps> = ({
     { label: "Industry", value: user.industry },
     { label: "Company", value: user.company },
     { label: "Status", value: user.status },
-    { label: "Verified", value: user.verified ? "Yes" : "No" },
+    { label: "Verified", value: user.is_verified },
     { label: "Created At", value: user.createdAt?.split("T")[0] },
   ];
 
@@ -41,8 +41,34 @@ const UserPreviewModal: React.FC<UserPreviewModalProps> = ({
           <tbody>
             {userDetails.map((detail, index) => (
               <tr key={index}>
-                <td className="border border-light-gray-3 p-2">{detail.label}</td>
-                <td className="border border-light-gray-3 p-2">{detail.value}</td>
+                <td className="border border-light-gray-3 p-2">
+                  {detail.label}
+                </td>
+                <td className="border border-light-gray-3 p-2">
+                  {detail.label === "Verified" ? (
+                    <span
+                      className={`rounded-lg px-2 py-1 text-sm border ${
+                        detail.value
+                          ? "bg-light-green-2 border-light-green-1 text-green"
+                          : "bg-light-red-2 border-light-red-1 text-red"
+                      }`}
+                    >
+                      {detail.value ? "Verified" : "Unverified"}
+                    </span>
+                  ) : detail.label === "Status" ? (
+                    <button
+                      className={`rounded-lg px-2 py-1 text-sm ${
+                        detail.value === "Active"
+                          ? "bg-light-green-2 border-light-green-1 text-green hover:bg-green hover:border-none hover:text-white"
+                          : "bg-[#FAFAFA] border-[#E6E6E6] text-dark hover:bg-light-dark hover:border-none hover:text-white"
+                      }`}
+                    >
+                      {detail.value}
+                    </button>
+                  ) : (
+                    detail.value
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
