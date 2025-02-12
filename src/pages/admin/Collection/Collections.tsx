@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 
 import { FaRegFolderOpen } from "react-icons/fa";
 import { CiFilter } from "react-icons/ci";
-import AdminHeader from "../../components/Dashboard/AdminHeader";
-import Pagination from "../../components/Pagination";
-import NewCollectionSkeleton from "../../components/Collection/NewCollectionSkeleton";
-import CollectionListHeader from "../../components/Collection/CollectionListHeader";
-import {CollectionListItem} from "../../components/Collection/CollectionListItem";
+import AdminHeader from "../../../components/Dashboard/AdminHeader";
+import Pagination from "../../../components/Pagination";
+import NewCollectionSkeleton from "../../../components/Collection/NewCollectionSkeleton";
+import CollectionListHeader from "../../../components/Collection/CollectionListHeader";
+import {CollectionListItem} from "../../../components/Collection/CollectionListItem";
 
 const dummyData = Array.from({ length: 25 }, (_, index) => ({
   id: index,

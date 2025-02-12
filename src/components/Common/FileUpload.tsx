@@ -6,14 +6,16 @@ import { TbRefresh } from "react-icons/tb";
 interface FileUploadProps {
   label: string;
   fileName: string | undefined;
+  accept: string;
   error: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleClose: (event: React.MouseEvent) => void;
 }
 
-export default function Input({
+export default function FileUpload({
   label,
   fileName,
+  accept,
   error,
   onChange,
   handleClose,
@@ -36,7 +38,7 @@ export default function Input({
 
   return (
     <>
-      <div className="w-full flex flex-col items-start gap-2">
+      <div className="w-full flex flex-col items-start">
         <label htmlFor="file-upload">{label}</label>
 
         <div className="w-full bg-white border border-light-gray3 rounded-lg p-2 flex items-center justify-between">
@@ -47,7 +49,7 @@ export default function Input({
             type="file"
             className="hidden"
             id="file-input"
-            accept=".csv"
+            accept={accept}
           />
           <label htmlFor="file-input">
             {fileName ? (

@@ -52,8 +52,8 @@ export default function NewFileSkeleton() {
         </div>
       </div>
 
-      <Link to="/user/new-file" className="absolute left-1/2 transform -translate-x-1/2 rounded-full px-4 py-2 flex items-center gap-2 bg-dark-blue text-white">
-        <PiPlusCircle className="text-2xl" /> <span>New File</span>
+      <Link to="/admin/collections/new" className="absolute left-1/2 transform -translate-x-1/2 rounded-full px-4 py-2 flex items-center gap-2 bg-dark-blue text-white">
+        <PiPlusCircle className="text-2xl" /> <span>New Collection</span>
       </Link>
     </div>
   );

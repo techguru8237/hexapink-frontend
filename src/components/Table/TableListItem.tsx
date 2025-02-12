@@ -136,7 +136,10 @@ export const TableListItem: React.FC<TableListItemProps> = ({
               )}
             </div>
             <CiCircleInfo
-              onClick={() => setIsModalOpen(true)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsModalOpen(true);
+              }}
               className="text-xl mr-2 border rounded-md p-1 box-content cursor-pointer"
             />
           </div>
@@ -198,10 +201,12 @@ export const TableListItem: React.FC<TableListItemProps> = ({
           />
         ))}
       {/* Preview Modal */}
-      {isModalOpen && <PreviewModal
-        onRequestClose={() => setIsModalOpen(false)}
-        data={data.data}
-      />}
+      {isModalOpen && (
+        <PreviewModal
+          onRequestClose={() => setIsModalOpen(false)}
+          data={data.data}
+        />
+      )}
 
       {/* Handle Tag Modal */}
       <TagModal

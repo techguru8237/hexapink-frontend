@@ -121,6 +121,7 @@ const CreateTable = ({onClose}: CreateTableProps): JSX.Element => {
           <FileUpload
             label="Selected File"
             fileName={file?.name}
+            accept=".csv"
             onChange={handleChange}
             handleClose={() => setFile(null)}
             error={errors.file}

@@ -141,6 +141,7 @@ export default function SignupPageMain() {
     } else if (formData.otp === "") {
       toast.warning("Please provide an OTP code.");
     } else {
+      showLoading();
       verifyEmail(
         formData.email,
         formData.otp,
@@ -148,14 +149,15 @@ export default function SignupPageMain() {
           toast.success(response.message);
           navigate("/login");
         }
-      );
+      ).finally(() => {
+        hideLoading();
+      });
     }
     setFormData({ ...formData, otp: "" });
     verificationCodeInputRef.current?.clear();
   };
 
   const handleClickResendCode = () => {
-    console.log("formData", formData);
     if (formData.email === "") {
       toast.warning("Please provide an email address.");
       navigate("/signup/2");

@@ -6,12 +6,13 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
 import AdminLayout from "./pages/admin/AdminLayout";
-import PaymentMethods from "./pages/admin/PaymentMethods";
 import Dashboard from "./pages/admin/Dashboard";
-import Collections from "./pages/admin/Collections";
 import Tables from "./pages/admin/Tables";
 import Orders from "./pages/admin/Orders";
 import Users from "./pages/admin/Users";
+import PaymentMethods from "./pages/admin/PaymentMethods";
+import Collections from "./pages/admin/Collection/Collections";
+import CreateCollection from "./pages/admin/Collection/CreateCollection";
 
 import Files from "./pages/user/Files";
 import Lookup from "./pages/user/Lookup";
@@ -52,6 +53,7 @@ function App() {
           <Route path="orders" element={<Orders />} />
           <Route path="paymentMethod" element={<PaymentMethods />} />
           <Route path="collections" element={<Collections />} />
+          <Route path="collections/new" element={<CreateCollection />} />
           <Route path="tables/:page?" element={<Tables />} />
           <Route path="users" element={<Users />} />
         </Route>
