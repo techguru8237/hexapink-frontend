@@ -22,7 +22,7 @@ const VerticalStepBar: React.FC<VerticalStepBarProps> = ({
             key={index}
             className={`relative w-36 h-8 ${
               isCurrentStep ? "border" : ""
-            } border-light-gray3 rounded-full flex items-center gap-2`}
+            } border-light-gray-3 rounded-full flex items-center gap-2`}
           >
             {isCurrentStep ? (
               <div className="w-8 h-8 bg-dark-blue text-white rounded-full flex items-center justify-center z-10">
@@ -34,7 +34,7 @@ const VerticalStepBar: React.FC<VerticalStepBarProps> = ({
                   className={`w-4 h-4 bg-white border ${
                     index < stepNumber - 1
                       ? "border-dark-blue"
-                      : "border-light-gray3"
+                      : "border-light-gray-3"
                   } rounded-full z-10`}
                 ></div>
               </div>
@@ -45,7 +45,7 @@ const VerticalStepBar: React.FC<VerticalStepBarProps> = ({
               } ${
                 index <= stepNumber - 1
                   ? "text-dark-blue"
-                  : "text-light-gray3"
+                  : "text-light-gray-3"
               }`}
             >
               {step.label}
@@ -56,7 +56,7 @@ const VerticalStepBar: React.FC<VerticalStepBarProps> = ({
                 className={`absolute h-20 border-r ${
                   index < stepNumber - 1
                     ? "border-dark-blue"
-                    : "border-light-gray3"
+                    : "border-light-gray-3"
                 } top-[23px] left-[15px] z-0`}
               ></div>
             )}

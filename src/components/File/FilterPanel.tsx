@@ -59,7 +59,7 @@
 //       <div className="flex justify-between items-center border-b p-4">
 //         <button
 //           onClick={() => window.location.reload()}
-//           className="border border-light-gray3 p-2 rounded-md"
+//           className="border border-light-gray-3 p-2 rounded-md"
 //         >
 //           <FiRefreshCcw />
 //         </button>
@@ -72,12 +72,12 @@
 //         </button>
 //       </div>
 
-//       <div className="p-4 border-b border-dashed border-light-gray3">
+//       <div className="p-4 border-b border-dashed border-light-gray-3">
 //         <h3 className="font-bold mb-2">Export Status</h3>
 //         <div className="flex flex-col gap-2">
 //           <div
 //             className={`flex items-center gap-2 border rounded-lg p-2 cursor-pointer ${
-//               exportStatus === "Ready" ? "bg-light-gray2 text-dark-blue" : ""
+//               exportStatus === "Ready" ? "bg-light-gray-2 text-dark-blue" : ""
 //             }`}
 //             onClick={() => setExportStatus("Ready")}
 //           >
@@ -87,7 +87,7 @@
 //           <div
 //             className={`flex items-center gap-2 border rounded-lg p-2 cursor-pointer ${
 //               exportStatus === "Exporting"
-//                 ? "bg-light-gray2 text-dark-blue"
+//                 ? "bg-light-gray-2 text-dark-blue"
 //                 : ""
 //             }`}
 //             onClick={() => setExportStatus("Exporting")}
@@ -98,7 +98,7 @@
 //         </div>
 //       </div>
 
-//       <div className="p-4 border-b border-dashed border-light-gray3">
+//       <div className="p-4 border-b border-dashed border-light-gray-3">
 //         <h3 className="font-bold mb-2">Volume Selection</h3>
 //         <div className="flex gap-2">
 //           <input

@@ -20,14 +20,14 @@ export default function Selection({
         {items.map((item) => (
           <div
             key={item}
-            className={`flex items-center gap-2 px-2 py-1 rounded-full border border-light-gray3 cursor-pointer ${
+            className={`flex items-center gap-2 px-2 py-1 rounded-full border border-light-gray-3 cursor-pointer ${
               selectedItem === item ? "text-dark-blue" : "text-dark"
             }`}
             onClick={() => onChange(item)}
           >
             <FaRegCircleDot
               className={`${
-                selectedItem === item ? "text-dark-blue" : "text-light-gray3"
+                selectedItem === item ? "text-dark-blue" : "text-light-gray-3"
               }`}
             />
             {item}

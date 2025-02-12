@@ -17,7 +17,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ checked, onChange }) => {
         onClick={() => onChange && onChange(!checked)}
       >
         <PiCheckBold
-          className={`${checked ? "text-white" : "text-light-gray3"}`}
+          className={`${checked ? "text-white" : "text-light-gray-3"}`}
         />
       </div>
     </label>

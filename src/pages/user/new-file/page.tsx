@@ -23,12 +23,12 @@ export default function NewFile() {
       <Header icon={<PiFileTextBold />} label="New File" />
 
       <div className="bg-light-gray flex">
-        <div className="p-8 border-r border-light-gray1">
+        <div className="p-8 border-r border-light-gray-1">
           <VerticalStepBar steps={steps} stepNumber={stepNumber} />
         </div>
 
-        <div className="flex flex-col flex-1 border-r border-light-gray1">
-          <div className="px-8 py-4 border-b border-light-gray1 flex justify-between items-center">
+        <div className="flex flex-col flex-1 border-r border-light-gray-1">
+          <div className="px-8 py-4 border-b border-light-gray-1 flex justify-between items-center">
             <div className="flex items-center gap-2">
               <button>Back</button>
               <button onClick={handleNextStep}>Next</button>
@@ -41,8 +41,8 @@ export default function NewFile() {
           </div>
 
           <div className="p-8 flex flex-col gap-4">
-            <div className="bg-white border border-light-gray1 rounded-lg flex flex-col">
-              <div className="p-2 border-b border-dashed border-light-gray1">
+            <div className="bg-white border border-light-gray-1 rounded-lg flex flex-col">
+              <div className="p-2 border-b border-dashed border-light-gray-1">
                 Type
               </div>
               <div className="p-4 flex items-center justify-start">

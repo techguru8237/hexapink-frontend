@@ -55,9 +55,9 @@ export default function Orders() {
     <div>
       <AdminHeader icon={<PiPackage />} label="Orders" />
 
-      <div className="bg-light-gray border-b border-light-gray1 flex">
-        <div className="flex flex-col flex-1 border-r border-light-gray1">
-          <div className="px-8 py-4 border-b border-light-gray1 flex items-center justify-between text-light-dark">
+      <div className="bg-light-gray border-b border-light-gray-1 flex">
+        <div className="flex flex-col flex-1 border-r border-light-gray-1">
+          <div className="px-8 py-4 border-b border-light-gray-1 flex items-center justify-between text-light-dark">
             {selectedFiles.length > 0 && (
               <span>{selectedFiles.length} Selected</span>
             )}
@@ -68,7 +68,7 @@ export default function Orders() {
                 )}
                 <button
                   onClick={handleClickFilter}
-                  className="flex items-center border border-light-gray3 rounded-md px-2 py-1 text-dark cursor-pointer"
+                  className="flex items-center border border-light-gray-3 rounded-md px-2 py-1 text-dark cursor-pointer"
                 >
                   <CiFilter />
                   <span>Filter</span>

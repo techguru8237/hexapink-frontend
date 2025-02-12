@@ -41,7 +41,7 @@ export default function FileUpload({
       <div className="w-full flex flex-col items-start">
         <label htmlFor="file-upload">{label}</label>
 
-        <div className="w-full bg-white border border-light-gray3 rounded-lg p-2 flex items-center justify-between">
+        <div className="w-full bg-white border border-light-gray-3 rounded-lg p-2 flex items-center justify-between">
           <span className="text-left text-sm w-full">{fileName}</span>
           <input
             ref={fileInputRef}

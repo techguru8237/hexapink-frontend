@@ -1,12 +1,15 @@
-import { JSX, useMemo, useState } from "react";
-import Input from "../Common/Input";
-import { PiPlusCircle } from "react-icons/pi";
-import { createUser } from "../../actions/user";
+import { JSX, useMemo, useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import Select from "react-select";
-import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input/input";
 import countryList from "react-select-country-list";
+import "react-phone-number-input/style.css";
+
+import { PiPlusCircle } from "react-icons/pi";
 import { IoCloseCircleOutline } from "react-icons/io5";
+
+import { UserItem } from "../../types";
+import { updateUser } from "../../actions/user";
+import Input from "../Common/Input";
 
 interface CountryOption {
   value: string;
@@ -18,7 +21,10 @@ interface UserTypeOption {
   label: string;
 }
 
-interface CreateUserProps {
+interface EditUserProps {
+  userData: UserItem;
+  users: UserItem[];
+  setUsers: (updatedUsers: UserItem[]) => void;
   onClose: () => void;
 }
 
@@ -28,39 +34,61 @@ const userTypeOptions: UserTypeOption[] = [
   { value: "Manager", label: "Manager" },
 ];
 
-const CreateUser = ({ onClose }: CreateUserProps): JSX.Element => {
+const EditUser = ({ onClose, userData, users, setUsers }: EditUserProps): JSX.Element => {
   const options: CountryOption[] = useMemo(() => countryList().getData(), []);
 
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
+  const [firstName, setFirstName] = useState<string>(userData?.firstName || "");
+  const [lastName, setLastName] = useState<string>(userData?.lastName || "");
+  const [email, setEmail] = useState<string>(userData?.email || "");
   const [password, setPassword] = useState<string>("");
-  const [phone, setPhone] = useState<string | undefined>(undefined);
-  const [country, setCountry] = useState<CountryOption | null>(null);
+  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
+  const [phone, setPhone] = useState<string | undefined>(userData?.phone);
+  const [country, setCountry] = useState<CountryOption | null>(
+    options.find((option) => option.label === userData?.country) || null
+  );
   const [userType, setUserType] = useState<UserTypeOption | null>(
-    userTypeOptions[0]
-  ); // Default to Customer
+    userTypeOptions.find((option) => option.value === userData?.type) ||
+      userTypeOptions[0]
+  );
+
+  useEffect(() => {
+    if (userData) {
+      setFirstName(userData.firstName);
+      setLastName(userData.lastName);
+      setEmail(userData.email);
+      setPhone(userData.phone);
+      setCountry(
+        options.find((option) => option.label === userData.country) || null
+      );
+      setUserType(
+        userTypeOptions.find((option) => option.value === userData.type) ||
+          userTypeOptions[0]
+      );
+    }
+  }, [userData, options]);
 
   const handleSubmit = async () => {
-    const userData = {
+    if (password !== passwordConfirm) {
+      toast.error("Password is not match");
+      return;
+    }
+
+    const updatedUser: UserItem = {
+      ...userData,
       firstName,
       lastName,
       email,
-      password,
       phone,
       country: country ? country.label : "",
-      userType: userType ? userType.value : "customer", // Default to customer
+      type: userType ? userType.value : "Customer", // Default to Customer
     };
 
-    await createUser(userData, () => {});
-    // Reset form
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setPassword("");
-    setPhone(undefined);
-    setCountry(null);
-    setUserType(userTypeOptions[0]); // Reset to default user type
+    await updateUser(userData._id, updatedUser, (updatedUser) => {
+      const updatedUsers = users.map(user => user._id === updatedUser._id ? updatedUser : user)
+      setUsers(updatedUsers);
+      toast.success("User data udpated successfully.")
+    });
+    onClose(); // Close the edit panel after submission
   };
 
   return (
@@ -68,7 +96,7 @@ const CreateUser = ({ onClose }: CreateUserProps): JSX.Element => {
       <div className="flex flex-col items-center relative w-full bg-white rounded-lg overflow-hidden border border-solid border-[#3f3fbf] shadow-[0px_0px_0px_4px_#ececf8]">
         <div className="flex h-12 items-center justify-between gap-2 p-4 relative self-stretch w-full border-b [border-bottom-style:dashed] border-light-gray-3">
           <div className="relative w-fit [font-family:'Raleway-SemiBold',Helvetica] font-semibold text-[#333333] text-md tracking-[0.28px] leading-[21px] whitespace-nowrap">
-            Create New User
+            Edit User
           </div>
           <IoCloseCircleOutline
             onClick={onClose}
@@ -105,8 +133,15 @@ const CreateUser = ({ onClose }: CreateUserProps): JSX.Element => {
             onChange={(e) => setPassword(e.target.value)}
             error=""
           />
+          <Input
+            label="Confirm Password"
+            type="password"
+            value={passwordConfirm}
+            onChange={(e) => setPasswordConfirm(e.target.value)}
+            error=""
+          />
           <div className="w-full">
-            <label className="block mb-2 text-left">Country</label>
+            <label className="block text-left">Country</label>
             <Select
               options={options}
               value={country}
@@ -115,7 +150,7 @@ const CreateUser = ({ onClose }: CreateUserProps): JSX.Element => {
             />
           </div>
           <div className="w-full">
-            <label className="block mb-2 text-left">User Type</label>
+            <label className="block text-left">User Type</label>
             <Select
               options={userTypeOptions}
               value={userType}
@@ -124,16 +159,12 @@ const CreateUser = ({ onClose }: CreateUserProps): JSX.Element => {
             />
           </div>
           <div className="w-full flex flex-col">
-            <label htmlFor="" className="text-left">
-              Phone
-            </label>
-            <PhoneInput
-              placeholder="Enter phone number"
+            <Input
+              label="Phone"
               type="tel"
-              autoComplete="tel"
               value={phone}
-              onChange={setPhone}
-              className="bg-white p-2 text-dark rounded-md border outline-none focus:border-dark-blue"
+              onChange={(e) => setPhone(e.target.value)}
+              error=""
             />
           </div>
         </div>
@@ -149,7 +180,7 @@ const CreateUser = ({ onClose }: CreateUserProps): JSX.Element => {
             } text-white flex items-center justify-center gap-2 rounded-full w-full`}
           >
             <PiPlusCircle className="text-xl" />
-            <span>Create User</span>
+            <span>Update User</span>
           </button>
         </div>
       </div>
@@ -157,4 +188,4 @@ const CreateUser = ({ onClose }: CreateUserProps): JSX.Element => {
   );
 };
 
-export default CreateUser;
+export default EditUser;

@@ -112,7 +112,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
     <div>
       {/* Mobile Toggle Button */}
       <div
-        className={`sm:hidden p-2 text-dark text-2xl border border-light-gray3 rounded-full bg-white cursor-pointer absolute top-14 ${isOpen? "left-12" : "-left-4"}`}
+        className={`sm:hidden p-2 text-dark text-2xl border border-light-gray-3 rounded-full bg-white cursor-pointer absolute top-14 ${isOpen? "left-12" : "-left-4"}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? (
@@ -124,7 +124,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
 
       {/* Sidebar */}
       <div
-        className={`h-screen flex flex-col lg:w-72 bg-white text-dark border-r border-light-gray3 ${
+        className={`h-screen flex flex-col lg:w-72 bg-white text-dark border-r border-light-gray-3 ${
           isOpen ? "flex" : "hidden"
         } sm:flex`}
       >

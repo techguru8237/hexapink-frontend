@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { confirmAlert } from "react-confirm-alert";
-import "react-confirm-alert/src/react-confirm-alert.css";
-
-import { Badge, Tooltip } from "@mui/material";
-
+import {
+  Badge,
+  Tooltip,
+} from "@mui/material";
 import { LuPlus } from "react-icons/lu";
 import { BsTrash3 } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
@@ -15,10 +14,10 @@ import { MdOutlineModeEdit } from "react-icons/md";
 import Checkbox from "../Checkbox";
 import PreviewModal from "../Common/PreviewModal"; // Import the modal
 import LoadingElement from "../Common/LoadingElement";
-
 import { TableListItemProps } from "../../types";
 import { deleteTableById, updateTableName } from "../../actions/table"; // Import the update function
 import TagModal from "../Common/TagModal";
+import ConfirmDialog from "../Common/ConfirmDialog";
 
 export const TableListItem: React.FC<TableListItemProps> = ({
   data,
@@ -37,32 +36,27 @@ export const TableListItem: React.FC<TableListItemProps> = ({
   const [selectedTag, setSelectedTag] = useState("");
   const [actionType, setActionType] = useState("");
 
+  // State for delete confirmation dialog
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
   const handleDelete = () => {
-    confirmAlert({
-      title: "Are you sure to delete this table?",
-      message: "Are you sure to do this.",
-      buttons: [
-        {
-          label: "Yes",
-          onClick: () => {
-            setLoading(true);
-            deleteTableById(data._id, () => {
-              toast.success("Table deleted successfully.");
-              fetchTables();
-              setLoading(false);
-            }).finally(() => {
-              setLoading(false);
-            });
-          },
-        },
-        {
-          label: "No",
-          onClick: () => {
-            console.log("Clicked close button");
-          },
-        },
-      ],
+    setOpenDeleteDialog(true); // Open the delete confirmation dialog
+  };
+
+  const confirmDelete = () => {
+    setLoading(true);
+    deleteTableById(data._id, () => {
+      toast.success("Table deleted successfully.");
+      fetchTables();
+      setLoading(false);
+    }).finally(() => {
+      setLoading(false);
+      setOpenDeleteDialog(false); // Close the dialog after deletion
     });
+  };
+
+  const cancelDelete = () => {
+    setOpenDeleteDialog(false); // Close the dialog without deleting
   };
 
   const handleEdit = async () => {
@@ -105,7 +99,7 @@ export const TableListItem: React.FC<TableListItemProps> = ({
       <Checkbox checked={isSelected} onChange={() => onCheckboxChange(index)} />
       <div
         className={`w-full bg-[#F7F7FC] flex justify-around border ${
-          isSelected ? "border-dark-blue" : "border-light-gray3"
+          isSelected ? "border-dark-blue" : "border-light-gray-3"
         } rounded-lg`}
         onClick={() => onCheckboxChange(index)}
       >
@@ -143,18 +137,18 @@ export const TableListItem: React.FC<TableListItemProps> = ({
               className="text-xl mr-2 border rounded-md p-1 box-content cursor-pointer"
             />
           </div>
-          <div className="w-[15%] p-3 flex items-center divide-x border-l border-dashed border-light-gray3">
+          <div className="w-[15%] p-3 flex items-center divide-x border-l border-dashed border-light-gray-3">
             <span>{data.columns.length}</span>
           </div>
-          <div className="w-[15%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray3">
+          <div className="w-[15%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
             <span>{data.leads}</span>
           </div>
-          <div className="w-[30%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray3">
+          <div className="w-[30%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
             <div className="flex flex-wrap gap-2">
               {data.tags?.map((tag, index) => (
                 <div
                   key={index}
-                  className="flex items-center bg-light-gray1 rounded-full px-2 gap-2"
+                  className="flex items-center bg-light-gray-1 rounded-full px-2 gap-2"
                 >
                   <span>{tag}</span>
                   <div className="flex items-center gap-1">
@@ -179,14 +173,14 @@ export const TableListItem: React.FC<TableListItemProps> = ({
               ))}
               <div
                 onClick={handleCreateTag}
-                className="flex items-center border-2 border-light-gray3 rounded-full px-2 gap-1 cursor-pointer"
+                className="flex items-center border-2 border-light-gray-3 rounded-full px-2 gap-1 cursor-pointer"
               >
                 <LuPlus />
                 <span>Add New</span>
               </div>
             </div>
           </div>
-          <div className="w-[15%] p-3 flex items-center border-l border-dashed border-light-gray3">
+          <div className="w-[15%] p-3 flex items-center border-l border-dashed border-light-gray-3">
             {data.createdAt.split("T")[0]}
           </div>
         </div>
@@ -217,6 +211,14 @@ export const TableListItem: React.FC<TableListItemProps> = ({
         open={isTagModalOpen}
         handleClose={() => setIsTagModalOpen(false)}
         actionType={actionType} // Pass the action type here
+      />
+
+      <ConfirmDialog
+        title="Confirm Deletion"
+        description="Are you sure you want to delete this table?"
+        handleConfirmChange={confirmDelete}
+        handleCloseDialog={cancelDelete}
+        openDialog={openDeleteDialog}
       />
     </div>
   );

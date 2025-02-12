@@ -10,6 +10,10 @@ import App from "./App.tsx";
 // Create a custom theme
 const theme = createTheme({
   palette: {
+    primary: {
+      main: "#4040BF",
+      contrastText: "#FFFFFF", // Set contrast text color to white
+    },
     secondary: {
       main: "#FF6699",
       contrastText: "#FFFFFF", // Set contrast text color to white
@@ -38,7 +42,25 @@ const theme = createTheme({
           },
         },
       },
-    }
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: "50px", // Fully rounded on left and right sides
+          padding: "6px 16px", // Adjust padding as needed
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          border: "none", // Removes the border
+          "&:focus": {
+            outline: "none", // Removes the focus outline
+          },
+        },
+      },
+    },
   },
 });
 

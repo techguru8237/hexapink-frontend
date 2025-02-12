@@ -55,9 +55,9 @@ export default function Files() {
     <div className="flex flex-col">
       <Header icon={<PiFileTextBold />} label="Files" />
 
-      <div className="bg-light-gray border-b border-light-gray1 flex">
-        <div className="flex flex-col flex-1 border-r border-light-gray1">
-          <div className="px-8 py-4 border-b border-light-gray1 flex items-center justify-between text-light-dark">
+      <div className="bg-light-gray border-b border-light-gray-1 flex">
+        <div className="flex flex-col flex-1 border-r border-light-gray-1">
+          <div className="px-8 py-4 border-b border-light-gray-1 flex items-center justify-between text-light-dark">
             {selectedFiles.length > 0 && (
               <span>{selectedFiles.length} Selected</span>
             )}

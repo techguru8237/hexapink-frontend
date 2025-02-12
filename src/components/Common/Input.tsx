@@ -1,7 +1,7 @@
 interface InputProps {
   label: string;
   type: string;
-  value: string;
+  value: string | undefined;
   error: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -21,7 +21,7 @@ export default function Input({
         onChange={onChange}
         id={label}
         type={type || "text"}
-        className="w-full bg-white border border-light-gray3 focus:border-dark-blue rounded-lg p-2 transition duration-200 outline-none"
+        className="w-full bg-white border border-light-gray-3 focus:border-dark-blue rounded-lg p-2 transition duration-200 outline-none"
       />
       {error && <span className="text-red-500 text-sm">{error}</span>}
     </div>

@@ -45,18 +45,18 @@ export default function CountrySelect({
   };
 
   return (
-    <div className="max-w-3xl bg-white border border-light-gray1 rounded-lg flex flex-col text-dark">
-      <div className="p-4 border-b border-dashed border-light-gray1 text-left font-raleway font-bold">
+    <div className="max-w-3xl bg-white border border-light-gray-1 rounded-lg flex flex-col text-dark">
+      <div className="p-4 border-b border-dashed border-light-gray-1 text-left font-raleway font-bold">
         Country
       </div>
-      <div className="p-4 border-b border-dashed border-light-gray1 flex items-center justify-start gap-2">
+      <div className="p-4 border-b border-dashed border-light-gray-1 flex items-center justify-start gap-2">
         <LiaSearchSolid />
         <input
           type="text"
           placeholder="Search Countries"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="border border-light-gray3 rounded px-2 py-1"
+          className="border border-light-gray-3 rounded px-2 py-1"
         />
       </div>
 
@@ -65,9 +65,9 @@ export default function CountrySelect({
           <div
             key={country}
             onClick={() => handleClickSearchedCountry(country)}
-            className="flex items-center gap-2 px-2 py-1 rounded-full border border-light-gray3 cursor-pointer hover:bg-light-gray1"
+            className="flex items-center gap-2 px-2 py-1 rounded-full border border-light-gray-3 cursor-pointer hover:bg-light-gray-1"
           >
-            <FaRegCircleDot className="text-light-gray3" />
+            <FaRegCircleDot className="text-light-gray-3" />
             {country}
           </div>
         ))}
@@ -79,10 +79,10 @@ export default function CountrySelect({
           {selectedCountries.map((country) => (
             <div
               key={country}
-              className="flex items-center gap-2 px-2 py-1 rounded-full border border-light-gray3 cursor-pointer bg-light-gray1"
+              className="flex items-center gap-2 px-2 py-1 rounded-full border border-light-gray-3 cursor-pointer bg-light-gray-1"
               onClick={() => handleClickSearchedCountry(country)}
             >
-              <FaRegCircleDot className="text-light-gray3" />
+              <FaRegCircleDot className="text-light-gray-3" />
               {country}
             </div>
           ))}

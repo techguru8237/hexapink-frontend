@@ -13,7 +13,7 @@ export default function Header({ icon, label }: HeaderProps) {
   const location = useLocation();
 
   return (
-    <div className="h-20 px-4 sm:px-8 py-4 border-b border-light-gray3 flex justify-between items-center">
+    <div className="h-20 px-4 sm:px-8 py-4 border-b border-light-gray-3 flex justify-between items-center">
       <div className="flex items-center gap-2 text-xl">
         {React.cloneElement(icon, {
           style: { color: "#4040BF" },
@@ -42,7 +42,7 @@ export default function Header({ icon, label }: HeaderProps) {
         <div className="flex items-center gap-2 cursor-pointer">
           <PiWalletLight className="text-2xl" />
           <span>Wallet</span>
-          <span className="bg-light-gray3 px-2 rounded-md">$1200</span>
+          <span className="bg-light-gray-3 px-2 rounded-md">$1200</span>
         </div>
         <div className="flex items-center gap-2 cursor-pointer">
           <PiUserCircleLight className="text-2xl" />

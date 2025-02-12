@@ -25,12 +25,12 @@ export const createUser = async (
 export const updateUser = async (
   id: string,
   formData: UserItem,
-  onSuccess: () => void
+  onSuccess: (updatedUser: UserItem) => void
 ) => {
   try {
     const response = await api.put(`/api/users/update/${id}`, formData);
     if (response.status === 200) {
-      onSuccess();
+      onSuccess(response.data.user);
     }
   } catch (error: any) {
     console.error("Error updating user:", error);
@@ -43,6 +43,28 @@ export const updateUser = async (
     }
   }
 };
+
+export const updateStatus = async (
+  id: string,
+  status: string,
+  onSuccess: () => void
+) => {
+  try {
+    const response = await api.put(`/api/users/update-status/${id}`, { status });
+    if (response.status === 200) {
+      onSuccess();
+    }
+  } catch (error: any) {
+    console.error("Error updating user status:", error);
+    if (error.response) {
+      alert(`Error: ${error.response.data.message}`);
+    } else if (error.request) {
+      alert("Error: No response from server. Please try again later.");
+    } else {
+      alert("Error: Unable to update user status. Please try again.");
+    }
+  }
+}
 
 export const getAllUsers = async () => {
   try {

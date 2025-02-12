@@ -24,12 +24,15 @@ export interface UserItem {
   firstName: string;
   lastName: string;
   email: string;
-  phone: string;
-  country: string;
-  status: string;
-  verified: boolean;
-  createdAt: string;
-  updatedAt: string;
+  phone?: string;
+  country?: string;
+  industry?: string;
+  company?: string;
+  type?: string;
+  status?: string;
+  verified?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface TableListItemProps {

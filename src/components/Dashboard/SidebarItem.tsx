@@ -11,7 +11,7 @@ export default function SidebarItem(data: SidebarItemType) {
     <Link to={`/${data.type}/${data.link}`}>
       <div
         className={`flex items-center gap-2 p-2 ${
-          isActive ? "border border-light-gray3 bg-light-gray rounded-lg" : ""
+          isActive ? "border border-light-gray-3 bg-light-gray rounded-lg" : ""
         }`}
       >
         {isActive

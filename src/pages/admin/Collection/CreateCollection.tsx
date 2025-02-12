@@ -53,12 +53,12 @@ export default function CreateCollection() {
       <AdminHeader icon={<FaRegFolderOpen />} label="New Collection" />
 
       <div className="flex bg-light-gray">
-        <div className="border-r border-light-gray1 px-12 py-8">
+        <div className="border-r border-light-gray-1 px-12 py-8">
           <VerticalStepBar steps={steps} stepNumber={step} />
         </div>
 
         <div className="flex flex-1 flex-col">
-          <div className="flex items-center justify-start gap-2 px-8 py-4 border-b border-light-gray3">
+          <div className="flex items-center justify-start gap-2 px-8 py-4 border-b border-light-gray-3">
             <div
               onClick={handleClickBackStep}
               className="flex items-center gap-1 border border-dark hover:border-dark-blue hover:text-dark-blue rounded-full px-4 py-2 cursor-pointer"

@@ -21,7 +21,6 @@ import HomePage from "./pages/Home";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPasswordPage from "./pages/ResetPassword";
 
-
 function App() {
   return (
     <>

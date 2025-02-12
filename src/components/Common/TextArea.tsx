@@ -15,7 +15,7 @@ export default function TextArea({ label, placeholder, value, error, onChange }:
         onChange={onChange}
         placeholder={placeholder}
         id={label}
-        className="w-full h-full min-h-16 bg-white border border-light-gray3 focus:border-dark-blue rounded-lg p-2 transition duration-200 outline-none"
+        className="w-full h-full min-h-16 bg-white border border-light-gray-3 focus:border-dark-blue rounded-lg p-2 transition duration-200 outline-none"
       />
       {error && <span className="text-red-500 text-sm">{error}</span>}
     </div>

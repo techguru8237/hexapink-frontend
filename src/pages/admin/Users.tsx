@@ -1,17 +1,23 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
+
 import { CiFilter } from "react-icons/ci";
 import { FaRegUserCircle } from "react-icons/fa";
-import AdminHeader from "../../components/Dashboard/AdminHeader";
+
 import Pagination from "../../components/Pagination";
+import AdminHeader from "../../components/Dashboard/AdminHeader";
+import LoadingElement from "../../components/Common/LoadingElement";
 import UserListHeader from "../../components/User/UserListHeader";
 import { UserListItem } from "../../components/User/UserListItem";
 import NewUserSkeleton from "../../components/User/NewUserSkeleton";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import api from "../../actions/api";
-import { UserItem } from "../../types";
 import CreateUser from "../../components/User/CreateUser";
 import FilterPanel from "../../components/User/FilterPanel";
-import LoadingElement from "../../components/Common/LoadingElement";
+import EditUser from "../../components/User/EditUser";
+
+import api from "../../actions/api";
+import { updateStatus } from "../../actions/user";
+import { UserItem } from "../../types";
 
 export default function Users() {
   const navigate = useNavigate();
@@ -22,9 +28,23 @@ export default function Users() {
   const [totalPages, setTotalPages] = useState(0);
   const [isFilterPanelVisible, setIsFilterPanelVisible] = useState(false);
   const [isNewUserPanelVisible, setIsNewUserPanelVisible] = useState(false);
+  const [isEditUserPanelVisible, setIsEditUserPanelVisible] = useState(false);
+  const [editUser, setEditUser] = useState<UserItem>();
 
   const handleAddUserClick = () => {
+    setIsEditUserPanelVisible(false);
     setIsNewUserPanelVisible(!isNewUserPanelVisible);
+  };
+
+  const handleEditUserClick = (userId: string) => {
+    if (isEditUserPanelVisible) {
+      setIsEditUserPanelVisible(false);
+    } else {
+      const user = users.find((user) => user._id === userId);
+      setEditUser(user);
+      setIsNewUserPanelVisible(false);
+      setIsEditUserPanelVisible(true);
+    }
   };
 
   const itemsPerPage = 5;
@@ -84,13 +104,29 @@ export default function Users() {
     return filterParams.filter((param) => searchParams.has(param)).length;
   };
 
+  const handleChangeUserStatus = (id: string) => {
+    const user = users.find((user) => user._id === id);
+    if (user) {
+      const newStatus = user.status === "Active" ? "Suspended" : "Active";
+      const onSuccess = () => {
+        const updatedUsers = users.map((user) =>
+          user._id === id ? { ...user, status: newStatus } : user
+        );
+        setUsers(updatedUsers);
+        toast.success("Changed user status successfully.");
+      };
+
+      updateStatus(id, newStatus, onSuccess);
+    }
+  };
+
   return (
     <div>
       <AdminHeader icon={<FaRegUserCircle />} label="Users" />
 
       <div className="bg-light-gray flex flex-row">
-        <div className="flex flex-col flex-1 border-r border-light-gray1">
-          <div className="px-8 py-4 border-b border-light-gray1 flex items-center justify-between text-light-dark">
+        <div className="flex flex-col flex-1 border-r border-light-gray-1">
+          <div className="px-8 py-4 border-b border-light-gray-1 flex items-center justify-between text-light-dark">
             {selectedUsers.length > 0 && (
               <span>{selectedUsers.length} Selected</span>
             )}
@@ -104,7 +140,7 @@ export default function Users() {
                   className={`flex items-center border rounded-md px-2 py-1 text-dark cursor-pointer ${
                     getActiveFiltersCount() > 0
                       ? "border-dark-blue text-dark-blue"
-                      : "border-light-gray3"
+                      : "border-light-gray-3"
                   }`}
                 >
                   <CiFilter />
@@ -128,7 +164,7 @@ export default function Users() {
           <NewUserSkeleton onAddUserClick={handleAddUserClick} />
 
           {/* Main Table */}
-          <div className="p-8 flex flex-col gap-4">
+          <div className="min-w-fit p-8 flex flex-col gap-4">
             <UserListHeader />
 
             {loading ? (
@@ -140,7 +176,9 @@ export default function Users() {
                   index={(currentPage - 1) * itemsPerPage + index + 1}
                   data={item}
                   isSelected={selectedUsers.includes(item._id)}
+                  handleStatusChange={handleChangeUserStatus}
                   onCheckboxChange={handleCheckboxChange}
+                  handleEditUserClick={handleEditUserClick}
                 />
               ))
             )}
@@ -148,13 +186,24 @@ export default function Users() {
         </div>
 
         {isNewUserPanelVisible && (
-          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray1 flex justify-center">
-            <CreateUser />
+          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray-1 flex justify-center">
+            <CreateUser onClose={() => setIsNewUserPanelVisible(false)} />
+          </div>
+        )}
+
+        {isEditUserPanelVisible && editUser && (
+          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray-1 flex justify-center">
+            <EditUser
+              userData={editUser}
+              users={users}
+              setUsers={setUsers}
+              onClose={() => setIsEditUserPanelVisible(false)}
+            />
           </div>
         )}
 
         {isFilterPanelVisible && (
-          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray1 flex justify-center">
+          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray-1 flex justify-center">
             <FilterPanel onClose={handleClickFilter} />
           </div>
         )}

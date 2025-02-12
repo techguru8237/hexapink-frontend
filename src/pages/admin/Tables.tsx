@@ -95,8 +95,8 @@ export default function Tables() {
       <AdminHeader icon={<PiTableLight />} label="Tables" />
 
       <div className="bg-light-gray flex flex-row">
-        <div className="flex flex-col flex-1 border-r border-light-gray1">
-          <div className="px-4 sm:px-8 py-4 border-b border-light-gray1 flex items-center text-light-dark">
+        <div className="flex flex-col flex-1 border-r border-light-gray-1">
+          <div className="px-4 sm:px-8 py-4 border-b border-light-gray-1 flex items-center text-light-dark">
             {selectedTables.length > 0 && (
               <span>{selectedTables.length} Selected</span>
             )}
@@ -110,7 +110,7 @@ export default function Tables() {
                   className={`flex items-center border rounded-md px-2 py-1 text-dark cursor-pointer ${
                     getActiveFiltersCount() > 0
                       ? "border-dark-blue text-dark-blue"
-                      : "border-light-gray3"
+                      : "border-light-gray-3"
                   }`}
                 >
                   <CiFilter />
@@ -160,13 +160,13 @@ export default function Tables() {
         </div>
 
         {isNewTablePanelVisible && (
-          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray1 bg-white/80 flex justify-center">
+          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray-1 bg-white/80 flex justify-center">
             <CreateTable onClose={() => setIsNewTablePanelVisible(false)} />
           </div>
         )}
 
         {isFilterPanelVisible && (
-          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray1 flex justify-center">
+          <div className="h-screen w-96 px-4 py-4 border-l-2 border-light-gray-1 flex justify-center">
             <FilterPanel onClose={handleClickFilter} />
           </div>
         )}

@@ -13,18 +13,18 @@ import { GiPositionMarker } from "react-icons/gi";
 
 export default function NewFileSkeleton() {
   return (
-    <div className="w-full border-b border-light-gray1 relative px-8 py-4 flex items-center gap-2 text-light-gray3">
+    <div className="w-full border-b border-light-gray-1 relative px-8 py-4 flex items-center gap-2 text-light-gray-3">
       <div className="w-6 h-6 border border-dashed rounded-md flex items-center justify-center">
         <PiCheckBold />
       </div>
       {/* File Item */}
-      <div className="w-full bg-[#F7F7FC] flex justify-around border border-dashed border-light-gray3 rounded-lg font-redacted-script">
+      <div className="w-full bg-[#F7F7FC] flex justify-around border border-dashed border-light-gray-3 rounded-lg font-redacted-script">
         <div className="w-full p-3 flex items-center">
           <PiDatabaseLight className="text-2xl" />
           <span>file_255</span>
         </div>
-        <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray3">
-          <div className="w-12 h-12 bg-[#F0F0FA] border border-light-gray3 rounded-l-lg flex items-center justify-center rounded-lg">
+        <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
+          <div className="w-12 h-12 bg-[#F0F0FA] border border-light-gray-3 rounded-l-lg flex items-center justify-center rounded-lg">
             <PiImageSquareLight className="text-2xl" />
           </div>
           <div className="flex flex-col">
@@ -41,7 +41,7 @@ export default function NewFileSkeleton() {
             </div>
           </div>
         </div>
-        <div className="w-full p-3 flex items-center divide-x border-l border-dashed border-light-gray3">
+        <div className="w-full p-3 flex items-center divide-x border-l border-dashed border-light-gray-3">
           <div className="flex items-center pr-2">
             <PiSquareSplitHorizontalThin className="text-2xl" />
             <span>7</span>
@@ -51,23 +51,23 @@ export default function NewFileSkeleton() {
             <span>1358</span>
           </div>
         </div>
-        <div className="w-full p-3 flex items-center border-l border-dashed border-light-gray3">
+        <div className="w-full p-3 flex items-center border-l border-dashed border-light-gray-3">
           11 Nov 2024
         </div>
-        <div className="w-full p-3 flex items-center border-l border-dashed border-light-gray3">
+        <div className="w-full p-3 flex items-center border-l border-dashed border-light-gray-3">
           <button className="bg-[#F0F0FA] rounded-lg px-2 py-1">Ready</button>
         </div>
-        <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray3">
-          <div className="px-4 py-1 rounded-full border border-light-gray3 flex items-center gap-2">
+        <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
+          <div className="px-4 py-1 rounded-full border border-light-gray-3 flex items-center gap-2">
             <PiDownloadSimpleLight className="text-2xl" />
             <span>CSV</span>
           </div>
-          <div className="px-4 py-1 rounded-full border border-light-gray3 flex items-center gap-2">
+          <div className="px-4 py-1 rounded-full border border-light-gray-3 flex items-center gap-2">
             <PiDownloadSimpleLight className="text-2xl" />
             <span>XLS</span>
           </div>
         </div>
-        <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray3">
+        <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
           <PiPackage className="text-2xl" />
           <span>ord_124</span>
         </div>

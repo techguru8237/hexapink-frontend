@@ -24,7 +24,7 @@ export const CollectionListItem: React.FC<CollectionListItemProps> = ({
       {/* Collection Item */}
       <div
         className={`w-full bg-[#F7F7FC] flex justify-around border ${
-          isSelected ? "border-dark-blue" : "border-light-gray3"
+          isSelected ? "border-dark-blue" : "border-light-gray-3"
         } rounded-lg`}
       >
         <div className="w-full p-3 flex items-center">
@@ -32,8 +32,8 @@ export const CollectionListItem: React.FC<CollectionListItemProps> = ({
           <span> col_{index + 1}</span>
           <CiCircleInfo className="text-xl ml-auto border rounded-md p-1 box-content" /> 
         </div>
-        <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray3">
-          <div className="w-12 h-12 bg-[#F0F0FA] border border-light-gray3 rounded-l-lg flex items-center justify-center rounded-lg">
+        <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
+          <div className="w-12 h-12 bg-[#F0F0FA] border border-light-gray-3 rounded-l-lg flex items-center justify-center rounded-lg">
             {/* <PiImageSquareLight className="text-2xl" /> */}
             <img src={samlpeImg} alt="file image" className="rounded-lg"/>
           </div>
@@ -51,16 +51,16 @@ export const CollectionListItem: React.FC<CollectionListItemProps> = ({
             </div>
           </div>
         </div>
-        <div className="w-full p-3 flex items-center divide-x border-l border-dashed border-light-gray3">
+        <div className="w-full p-3 flex items-center divide-x border-l border-dashed border-light-gray-3">
           <span>12</span>
         </div>
-        <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray3">
+        <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
           <span>1500</span>
         </div>
-        <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray3">
+        <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
           <span>1500-5</span>
         </div>
-        <div className="w-full p-3 flex items-center border-l border-dashed border-light-gray3">
+        <div className="w-full p-3 flex items-center border-l border-dashed border-light-gray-3">
           11 Nov 2024
         </div>
       </div>

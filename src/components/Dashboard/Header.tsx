@@ -12,7 +12,7 @@ interface HeaderProps {
 
 export default function Header({ icon, label }: HeaderProps) {
   return (
-    <div className="h-20 px-8 py-4 border-b border-light-gray3 flex justify-between items-center">
+    <div className="h-20 px-8 py-4 border-b border-light-gray-3 flex justify-between items-center">
       <div className="flex items-center gap-2 text-xl">
         {React.cloneElement(icon, {
           style: { color: "#4040BF" },
@@ -26,7 +26,7 @@ export default function Header({ icon, label }: HeaderProps) {
             <PiShoppingCartLight className="text-2xl" />
             <span>Cart</span>
           </div>
-          <span className="bg-light-gray3 px-2 rounded-md">6</span>
+          <span className="bg-light-gray-3 px-2 rounded-md">6</span>
         </div>
         <div className="flex items-center gap-2 cursor-pointer">
           <PiWalletLight className="text-2xl" />

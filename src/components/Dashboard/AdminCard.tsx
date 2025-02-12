@@ -43,7 +43,7 @@ const AdminCard: React.FC = () => {
       {items.map((item, index) => (
         <div
           key={index}
-          className="flex flex-col border-2 border-light-gray3 items-center justify-center bg-white rounded-xl"
+          className="flex flex-col border-2 border-light-gray-3 items-center justify-center bg-white rounded-xl"
         >
           <div className="flex flex-row border-b-2 w-full m-1 justify-between">
             {/* Adjusted icon and type container */}
