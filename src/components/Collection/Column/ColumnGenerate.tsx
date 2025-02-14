@@ -56,7 +56,7 @@ export default function ColumnGenerate({
         <h2 className="text-left text-lg font-semibold">Columns</h2>
         <div className="flex flex-col gap-4">
           <ColumnItemSkeleton onClickNewColumn={handleClickNewColumn} />
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-2">
             {columns.map((column, index) => (
               <div
                 key={column.id}
