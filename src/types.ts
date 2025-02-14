@@ -72,3 +72,14 @@ export interface TagOption {
   inputValue?: string;
   name: string;
 }
+
+
+export interface Column {
+  id: number;
+  name: string;
+  type: string;
+  showToClient: boolean;
+  additionalFee: boolean;
+  tableId?: string;
+  tableColumn?: string;
+}

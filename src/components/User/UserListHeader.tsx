@@ -2,7 +2,7 @@ import { PiCheckBold } from "react-icons/pi";
 
 export default function OrderListHeader() {
   return (
-    <div className="flex items-center gap-2">
+    <div className="w-full flex items-center gap-2">
       <div className="w-6 h-6 border rounded-md flex items-center justify-center">
         <PiCheckBold className="text-light-gray-3" />
       </div>

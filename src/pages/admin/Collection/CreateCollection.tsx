@@ -7,8 +7,12 @@ import { HiArrowNarrowRight, HiArrowNarrowLeft } from "react-icons/hi";
 
 import AdminHeader from "../../../components/Dashboard/AdminHeader";
 import VerticalStepBar from "../../../components/NewFile/VerticalStepbar";
-import GeneralInformation from "../../../components/Collection/GeneralInformation";
+import GeneralInformation from "../../../components/Collection/General/GeneralInformation";
 import CountrySelect from "../../../components/Common/CountrySelect";
+import Pricing from "../../../components/User/Pricing";
+import ColumnGenerate from "../../../components/Collection/Column/ColumnGenerate";
+import { Column } from "../../../types";
+import ColumnMapping from "../../../components/Collection/Table/ColumnMapping";
 
 const steps = [
   { label: "General", step: 1 },
@@ -28,6 +32,9 @@ export default function CreateCollection() {
   const [type, setType] = useState(types[0]);
   const [description, setDescription] = useState("");
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+  const [fee, setFee] = useState<number>(0);
+  const [discount, setDiscount] = useState<number>(0);
+  const [columns, setColumns] = useState<Column[]>([])
 
   const handleClickBackStep = () => {
     if (step === 1) {
@@ -46,13 +53,11 @@ export default function CreateCollection() {
     }
   };
 
-  console.log('step', step)
-
   return (
-    <div>
+    <div className="h-full flex flex-col">
       <AdminHeader icon={<FaRegFolderOpen />} label="New Collection" />
 
-      <div className="flex bg-light-gray">
+      <div className="h-full flex bg-light-gray">
         <div className="border-r border-light-gray-1 px-12 py-8">
           <VerticalStepBar steps={steps} stepNumber={step} />
         </div>
@@ -79,19 +84,39 @@ export default function CreateCollection() {
             </div>
           </div>
 
-          <div className="p-8 flex flex-col gap-8">
-            <GeneralInformation
-              title={title}
-              description={description}
-              fileName={file?.name}
-              type={type}
-              setTitle={setTitle}
-              setFile={setFile}
-              setType={setType}
-              setDescription={setDescription}
-            />
+          <div className="h-full">
+            {step === 1 && (
+              <div className="flex flex-col gap-8 p-8">
+                <GeneralInformation
+                  title={title}
+                  description={description}
+                  fileName={file?.name}
+                  type={type}
+                  setTitle={setTitle}
+                  setFile={setFile}
+                  setType={setType}
+                  setDescription={setDescription}
+                />
+                <CountrySelect
+                  selectedCountries={selectedCountries}
+                  setSelectedCountries={setSelectedCountries}
+                />
+                <Pricing
+                  fee={fee}
+                  discount={discount}
+                  setFee={setFee}
+                  setDiscount={setDiscount}
+                />
+              </div>
+            )}
 
-            <CountrySelect selectedCountries={selectedCountries} setSelectedCountries={setSelectedCountries} />
+            {step === 2 && (
+              <ColumnGenerate columns={columns} setColumns={setColumns} />
+            )}
+
+            {step === 3 && (
+              <ColumnMapping columns={columns} setColumns={setColumns} />
+            )}
           </div>
         </div>
       </div>

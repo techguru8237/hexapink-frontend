@@ -1,8 +1,8 @@
 import React from "react";
-import FileUpload from "../Common/FileUpload";
-import Input from "../Common/Input";
-import TextArea from "../Common/TextArea";
-import Selection from "../Common/Selection";
+import FileUpload from "../../Common/FileUpload";
+import Input from "../../Common/Input";
+import TextArea from "../../Common/TextArea";
+import Selection from "../../Common/Selection";
 
 interface GeneralInformationProps {
   title: string;

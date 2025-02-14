@@ -1,16 +1,17 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import Logo from "../../assets/TheHomePage/image/logo.svg";
 import HexagonLoginButton from "./elements/desktop/HexagonLoginButton";
 import HexagonSignupButton from "./elements/desktop/HexagonSignupButton";
 import Login_M from "../../assets/TheHomePage/image/login_m.svg";
 import Signup_M from "../../assets/TheHomePage/image/signup_m.svg";
 import Home_M from "../../assets/TheHomePage/image/home.svg";
-import "../../style/TheHomePage/font.css";
 import HomeButton from "./elements/desktop/HomeButton";
 import LoginButton from "./elements/desktop/LoginButton";
 import CreateAccountButton_M from "./elements/desktop/CreateAccountButton_M";
 import CreateAccountButton from "../TheSignupPage/elements/CreateAccountButton";
+
 import useAuth from "../../hooks/useAuth";
+import Logo from "../../assets/TheHomePage/image/logo.svg";
+import "../../style/TheHomePage/font.css";
 
 const HomeHeader = () => {
   const navigate = useNavigate();

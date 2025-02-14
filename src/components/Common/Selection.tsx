@@ -1,4 +1,4 @@
-import { FaRegCircleDot } from "react-icons/fa6";
+import { IoMdRadioButtonOn } from "react-icons/io";
 
 interface SelectionProps {
   label: string;
@@ -25,7 +25,7 @@ export default function Selection({
             }`}
             onClick={() => onChange(item)}
           >
-            <FaRegCircleDot
+            <IoMdRadioButtonOn
               className={`${
                 selectedItem === item ? "text-dark-blue" : "text-light-gray-3"
               }`}

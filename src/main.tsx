@@ -1,8 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider, createTheme } from "@mui/material";
+
 import { LoadingProvider } from "./contexts/Loading.tsx";
-import { ThemeProvider, createTheme } from "@mui/material"; // Import ThemeProvider and createTheme
+import { CurrencyProvider } from "./contexts/Currency.tsx";
 
 import "./index.css";
 import App from "./App.tsx";
@@ -69,9 +71,11 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <LoadingProvider>
-        <ThemeProvider theme={theme}>
-          <App />
-        </ThemeProvider>
+        <CurrencyProvider>
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
+        </CurrencyProvider>
       </LoadingProvider>
     </BrowserRouter>
   </StrictMode>

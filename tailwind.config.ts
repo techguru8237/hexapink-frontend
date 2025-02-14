@@ -17,6 +17,7 @@ export default {
         "light-dark": "#666666",
         "light-gray": "#FBFBFE",
         "light-gray-1": "#ECECF9",
+        "light-gray-2": "#F7F7FC",
         "light-gray-3": "#D9D9F2",
         "dark-blue": "#4040BF",
         "dark-red": "#BF4040",

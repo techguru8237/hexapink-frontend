@@ -164,11 +164,11 @@ export default function Users() {
           <NewUserSkeleton onAddUserClick={handleAddUserClick} />
 
           {/* Main Table */}
-          <div className="min-w-fit p-8 flex flex-col gap-3">
+          <div className="min-w-full h-full p-4 sm:p-8 flex flex-col items-center gap-4">
             <UserListHeader />
 
             {loading ? (
-              <LoadingElement width="32" color="#4040B" />
+              <LoadingElement width="32" color="#4040BF" />
             ) : (
               users.map((item: UserItem, index) => (
                 <UserListItem
