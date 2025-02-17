@@ -18,7 +18,7 @@ const DashboardLayout = () => {
   }, [isAuthenticated]);
 
   return (
-    <div className="h-full flex flex-row items-stretch border-b border-light-gray-3">
+    <div className="h-full flex flex-row items-stretch border-b border-light-gray-3 font-raleway">
       <Sidebar type="admin" />
       <div className="flex flex-col flex-1 bg-white">
         <Outlet />

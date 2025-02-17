@@ -51,11 +51,6 @@ export default function Tables() {
   };
 
   useEffect(() => {
-    // if (searchParams.get("page") == "0" || !searchParams.get("page")) {
-    //   navigate("/admin/tables/1");
-    //   return;
-    // }
-
     fetchTables();
   }, [searchParams]); // Now depends on searchParams instead of just page
 

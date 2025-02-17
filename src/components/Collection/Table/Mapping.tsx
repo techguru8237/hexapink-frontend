@@ -17,6 +17,7 @@ export default function Mapping({ columns, setColumns, table }: MappingProps) {
         <MappingHeader />
         {columns.map((column) => (
           <ColumnMappingItem
+            key={column.id}
             column={column}
             columns={columns}
             setColumns={setColumns}

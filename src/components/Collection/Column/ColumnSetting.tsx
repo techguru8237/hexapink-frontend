@@ -3,6 +3,7 @@ import { Column } from "../../../types";
 import Input from "../../Common/Input";
 import SwitchButton from "../../Common/SwitchButton";
 import ColumnTypeSelect from "./ColumnTypeSelect";
+import CurrencyInput from "../../Common/CurrencyInput";
 
 interface ColumnSettingProps {
   columns: Column[];
@@ -20,7 +21,9 @@ export default function ColumnSetting({
     name: "",
     showToClient: false,
     type: "Text",
-    additionalFee: false,
+    isAdditionalFee: false,
+    additionalFee: 0,
+    optional: true,
   });
 
   useEffect(() => {
@@ -41,7 +44,7 @@ export default function ColumnSetting({
     <div className="flex flex-1 flex-col gap-4 border-l border-light-gray-3 p-6">
       <h2 className="text-left text-lg font-semibold">Column Setting</h2>
       <div className="max-w-3xl bg-white border border-light-gray-1 rounded-lg flex flex-col text-dark">
-        <div className="p-4 border-b border-dashed border-light-gray-3 text-left font-raleway font-bold">
+        <div className="p-4 border-b border-dashed border-light-gray-3 text-left font-bold">
           General
         </div>
         <div className="flex flex-col gap-4 p-6 border-b border-dashed border-light-gray-3">
@@ -80,20 +83,47 @@ export default function ColumnSetting({
       </div>
 
       <div className="max-w-3xl bg-white border border-light-gray-1 rounded-lg flex flex-col text-dark">
-        <div className="p-4 border-b border-dashed border-light-gray-3 text-left font-raleway font-bold">
+        <div className="p-4 border-b border-dashed border-light-gray-3 text-left font-bold">
           Additional Fees
         </div>
-        <div className="flex items-center gap-2 p-6">
-          <SwitchButton
-            value={columnData.additionalFee}
-            onChange={() =>
-              setColumnData((prev) => ({
-                ...prev,
-                additionalFee: !prev.additionalFee,
-              }))
-            }
-          />
-          <span className="text-left">This column has an additional fee</span>
+        <div className="flex flex-col p-6 gap-4">
+          <div className="flex items-center gap-2">
+            <SwitchButton
+              value={columnData.isAdditionalFee}
+              onChange={() =>
+                setColumnData((prev) => ({
+                  ...prev,
+                  isAdditionalFee: !prev.isAdditionalFee,
+                }))
+              }
+            />
+            <span className="text-left">This column has an additional fee</span>
+          </div>
+          {columnData.isAdditionalFee && (
+            <div className="flex flex-col gap-4">
+              <CurrencyInput
+                label="Additional Fee"
+                type="number"
+                value={columnData.additionalFee}
+                error=""
+                onChange={(value) =>
+                  setColumnData({ ...columnData, additionalFee: value })
+                }
+              />
+              <div className="flex items-center gap-2">
+                <SwitchButton
+                  value={columnData.optional}
+                  onChange={() =>
+                    setColumnData((prev) => ({
+                      ...prev,
+                      optional: !prev.optional,
+                    }))
+                  }
+                />
+                <span className="text-left">the column is optional</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

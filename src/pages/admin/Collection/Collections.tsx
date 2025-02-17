@@ -6,50 +6,62 @@ import AdminHeader from "../../../components/Dashboard/AdminHeader";
 import Pagination from "../../../components/Pagination";
 import NewCollectionSkeleton from "../../../components/Collection/NewCollectionSkeleton";
 import CollectionListHeader from "../../../components/Collection/CollectionListHeader";
-import {CollectionListItem} from "../../../components/Collection/CollectionListItem";
-
-const dummyData = Array.from({ length: 25 }, (_, index) => ({
-  id: index,
-  name: `file_${index + 1}`,
-  date: "11 Nov 2024",
-  status: "Ready",
-  order: `ord_${index + 124}`,
-}));
+import { CollectionListItem } from "../../../components/Collection/CollectionListItem";
+import LoadingElement from "../../../components/Common/LoadingElement";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import api from "../../../actions/api";
+import { Collection } from "../../../types";
 
 export default function Collections() {
-  const [selectedFiles, setSelectedFiles] = useState<number[]>([]);
-  const [filteredFiles, setFilteredFiles] = useState<
-    { id: number; name: string; date: string; status: string; order: string }[]
-  >([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [loading, setLoading] = useState(false);
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const [selectedCollections, setSelectedCollections] = useState<string[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
   const [isFilterPanelVisible, setIsFilterPanelVisible] = useState(false);
-  const itemsPerPage = 5; // Number of items per page
-  const totalPages = Math.ceil(dummyData.length / itemsPerPage);
+  const [isNewTablePanelVisible, setIsNewTablePanelVisible] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  useEffect(() => {
-    setFilteredFiles(dummyData);
-  }, []);
+  const currentPage = parseInt(searchParams.get("page") || "1");
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  const fetchCollections = async () => {
+    const queryParams = new URLSearchParams(searchParams);
+    try {
+      setLoading(true);
+      const response = await api.get(
+        `/api/collection?${queryParams.toString()}&limit=${rowsPerPage}`
+      );
+      setCollections(response.data.collections);
+      setTotalPages(response.data.totalPages);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching tables:", error);
+      setLoading(false);
+    }
   };
 
-  const handleCheckboxChange = (index: number) => {
-    setSelectedFiles((prevSelectedFiles) =>
-      prevSelectedFiles.includes(index)
-        ? prevSelectedFiles.filter((fileIndex) => fileIndex !== index)
-        : [...prevSelectedFiles, index]
+  useEffect(() => {
+    fetchCollections();
+  }, [searchParams]);
+
+  const handlePageChange = (page: number) => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set("page", page.toString());
+    navigate(`/admin/collections?${newSearchParams.toString()}`);
+  };
+
+  const handleCheckboxChange = (id: string) => {
+    setSelectedCollections((prevSelectedCollections) =>
+      prevSelectedCollections.includes(id)
+        ? prevSelectedCollections.filter((collectionId) => collectionId !== id)
+        : [...prevSelectedCollections, id]
     );
   };
 
   const handleClickFilter = () => {
     setIsFilterPanelVisible(!isFilterPanelVisible);
   };
-
-  // Calculate the start and end indices for slicing the filteredFiles array
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentFiles = filteredFiles.slice(startIndex, endIndex);
 
   return (
     <div>
@@ -58,14 +70,14 @@ export default function Collections() {
       <div className="bg-light-gray border-b border-light-gray-1 flex">
         <div className="flex flex-col flex-1 border-r border-light-gray-1">
           <div className="px-8 py-4 border-b border-light-gray-1 flex items-center justify-between text-light-dark">
-            {selectedFiles.length > 0 && (
-              <span>{selectedFiles.length} Selected</span>
+            {selectedCollections.length > 0 && (
+              <span>{selectedCollections.length} Selected</span>
             )}
             <div className="ml-auto flex items-center divide-x">
               <div className="pr-4 flex items-center gap-2">
-                {filteredFiles.length > 0 && (
+                {/* {filteredFiles.length > 0 && (
                   <span>{filteredFiles.length} Results</span>
-                )}
+                )} */}
                 <button
                   onClick={handleClickFilter}
                   className="flex items-center border border-light-gray-3 rounded-md px-2 py-1 text-dark cursor-pointer"
@@ -76,12 +88,12 @@ export default function Collections() {
               </div>
               <div className="pl-4">
                 <Pagination
-                  onPageSizeChange={() => {}}
-                  rowsPerPage={itemsPerPage}
-                  pageSizeOptions={[5, 10, 20, 50]}
                   currentPage={currentPage}
                   totalPages={totalPages}
+                  rowsPerPage={rowsPerPage}
+                  pageSizeOptions={[5, 10, 20]}
                   onPageChange={handlePageChange}
+                  onPageSizeChange={(value) => setRowsPerPage(value)}
                 />
               </div>
             </div>
@@ -91,14 +103,23 @@ export default function Collections() {
 
           <div className="p-8 flex flex-col gap-4">
             <CollectionListHeader />
-            {currentFiles.map((item) => (
-              <CollectionListItem
-                key={item.id}
-                index={item.id}
-                isSelected={selectedFiles.includes(item.id)}
-                onCheckboxChange={handleCheckboxChange}
-              />
-            ))}
+
+            {loading ? (
+              <LoadingElement width="32" color="#4040BF" />
+            ) : (
+              collections.map((item) => (
+                <CollectionListItem
+                  key={item._id}
+                  data={item}
+                  id={item._id}
+                  isSelected={selectedCollections.includes(item._id)}
+                  setCollections={setCollections}
+                  collections={collections}
+                  fetchCollections={fetchCollections}
+                  onCheckboxChange={handleCheckboxChange}
+                />
+              ))
+            )}
           </div>
         </div>
         {/* {isFilterPanelVisible && (

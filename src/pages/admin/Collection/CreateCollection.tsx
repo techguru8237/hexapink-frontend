@@ -13,6 +13,10 @@ import Pricing from "../../../components/User/Pricing";
 import ColumnGenerate from "../../../components/Collection/Column/ColumnGenerate";
 import { Column } from "../../../types";
 import ColumnMapping from "../../../components/Collection/Table/ColumnMapping";
+import StepSetting from "../../../components/Collection/Step/StepSetting";
+import { useLoading } from "../../../contexts/Loading";
+import { formApi } from "../../../actions/api";
+import { toast } from "react-toastify";
 
 const steps = [
   { label: "General", step: 1 },
@@ -25,6 +29,7 @@ const types = ["Business", "Client"];
 
 export default function CreateCollection() {
   const navigate = useNavigate();
+  const { showLoading, hideLoading } = useLoading();
 
   const [step, setStep] = useState(1);
   const [title, setTitle] = useState("");
@@ -34,7 +39,7 @@ export default function CreateCollection() {
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [fee, setFee] = useState<number>(0);
   const [discount, setDiscount] = useState<number>(0);
-  const [columns, setColumns] = useState<Column[]>([])
+  const [columns, setColumns] = useState<Column[]>([]);
 
   const handleClickBackStep = () => {
     if (step === 1) {
@@ -44,10 +49,35 @@ export default function CreateCollection() {
     }
   };
 
-  const handleClickNextStep = () => {
+  const handleClickNextStep = async () => {
     if (step === steps.length) {
-      // Create collection
-      console.log("Create collection");
+      const formData = new FormData();
+      formData.append("title", title);
+      if (file) {
+        formData.append("file", file); // Append the file object
+      }
+      formData.append("type", type);
+      formData.append("description", description);
+      formData.append("countries", JSON.stringify(selectedCountries)); // Stringify the array
+      formData.append("fee", fee.toString());
+      formData.append("discount", discount.toString());
+      formData.append("columns", JSON.stringify(columns)); // Stringify the array
+
+      showLoading();
+      try {
+        const response = await formApi.post(
+          `${import.meta.env.VITE_BACKEND_URL}/api/collection/create`,
+          formData
+        );
+
+        if (response.status === 201) {
+          toast.success("Created Collection Correctly.");
+        }
+      } catch (error: any) {
+        toast.error("Error saving collection:", error.message);
+      } finally {
+        hideLoading();
+      }
     } else {
       setStep(step + 1);
     }
@@ -73,8 +103,10 @@ export default function CreateCollection() {
             </div>
             <div
               onClick={handleClickNextStep}
-              className={`flex items-center gap-1 border border-dark hover:border-dark-blue hover:text-dark-blue rounded-full px-4 py-2 cursor-pointer ${
-                step === steps.length ? "flex-row-reverse" : ""
+              className={`flex items-center gap-1 border rounded-full px-4 py-2 cursor-pointer ${
+                step === steps.length
+                  ? "flex-row-reverse bg-dark-blue text-white"
+                  : "border-dark hover:border-dark-blue hover:text-dark-blue"
               }`}
             >
               <span>
@@ -116,6 +148,10 @@ export default function CreateCollection() {
 
             {step === 3 && (
               <ColumnMapping columns={columns} setColumns={setColumns} />
+            )}
+
+            {step === 4 && (
+              <StepSetting columns={columns} setColumns={setColumns} />
             )}
           </div>
         </div>

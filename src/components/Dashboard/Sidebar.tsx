@@ -134,7 +134,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
             className="flex items-center gap-2 lg:p-4 text-2xl font-bold cursor-pointer"
           >
             <img src={logo} alt="logo image" className="py-2 lg:py-0" />
-            <span className="hidden lg:flex">Hexapink</span>
+            <span className="hidden lg:flex text-dark">Hexapink</span>
           </Link>
         </div>
         <div className="h-full p-4 flex flex-col justify-between">

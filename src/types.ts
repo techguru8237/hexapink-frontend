@@ -79,7 +79,29 @@ export interface Column {
   name: string;
   type: string;
   showToClient: boolean;
-  additionalFee: boolean;
+  isAdditionalFee: boolean;
+  additionalFee?: number;
   tableId?: string;
   tableColumn?: string;
+  optional?: boolean
+  stepName?: string
+}
+
+export interface Step {
+  id: number;
+  name: string;
+}
+
+export interface Collection {
+  _id: string;
+  title: string;
+  file?: string;
+  type?: string;
+  description?: string;
+  countries?: string[];
+  fee?: number;
+  discount?: number;
+  columns: Column[];
+  createdAt?: string;
+  updatedAt?: string;
 }

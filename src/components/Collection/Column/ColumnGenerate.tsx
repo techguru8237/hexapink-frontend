@@ -25,7 +25,7 @@ export default function ColumnGenerate({
     name: `Column ${maxID + 1}`,
     type: "Text",
     showToClient: true,
-    additionalFee: false,
+    isAdditionalFee: false,
   };
   
     setColumns([...columns, newColumn]);
@@ -51,7 +51,7 @@ export default function ColumnGenerate({
   };
 
   return (
-    <div className="h-full flex font-raleway text-dark">
+    <div className="h-full flex text-dark">
       <div className="w-96 flex flex-col gap-4 p-6">
         <h2 className="text-left text-lg font-semibold">Columns</h2>
         <div className="flex flex-col gap-4">

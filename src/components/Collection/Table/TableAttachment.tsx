@@ -6,6 +6,7 @@ import AttachedTableItem from "./AttachedTableItem";
 import TableListItem from "./TableListItem";
 import api from "../../../actions/api";
 import TableListItemSkeleton from "./TableListItemSkeleton";
+import LoadingElement from "../../Common/LoadingElement";
 
 interface TableAttachmentProps {
   selectedTable: TableItem | null;
@@ -20,6 +21,7 @@ export default function TableAttachment({
   setSelectedTable,
   setAttachedTables,
 }: TableAttachmentProps) {
+  const [tableLoading, setTableLoading] = useState<boolean>(false);
   const [tables, setTables] = useState<TableItem[]>([]);
   const [search, setSearch] = useState<string>("");
   const [searchResults, setSearchResults] = useState<TableItem[]>([]);
@@ -28,10 +30,13 @@ export default function TableAttachment({
   useEffect(() => {
     const fetchTables = async () => {
       try {
+        setTableLoading(true);
         const response = await api.get(`/api/table/all`);
         setTables(response.data);
       } catch (error) {
         console.error("Error fetching tables:", error);
+      } finally {
+        setTableLoading(false);
       }
     };
 
@@ -69,7 +74,7 @@ export default function TableAttachment({
       <div className="flex flex-col gap-8">
         {showSearch ? (
           <div className="max-w-3xl bg-white border border-light-gray-1 rounded-lg flex flex-col text-dark">
-            <div className="p-4 border-b border-dashed border-light-gray-1 text-left font-raleway">
+            <div className="p-4 border-b border-dashed border-light-gray-1 text-left">
               <div className="flex items-center">
                 <div className="flex flex-1 items-center gap-4">
                   <LiaSearchSolid className="text-2xl" />
@@ -87,15 +92,21 @@ export default function TableAttachment({
                 />
               </div>
             </div>
-            <div className="flex flex-col p-2 gap-2 h-48 overflow-auto">
-              {searchResults.map((table) => (
-                <TableListItem
-                  key={table._id}
-                  data={table}
-                  handleAttachTable={handleAttachTable}
-                />
-              ))}
-            </div>
+            {tableLoading ? (
+              <div className="flex justify-center py-4">
+                <LoadingElement width="16" color="#4040BF" />
+              </div>
+            ) : (
+              <div className="flex flex-col p-2 gap-2 h-48 overflow-auto">
+                {searchResults.map((table) => (
+                  <TableListItem
+                    key={table._id}
+                    data={table}
+                    handleAttachTable={handleAttachTable}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         ) : (
           <TableListItemSkeleton

@@ -39,7 +39,12 @@ export default function FileUpload({
   return (
     <>
       <div className="w-full flex flex-col items-start">
-        <label htmlFor="file-upload">{label}</label>
+        <label
+          htmlFor="file-upload"
+          className="text-sm text-light-dark font-medium"
+        >
+          {label}
+        </label>
 
         <div className="w-full bg-white border border-light-gray-3 rounded-lg p-2 flex items-center justify-between">
           <span className="text-left text-sm w-full">{fileName}</span>

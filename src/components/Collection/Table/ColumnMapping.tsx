@@ -18,7 +18,7 @@ export default function ColumnMapping({
   const [attachedTables, setAttachedTables] = useState<TableItem[]>([]);
 
   return (
-    <div className="h-full flex font-raleway text-dark">
+    <div className="h-full flex text-dark">
       <TableAttachment
         selectedTable={selectedTable}
         attachedTables={attachedTables}

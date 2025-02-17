@@ -35,7 +35,7 @@ export default function GeneralInformation({
 
   return (
     <div className="max-w-3xl bg-white border border-light-gray-1 rounded-lg flex flex-col text-dark">
-      <div className="p-4 border-b border-dashed border-light-gray-1 text-left font-raleway font-bold">
+      <div className="p-4 border-b border-dashed border-light-gray-1 text-left font-bold">
         General Information
       </div>
       <div className="flex flex-col lg:flex-row gap-4 p-6">
