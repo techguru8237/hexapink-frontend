@@ -20,7 +20,6 @@ export default function Collections() {
   const [selectedCollections, setSelectedCollections] = useState<string[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [isFilterPanelVisible, setIsFilterPanelVisible] = useState(false);
-  const [isNewTablePanelVisible, setIsNewTablePanelVisible] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const currentPage = parseInt(searchParams.get("page") || "1");

@@ -21,9 +21,6 @@ interface CollectionListItemProps {
 export const CollectionListItem: React.FC<CollectionListItemProps> = ({
   id,
   data,
-  fetchCollections,
-  collections,
-  setCollections,
   isSelected,
   onCheckboxChange,
 }) => {

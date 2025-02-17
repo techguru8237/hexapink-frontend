@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { Column, Step } from "../../../types";
-import ColumnItem from "./StepItem";
-import ColumnItemSkeleton from "./StepItemSkeleton";
 import StepGenerator from "./StepGenerate";
 import ColumnToStep from "./ColumnToStep";
 

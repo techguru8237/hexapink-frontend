@@ -14,7 +14,6 @@ interface StepedColumnItemProps {
 const StepedColumnItem: React.FC<StepedColumnItemProps> = ({
   column,
   onDetachTable,
-  draggedColumnId,
   setDraggedColumnId,
   index,
   handleDrop,
