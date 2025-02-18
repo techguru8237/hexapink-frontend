@@ -22,6 +22,7 @@ import Lookup from "./pages/user/Lookup";
 import HomePage from "./pages/Home";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPasswordPage from "./pages/ResetPassword";
+import EditCollection from "./pages/admin/Collection/EditCollection";
 
 function App() {
   return (
@@ -55,6 +56,10 @@ function App() {
           <Route path="paymentMethod" element={<PaymentMethods />} />
           <Route path="collections" element={<Collections />} />
           <Route path="collections/new" element={<CreateCollection />} />
+          <Route
+            path="collections/edit/:collectionId"
+            element={<EditCollection />}
+          />
           <Route path="tables/:page?" element={<Tables />} />
           <Route path="users" element={<Users />} />
         </Route>

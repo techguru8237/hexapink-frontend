@@ -15,15 +15,13 @@ export default function ColumnMapping({
   setColumns,
 }: ColumnMappingProps) {
   const [selectedTable, setSelectedTable] = useState<TableItem | null>(null);
-  const [attachedTables, setAttachedTables] = useState<TableItem[]>([]);
 
   return (
     <div className="h-full flex text-dark">
       <TableAttachment
+        columns={columns}
         selectedTable={selectedTable}
-        attachedTables={attachedTables}
         setSelectedTable={setSelectedTable}
-        setAttachedTables={setAttachedTables}
       />
 
       <Mapping

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Column, Step } from "../../../types";
 import StepGenerator from "./StepGenerate";
 import ColumnToStep from "./ColumnToStep";
@@ -12,6 +12,21 @@ export default function StepSetting({ columns, setColumns }: StepSettingProps) {
   const [steps, setSteps] = useState<Step[]>([]);
   const [selectedStepId, setSelectedStepId] = useState<number | null>(null);
   const [draggedStepId, setDraggedStepId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const uniqueStepNames = new Set(
+      columns
+        .map((col) => col.stepName)
+        .filter((name): name is string => name !== undefined)
+    );
+
+    const uniqueSteps = Array.from(uniqueStepNames).map((name, index) => ({
+      id: index + 1,
+      name: name,
+    }));
+
+    setSteps(uniqueSteps);
+  }, [columns]);
 
   const handleClickNewStep = () => {
     const Ids = steps.map((step) => step.id);

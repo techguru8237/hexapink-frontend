@@ -29,7 +29,7 @@ export default function ColumnMappingItem({
               ...item,
               tableColumns: [
                 ...(item.tableColumns ?? []),
-                { tableId: table._id, tableColumn: tableColumn },
+                { tableId: table._id, tableName: table.tableName, tableColumn: tableColumn },
               ],
             }
           : item

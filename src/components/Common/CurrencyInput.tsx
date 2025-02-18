@@ -1,9 +1,11 @@
+import { NumericFormat } from "react-number-format";
 import { FiPlus, FiMinus } from "react-icons/fi";
+
 import { useCurrency } from "../../contexts/Currency";
 
 interface InputProps {
   label: string;
-  type: string;
+  type: string; // This can remain as is if you want to keep flexibility
   value: number | undefined;
   error: string;
   onChange: (value: number) => void;
@@ -11,7 +13,6 @@ interface InputProps {
 
 export default function CurrencyInput({
   label,
-  type,
   value,
   error,
   onChange,
@@ -40,10 +41,16 @@ export default function CurrencyInput({
         id="currency-input"
         className="flex items-center justify-between p-0.5 border border-light-gray-3 rounded-lg"
       >
-        <input
-          type={type}
+        <NumericFormat
           value={value}
-          onChange={(e) => onChange(parseInt(e.target.value))}
+          thousandSeparator=","
+          decimalScale={0} // Allow decimals if needed
+          fixedDecimalScale={true} // Ensure two decimal places
+          allowNegative={false} // Prevent negative values
+          onValueChange={(values) => {
+            const { floatValue } = values; // Get the float value directly
+            onChange(floatValue || 0); // Update the value
+          }}
           className="p-1.5 bg-transparent border-none outline-none"
         />
         <span>{error}</span>

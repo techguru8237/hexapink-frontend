@@ -1,26 +1,29 @@
 import { useEffect, useState } from "react";
+
 import { LiaSearchSolid } from "react-icons/lia";
 import { BsArrowLeftSquare } from "react-icons/bs";
-import { TableItem } from "../../../types";
-import AttachedTableItem from "./AttachedTableItem";
-import TableListItem from "./TableListItem";
+
 import api from "../../../actions/api";
-import TableListItemSkeleton from "./TableListItemSkeleton";
+
+import { Column, TableItem } from "../../../types";
+
 import LoadingElement from "../../Common/LoadingElement";
+import TableListItem from "./TableListItem";
+import AttachedTableItem from "./AttachedTableItem";
+import TableListItemSkeleton from "./TableListItemSkeleton";
 
 interface TableAttachmentProps {
+  columns: Column[];
   selectedTable: TableItem | null;
   setSelectedTable: (table: TableItem) => void;
-  attachedTables: TableItem[];
-  setAttachedTables: (tables: TableItem[]) => void;
 }
 
 export default function TableAttachment({
+  columns,
   selectedTable,
-  attachedTables,
   setSelectedTable,
-  setAttachedTables,
 }: TableAttachmentProps) {
+  const [attachedTables, setAttachedTables] = useState<TableItem[]>([]);
   const [tableLoading, setTableLoading] = useState<boolean>(false);
   const [tables, setTables] = useState<TableItem[]>([]);
   const [search, setSearch] = useState<string>("");
@@ -42,6 +45,17 @@ export default function TableAttachment({
 
     fetchTables();
   }, []);
+
+  useEffect(() => {
+    if (columns.length && tables.length) {
+      const attachedTables = tables.filter((table) =>
+        columns.some((column) =>
+          column.tableColumns?.some((tc) => tc.tableId === table._id)
+        )
+      );
+      setAttachedTables(attachedTables);
+    }
+  }, [columns, tables]);
 
   useEffect(() => {
     if (search) {

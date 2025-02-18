@@ -15,7 +15,7 @@ export default function Mapping({ columns, setColumns, table }: MappingProps) {
 
       <div className="flex flex-col gap-4">
         <MappingHeader />
-        {columns.map((column) => (
+        {table && columns.map((column) => (
           <ColumnMappingItem
             key={column.id}
             column={column}

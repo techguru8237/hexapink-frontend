@@ -75,6 +75,7 @@ export interface TagOption {
 
 interface mappedTable {
   tableId: string;
+  tableName: string;
   tableColumn: string;
 }
 
@@ -90,23 +91,24 @@ export interface Column {
   stepName?: string;
 }
 
-export interface Step {
-  id: number;
-  name: string;
-}
-
 export interface Collection {
   _id: string;
   title: string;
-  file?: string;
+  image?: string;
   type?: string;
   description?: string;
   countries?: string[];
   fee?: number;
   discount?: number;
   columns: Column[];
+  status: string;
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface Step {
+  id: number;
+  name: string;
 }
 
 export interface CollectionCreateErrors {
