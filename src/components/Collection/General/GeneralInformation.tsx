@@ -3,6 +3,7 @@ import FileUpload from "../../Common/FileUpload";
 import Input from "../../Common/Input";
 import TextArea from "../../Common/TextArea";
 import Selection from "../../Common/Selection";
+import { CollectionCreateErrors } from "../../../types";
 
 interface GeneralInformationProps {
   title: string;
@@ -13,6 +14,8 @@ interface GeneralInformationProps {
   setFile: (file: File | null) => void;
   setType: (type: string) => void;
   setDescription: (description: string) => void;
+  errors: CollectionCreateErrors;
+  setErrors: (errors: CollectionCreateErrors) => void;
 }
 
 export default function GeneralInformation({
@@ -24,13 +27,25 @@ export default function GeneralInformation({
   setFile,
   setType,
   setDescription,
+  errors,
+  setErrors,
 }: GeneralInformationProps) {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) {
       return;
+    } else {
+      setErrors({...errors, file: ""});
+      const file = event.target.files[0];
+      setFile(file);
     }
-    const file = event.target.files[0];
-    setFile(file);
+  };
+
+  const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const input = event.target.value;
+    if (input !== "") {
+      setErrors({...errors, title: ""});
+    }
+    setTitle(input);
   };
 
   return (
@@ -44,8 +59,8 @@ export default function GeneralInformation({
             label="Title"
             type="text"
             value={title}
-            error=""
-            onChange={(e) => setTitle(e.target.value)}
+            error={errors.title}
+            onChange={handleChangeTitle}
           />
 
           <FileUpload
@@ -54,10 +69,15 @@ export default function GeneralInformation({
             accept="image/*"
             onChange={handleFileChange}
             handleClose={() => setFile(null)}
-            error=""
+            error={errors.file}
           />
 
-          <Selection label="Type" selectedItem={type} onChange={(item) => setType(item)}  items={["Customer", "Business"]} />
+          <Selection
+            label="Type"
+            selectedItem={type}
+            onChange={(item) => setType(item)}
+            items={["Customer", "Business"]}
+          />
         </div>
         <div className="flex-1">
           <TextArea

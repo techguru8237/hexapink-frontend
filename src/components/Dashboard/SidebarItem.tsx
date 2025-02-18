@@ -10,8 +10,8 @@ export default function SidebarItem(data: SidebarItemType) {
   return (
     <Link to={`/${data.type}/${data.link}`}>
       <div
-        className={`flex items-center gap-2 p-2 ${
-          isActive ? "border border-light-gray-3 bg-light-gray rounded-lg" : ""
+        className={`flex items-center gap-2 p-2 border border-transparent hover:border-light-gray-3 rounded-lg ${
+          isActive ? "border border-light-dark bg-light-gray" : ""
         }`}
       >
         {isActive
@@ -22,7 +22,7 @@ export default function SidebarItem(data: SidebarItemType) {
               style: { color: "black" },
             })}
         <span
-          className={`text-lg ${
+          className={`text-md ${
             isActive ? "text-dark-blue" : "text-dark"
           } hidden lg:block`}
         >

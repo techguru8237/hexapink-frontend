@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Load the backend URL from the .env file
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
+console.log('first', localStorage.getItem('token'))
 const api = axios.create({
   baseURL: backendUrl,
   headers: {

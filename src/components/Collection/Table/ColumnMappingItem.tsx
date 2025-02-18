@@ -22,21 +22,40 @@ export default function ColumnMappingItem({
   const [expandTableColumns, setExpandTableColumns] = useState<boolean>(false);
 
   const handleMapColumn = (tableColumn: string) => {
-    const updatedColumns = columns.map((item) =>
-      item.id === column.id
-        ? { ...item, tableId: table?._id, tableColumn: tableColumn }
-        : item
-    );
-    setColumns(updatedColumns);
-    setExpandTableColumns(false);
+    if (table) {
+      const updatedColumns = columns.map((item) =>
+        item.id === column.id
+          ? {
+              ...item,
+              tableColumns: [
+                ...(item.tableColumns ?? []),
+                { tableId: table._id, tableColumn: tableColumn },
+              ],
+            }
+          : item
+      );
+      setColumns(updatedColumns);
+      setExpandTableColumns(false);
+    }
   };
 
   const handleUnmapColumn = () => {
-    const updatedColumns = columns.map((item) =>
-      item.id === column.id ? { ...item, tableColumn: "", tableId: "" } : item
-    );
+    const updatedColumns = columns.map((item) => {
+      if (item.id === column.id) {
+        const updatedTableColumns =
+          item.tableColumns?.filter((tcol) => tcol.tableId !== table?._id) ??
+          [];
+        return { ...column, tableColumns: updatedTableColumns };
+      } else {
+        return item;
+      }
+    });
     setColumns(updatedColumns);
   };
+
+  const mappedTableColumn = column.tableColumns?.find(
+    (tableColumn) => tableColumn.tableId === table?._id
+  );
 
   return (
     <div className="flex flex-col border border-light-gray-3 rounded-xl p-1">
@@ -48,25 +67,21 @@ export default function ColumnMappingItem({
           </span>
           <div
             className={`absolute top-1/2 -right-1 transform -translate-y-1/2 z-10 w-2 h-2 rounded-full bg-white border ${
-              column.tableId && column.tableId !== ""
-                ? "border-dark-blue"
-                : "border-light-gray-3"
+              mappedTableColumn ? "border-dark-blue" : "border-light-gray-3"
             }`}
           ></div>
         </div>
         <div
           className={`w-4 border-b ${
-            column.tableId && column.tableId !== ""
-              ? "border-dark-blue"
-              : "border-light-gray-3"
+            mappedTableColumn ? "border-dark-blue" : "border-light-gray-3"
           }`}
         ></div>
         {/* Table Column */}
         <div className="relative flex flex-1 items-center justify-start gap-2 bg-white border-2 border-[#D8D8F3] text-sm text-dark rounded-lg p-2">
-          {column.tableColumn ? (
+          {mappedTableColumn ? (
             <div className="w-full px-2 py-1 bg-light-gray-2 border-light-gray-3 text-dark-blue rounded-full flex items-center gap-2">
               <IoMdRadioButtonOn className="text-lg" />
-              <span>{column.tableColumn}</span>
+              <span>{mappedTableColumn.tableColumn}</span>
               <button
                 onClick={handleUnmapColumn}
                 className="w-4 h-4 ml-auto text-red border border-light-gray-3 rounded-full p-1 box-content"
@@ -97,9 +112,7 @@ export default function ColumnMappingItem({
           )}
           <div
             className={`absolute top-1/2 -left-1 transform -translate-y-1/2 z-10 w-2 h-2 rounded-full bg-white border ${
-              column.tableId && column.tableId !== ""
-                ? "border-dark-blue"
-                : "border-light-gray-3"
+              mappedTableColumn ? "border-dark-blue" : "border-light-gray-3"
             }`}
           ></div>
         </div>

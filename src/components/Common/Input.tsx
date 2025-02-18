@@ -15,7 +15,7 @@ export default function Input({
 }: InputProps) {
   return (
     <div className="w-full flex flex-col items-start">
-      <label htmlFor={label} className="text-sm text-light-dark font-medium">{label}</label>
+      <label htmlFor={label} className="text-md text-light-dark font-medium">{label}</label>
       <input
         value={value}
         onChange={onChange}
@@ -23,7 +23,7 @@ export default function Input({
         type={type || "text"}
         className="w-full bg-white border border-light-gray-3 focus:border-dark-blue rounded-lg p-2 transition duration-200 outline-none"
       />
-      {error && <span className="text-red-500 text-sm">{error}</span>}
+      {error && <span className="text-red text-xs">{error}</span>}
     </div>
   );
 }

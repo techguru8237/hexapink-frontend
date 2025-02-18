@@ -73,6 +73,10 @@ export interface TagOption {
   name: string;
 }
 
+interface mappedTable {
+  tableId: string;
+  tableColumn: string;
+}
 
 export interface Column {
   id: number;
@@ -81,10 +85,9 @@ export interface Column {
   showToClient: boolean;
   isAdditionalFee: boolean;
   additionalFee?: number;
-  tableId?: string;
-  tableColumn?: string;
-  optional?: boolean
-  stepName?: string
+  tableColumns?: mappedTable[];
+  optional?: boolean;
+  stepName?: string;
 }
 
 export interface Step {
@@ -104,4 +107,10 @@ export interface Collection {
   columns: Column[];
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface CollectionCreateErrors {
+  title: string;
+  file: string;
+  columnMapping: string;
 }

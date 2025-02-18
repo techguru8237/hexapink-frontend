@@ -9,7 +9,7 @@ interface TextAreaProps {
 export default function TextArea({ label, placeholder, value, error, onChange }: TextAreaProps) {
   return (
     <div className="w-full h-full flex flex-col items-start">
-      <label htmlFor={label} className="text-sm text-light-dark font-medium">
+      <label htmlFor={label} className="text-md text-light-dark font-medium">
         {label}
       </label>
       <textarea
@@ -19,7 +19,7 @@ export default function TextArea({ label, placeholder, value, error, onChange }:
         id={label}
         className="w-full h-full min-h-16 bg-white border border-light-gray-3 focus:border-dark-blue rounded-lg p-2 transition duration-200 outline-none"
       />
-      {error && <span className="text-red-500 text-sm">{error}</span>}
+      {error && <span className="text-red text-sm">{error}</span>}
     </div>
   );
 }

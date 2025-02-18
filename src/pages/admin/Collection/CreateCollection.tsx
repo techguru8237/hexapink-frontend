@@ -11,7 +11,7 @@ import GeneralInformation from "../../../components/Collection/General/GeneralIn
 import CountrySelect from "../../../components/Common/CountrySelect";
 import Pricing from "../../../components/User/Pricing";
 import ColumnGenerate from "../../../components/Collection/Column/ColumnGenerate";
-import { Column } from "../../../types";
+import { CollectionCreateErrors, Column } from "../../../types";
 import ColumnMapping from "../../../components/Collection/Table/ColumnMapping";
 import StepSetting from "../../../components/Collection/Step/StepSetting";
 import { useLoading } from "../../../contexts/Loading";
@@ -40,6 +40,12 @@ export default function CreateCollection() {
   const [fee, setFee] = useState<number>(0);
   const [discount, setDiscount] = useState<number>(0);
   const [columns, setColumns] = useState<Column[]>([]);
+
+  const [errors, setErrors] = useState<CollectionCreateErrors>({
+    title: "",
+    file: "",
+    columnMapping: ""
+  })
 
   const handleClickBackStep = () => {
     if (step === 1) {
@@ -72,6 +78,7 @@ export default function CreateCollection() {
 
         if (response.status === 201) {
           toast.success("Created Collection Correctly.");
+          navigate('/admin/collections')
         }
       } catch (error: any) {
         toast.error("Error saving collection:", error.message);
@@ -79,6 +86,16 @@ export default function CreateCollection() {
         hideLoading();
       }
     } else {
+      if (step === 1) {
+        if (title === "") {
+          setErrors((prev) => ({ ...prev, title: "Title is required." }));
+          return;
+        }
+        if (!file) {
+          setErrors((prev) => ({ ...prev, file: "Image file is required." }));
+          return;
+        }
+      }
       setStep(step + 1);
     }
   };
@@ -128,6 +145,8 @@ export default function CreateCollection() {
                   setFile={setFile}
                   setType={setType}
                   setDescription={setDescription}
+                  errors={errors}
+                  setErrors={setErrors}
                 />
                 <CountrySelect
                   selectedCountries={selectedCountries}

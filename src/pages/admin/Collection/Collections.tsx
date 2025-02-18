@@ -11,9 +11,11 @@ import LoadingElement from "../../../components/Common/LoadingElement";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import api from "../../../actions/api";
 import { Collection } from "../../../types";
+import useAuth from "../../../hooks/useAuth";
 
 export default function Collections() {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [collections, setCollections] = useState<Collection[]>([]);
@@ -34,7 +36,10 @@ export default function Collections() {
       setCollections(response.data.collections);
       setTotalPages(response.data.totalPages);
       setLoading(false);
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response.status === 401) {
+        logout()
+      }
       console.error("Error fetching tables:", error);
       setLoading(false);
     }
@@ -100,7 +105,7 @@ export default function Collections() {
 
           <NewCollectionSkeleton />
 
-          <div className="p-8 flex flex-col gap-4">
+          <div className="p-8 flex flex-col items-center gap-4">
             <CollectionListHeader />
 
             {loading ? (

@@ -41,7 +41,7 @@ export default function FileUpload({
       <div className="w-full flex flex-col items-start">
         <label
           htmlFor="file-upload"
-          className="text-sm text-light-dark font-medium"
+          className="text-md text-light-dark font-medium"
         >
           {label}
         </label>
@@ -71,7 +71,7 @@ export default function FileUpload({
           )}
         </div>
 
-        {error && <span className="text-red-500 text-sm">{error}</span>}
+        {error && <span className="text-red text-sm">{error}</span>}
       </div>
     </>
   );

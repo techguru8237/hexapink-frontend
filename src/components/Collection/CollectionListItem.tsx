@@ -41,7 +41,13 @@ export const CollectionListItem: React.FC<CollectionListItemProps> = ({
         <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
           <div className="w-12 h-12 bg-[#F0F0FA] border border-light-gray-3 rounded-l-lg flex items-center justify-center rounded-lg">
             {/* <PiImageSquareLight className="text-2xl" /> */}
-            <img src={samlpeImg} alt="file image" className="rounded-lg" />
+            <img
+              src={`${
+                import.meta.env.VITE_BACKEND_URL
+              }/a2a7da096b5c66b3d1e7c01c27f83b66`}
+              alt="file image"
+              className="rounded-lg"
+            />
           </div>
           <div className="flex flex-col">
             <span className="font-bold text-left">{data.title}</span>
@@ -67,7 +73,7 @@ export const CollectionListItem: React.FC<CollectionListItemProps> = ({
           <span>1500-5</span>
         </div>
         <div className="w-full p-3 flex items-center border-l border-dashed border-light-gray-3">
-          {data.createdAt?.split('T')[0]}
+          {data.createdAt?.split("T")[0]}
         </div>
       </div>
     </div>
