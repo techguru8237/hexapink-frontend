@@ -4,7 +4,6 @@ import { FaRegFolderOpen } from "react-icons/fa";
 import { CiCircleInfo } from "react-icons/ci";
 import { PiMapPinLight } from "react-icons/pi";
 
-import samlpeImg from "../../assets/collection.png";
 import Checkbox from "../Checkbox";
 import { Collection } from "../../types";
 
