@@ -6,7 +6,7 @@ import { FaRegFolderOpen } from "react-icons/fa";
 import { HiArrowNarrowRight, HiArrowNarrowLeft } from "react-icons/hi";
 
 import AdminHeader from "../../../components/Dashboard/AdminHeader";
-import VerticalStepBar from "../../../components/NewFile/VerticalStepbar";
+import VerticalStepBar from "../../../components/Collection/VerticalStepbar";
 import GeneralInformation from "../../../components/Collection/General/GeneralInformation";
 import CountrySelect from "../../../components/Common/CountrySelect";
 import Pricing from "../../../components/User/Pricing";

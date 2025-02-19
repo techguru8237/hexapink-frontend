@@ -1,20 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
 import { PiTableLight, PiPencilSimpleLight } from "react-icons/pi";
 import { CiCircleInfo } from "react-icons/ci";
-import samlpeImg from "../../assets/payment.png";
 import Checkbox from "../Checkbox";
+import { PaymentItem } from "../../types";
+import ConfirmDialog from "../Common/ConfirmDialog";
 
 interface PaymentListItemProps {
-  index: number;
+  index: string;
+  data: PaymentItem;
   isSelected: boolean;
-  onCheckboxChange: (index: number) => void;
+  payments: PaymentItem[];
+  setPayments: (updatedTables: PaymentItem[]) => void;
+  fetchPaymentMethods: () => Promise<void>;
+  onCheckboxChange: (index: string) => void;
+  handleStatusChange: (id: string) => void;
 }
 
 export const PaymentListItem: React.FC<PaymentListItemProps> = ({
   index,
+  data,
   isSelected,
   onCheckboxChange,
+  handleStatusChange,
 }) => {
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedPaymentId, setSelectedPaymentId] = useState<string | null>(
+    null
+  );
+  const [openPreview, setOpenPreview] = useState(false);
+
+  const onClickStatus = (event: React.MouseEvent, id: string) => {
+    event.stopPropagation();
+    setSelectedPaymentId(id);
+    setOpenDialog(true);
+  };
+
+  const handleConfirmChange = () => {
+    if (selectedPaymentId) {
+      handleStatusChange(selectedPaymentId);
+    }
+    setOpenDialog(false);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedPaymentId(null);
+  };
+
   return (
     <div className="w-full flex items-center gap-2 text-light-dark">
       <Checkbox checked={isSelected} onChange={() => onCheckboxChange(index)} />
@@ -26,29 +58,56 @@ export const PaymentListItem: React.FC<PaymentListItemProps> = ({
       >
         <div className="w-full p-3 flex items-center">
           <PiTableLight className="text-2xl mr-2" />
-          <span> bank_{index + 1}</span>
-          <CiCircleInfo className="text-xl ml-auto border rounded-md p-1 box-content" /> 
+          <span> bank_{data._id.slice(-5)}</span>
+          <CiCircleInfo className="text-xl ml-auto border rounded-md p-1 box-content" />
         </div>
-        <div className="w-full p-3 flex items-center justify-between gap-2 border-l border-dashed border-light-gray-3">
+        <div className="w-full p-3 flex items-center justify-start gap-2 border-l border-dashed border-light-gray-3">
           <div className="w-12 h-12 bg-[#F0F0FA] border border-light-gray-3 rounded-l-lg flex items-center justify-center rounded-lg">
-            {/* <PiImageSquareLight className="text-2xl" /> */}
-            <img src={samlpeImg} alt="file image" className="rounded-lg"/>
+            <img
+              src={`${
+                import.meta.env.VITE_BACKEND_URL
+              }/${data.bankLogo?.replace("uploads", "")}`}
+              alt="Bank Logo"
+              className="rounded-lg"
+            />
           </div>
-          <span>Bank of Africa</span>
+          <span>{data.bankName}</span>
         </div>
         <div className="w-full p-3 flex items-center divide-x border-l border-dashed border-light-gray-3">
-          <span>John Doe</span>
+          <span>{data.accountOwner}</span>
         </div>
         <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
-          <button className="h-8 bg-[#F0F0FA] border border-light-gray-3 rounded-l-lg flex items-center justify-center rounded-lg">
-            Suspended
+          <button
+            onClick={(e) => onClickStatus(e, data._id)}
+            className={`rounded-lg px-2 py-1 text-sm ${
+              data.status === "Active"
+                ? "bg-light-green-2 border-light-green-1 text-green hover:bg-green hover:border-none hover:text-white"
+                : "bg-[#FAFAFA] border-[#E6E6E6] text-dark hover:bg-light-dark hover:border-none hover:text-white"
+            }`}
+          >
+            {data.status}
           </button>
           <PiPencilSimpleLight className="text-xl ml-auto border rounded-md p-1 box-content" />
         </div>
         <div className="w-full p-3 flex items-center border-l border-dashed border-light-gray-3">
-          11 Nov 2024
+          {data.createdAt.split("T")[0]}
         </div>
       </div>
+
+      <ConfirmDialog
+        title="Confirm Status Change"
+        description={`Are you sure you want to change the status of ${data.accountOwner}'s payment method?`}
+        handleConfirmChange={handleConfirmChange}
+        handleCloseDialog={handleCloseDialog}
+        openDialog={openDialog}
+      />
+
+      {/* Preview Modal */}
+      {/* <UserPreviewModal
+        open={openPreview}
+        onClose={handleClosePreview}
+        user={data}
+      /> */}
     </div>
   );
 };

@@ -116,3 +116,13 @@ export interface CollectionCreateErrors {
   file: string;
   columnMapping: string;
 }
+
+export interface PaymentItem {
+  _id: string;
+  bankName: string;
+  accountOwner: string;
+  bankLogo: string;
+  qrCode: string;
+  status: string;
+  createdAt: string;
+}

@@ -93,8 +93,8 @@ const items: SidebarItemType[] = [
   },
   {
     type: "admin",
-    label: "PaymentMethod",
-    link: "paymentmethod",
+    label: "Payments",
+    link: "payments",
     icon: <PiBankLight className="text-lg" />,
     selectedIcon: <PiBankFill className="text-lg" />,
   },

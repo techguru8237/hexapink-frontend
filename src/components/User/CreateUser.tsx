@@ -1,12 +1,14 @@
 import { JSX, useMemo, useState } from "react";
-import Input from "../Common/Input";
-import { PiPlusCircle } from "react-icons/pi";
-import { createUser } from "../../actions/user";
 import Select from "react-select";
-import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input/input";
 import countryList from "react-select-country-list";
+import "react-phone-number-input/style.css";
+
+import { PiPlusCircle } from "react-icons/pi";
 import { IoCloseCircleOutline } from "react-icons/io5";
+
+import Input from "../Common/Input";
+import { createUser } from "../../actions/user";
 
 interface CountryOption {
   value: string;
@@ -111,7 +113,15 @@ const CreateUser = ({ onClose }: CreateUserProps): JSX.Element => {
               options={options}
               value={country}
               onChange={(selectedOption) => setCountry(selectedOption)}
-              className="text-left focus-within:border-dark-blue"
+              className="text-left"
+              styles={{
+                control: (baseStyles, state) => ({
+                  ...baseStyles,
+                  padding: "2px 0px",
+                  borderColor: state.isFocused ? "#4040BF" : "#D9D9F2",
+                  borderRadius: "8px",
+                }),
+              }}
             />
           </div>
           <div className="w-full">
@@ -120,7 +130,15 @@ const CreateUser = ({ onClose }: CreateUserProps): JSX.Element => {
               options={userTypeOptions}
               value={userType}
               onChange={(selectedOption) => setUserType(selectedOption)}
-              className="text-left focus-within:border-dark-blue"
+              className="text-left"
+              styles={{
+                control: (baseStyles, state) => ({
+                  ...baseStyles,
+                  padding: "2px 0px",
+                  borderColor: state.isFocused ? "#4040BF" : "#D9D9F2",
+                  borderRadius: "8px",
+                }),
+              }}
             />
           </div>
           <div className="w-full flex flex-col">
@@ -133,7 +151,7 @@ const CreateUser = ({ onClose }: CreateUserProps): JSX.Element => {
               autoComplete="tel"
               value={phone}
               onChange={setPhone}
-              className="bg-white p-2 text-dark rounded-md border outline-none focus:border-dark-blue"
+              className="bg-white p-2 text-dark rounded-lg border outline-none focus:border-dark-blue"
             />
           </div>
         </div>

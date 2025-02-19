@@ -53,7 +53,7 @@ function App() {
           <Route index element={<Navigate to="dashboard" />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="orders" element={<Orders />} />
-          <Route path="paymentMethod" element={<PaymentMethods />} />
+          <Route path="payments/:page?" element={<PaymentMethods />} />
           <Route path="collections" element={<Collections />} />
           <Route path="collections/new" element={<CreateCollection />} />
           <Route

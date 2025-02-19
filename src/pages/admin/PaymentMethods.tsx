@@ -1,4 +1,3 @@
-
 import { PiBankLight } from "react-icons/pi";
 
 import { useState, useEffect } from "react";
@@ -8,39 +7,66 @@ import Pagination from "../../components/Pagination";
 import NewPaymentSkeleton from "../../components/PaymentMethod/NewPaymentSkeleton";
 import PaymentListHeader from "../../components/PaymentMethod/PaymentListHeader";
 import { PaymentListItem } from "../../components/PaymentMethod/PaymentListItem";
-
-
-const dummyData = Array.from({ length: 25 }, (_, index) => ({
-  id: index,
-  name: `file_${index + 1}`,
-  date: "11 Nov 2024",
-  status: "Ready",
-  order: `ord_${index + 124}`,
-}));
+import CreatePayment from "../../components/PaymentMethod/CreatePayment";
+import { PaymentItem } from "../../types";
+import api from "../../actions/api";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import LoadingElement from "../../components/Common/LoadingElement";
+import { toast } from "react-toastify";
+import { updateStatus } from "../../actions/payment";
 
 export default function PaymentMethods() {
-  const [selectedFiles, setSelectedFiles] = useState<number[]>([]);
-  const [filteredFiles, setFilteredFiles] = useState<
-    { id: number; name: string; date: string; status: string; order: string }[]
-  >([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const [payments, setPayments] = useState<PaymentItem[]>([]);
+  const [selectePayments, selectedPayments] = useState<string[]>([]);
+  const [isNewPaymentPanelVisible, setIsNewPaymentPanelVisible] =
+    useState(false);
   const [isFilterPanelVisible, setIsFilterPanelVisible] = useState(false);
-  const itemsPerPage = 4; // Number of items per page
-  const totalPages = Math.ceil(dummyData.length / itemsPerPage);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [totalPages, setTotalPages] = useState(0);
 
-  useEffect(() => {
-    setFilteredFiles(dummyData);
-  }, []);
+  const currentPage = parseInt(searchParams.get("page") || "1");
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  const fetchPaymentMethods = async () => {
+    const queryParams = new URLSearchParams(searchParams);
+    try {
+      setLoading(true);
+      const response = await api.get(
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/payment?${queryParams.toString()}&limit=${rowsPerPage}`
+      );
+      setPayments(response.data.payments);
+      setTotalPages(response.data.totalPages);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching payments:", error);
+      setLoading(false);
+    }
   };
 
-  const handleCheckboxChange = (index: number) => {
-    setSelectedFiles((prevSelectedFiles) =>
-      prevSelectedFiles.includes(index)
-        ? prevSelectedFiles.filter((fileIndex) => fileIndex !== index)
-        : [...prevSelectedFiles, index]
+  useEffect(() => {
+    fetchPaymentMethods();
+  }, [searchParams]);
+
+  const handlePageChange = (page: number) => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set("page", page.toString());
+    navigate(`/admin/tables?${newSearchParams.toString()}`);
+  };
+
+  const handleAddPaymentClick = () => {
+    setIsNewPaymentPanelVisible(!isNewPaymentPanelVisible);
+  };
+
+  const handleCheckboxChange = (index: string) => {
+    selectedPayments((prevSelectedPayments) =>
+      prevSelectedPayments.includes(index)
+        ? prevSelectedPayments.filter((payment) => payment !== index)
+        : [...prevSelectedPayments, index]
     );
   };
 
@@ -48,11 +74,21 @@ export default function PaymentMethods() {
     setIsFilterPanelVisible(!isFilterPanelVisible);
   };
 
-  // Calculate the start and end indices for slicing the filteredFiles array
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentFiles = filteredFiles.slice(startIndex, endIndex);
+  const handleChangePaymentStatus = (id: string) => {
+    const payment = payments.find((payment) => payment._id === id);
+    if (payment) {
+      const newStatus = payment.status === "Active" ? "Inactive" : "Active";
+      const onSuccess = () => {
+        const updatedUsers = payments.map((payment) =>
+          payment._id === id ? { ...payment, status: newStatus } : payment
+        );
+        setPayments(updatedUsers);
+        toast.success("Changed user status successfully.");
+      };
 
+      updateStatus(id, newStatus, onSuccess);
+    }
+  };
 
   return (
     <div>
@@ -61,13 +97,13 @@ export default function PaymentMethods() {
       <div className="bg-light-gray border-b border-light-gray-1 flex">
         <div className="flex flex-col flex-1 border-r border-light-gray-1">
           <div className="px-8 py-4 border-b border-light-gray-1 flex items-center justify-between text-light-dark">
-            {selectedFiles.length > 0 && (
-              <span>{selectedFiles.length} Selected</span>
+            {selectedPayments.length > 0 && (
+              <span>{selectedPayments.length} Selected</span>
             )}
             <div className="ml-auto flex items-center divide-x">
               <div className="pr-4 flex items-center gap-2">
-                {filteredFiles.length > 0 && (
-                  <span>{filteredFiles.length} Results</span>
+                {payments && payments.length > 0 && (
+                  <span>{payments.length} Results</span>
                 )}
                 <button
                   onClick={handleClickFilter}
@@ -79,31 +115,49 @@ export default function PaymentMethods() {
               </div>
               <div className="pl-4">
                 <Pagination
-                  onPageSizeChange={() => {}}
-                  rowsPerPage={itemsPerPage}
-                  pageSizeOptions={[5, 10, 20, 50]}
                   currentPage={currentPage}
                   totalPages={totalPages}
+                  rowsPerPage={rowsPerPage}
+                  pageSizeOptions={[5, 10, 20]}
                   onPageChange={handlePageChange}
+                  onPageSizeChange={(value) => setRowsPerPage(value)}
                 />
               </div>
             </div>
           </div>
 
-          <NewPaymentSkeleton />
+          <NewPaymentSkeleton onAddPaymentClick={handleAddPaymentClick} />
 
-          <div className="p-8 flex flex-col gap-4">
+          <div className="p-8 flex flex-col items-center gap-4">
             <PaymentListHeader />
-            {currentFiles.map((item) => (
-              <PaymentListItem
-                key={item.id}
-                index={item.id}
-                isSelected={selectedFiles.includes(item.id)}
-                onCheckboxChange={handleCheckboxChange}
-              />
-            ))}
+
+            {loading ? (
+              <LoadingElement width="32" color="#4040BF" />
+            ) : (
+              payments &&
+              payments.map((item) => (
+                <PaymentListItem
+                  key={item._id}
+                  data={item}
+                  index={item._id}
+                  isSelected={selectePayments.includes(item._id)}
+                  setPayments={setPayments}
+                  payments={payments}
+                  handleStatusChange={handleChangePaymentStatus}
+                  fetchPaymentMethods={fetchPaymentMethods}
+                  onCheckboxChange={handleCheckboxChange}
+                />
+              ))
+            )}
           </div>
         </div>
+
+        {isNewPaymentPanelVisible && (
+          <div className="w-96 px-4 py-4 border-l-2 border-light-gray-1 flex justify-center">
+            <CreatePayment onClose={() => setIsNewPaymentPanelVisible(false)} />
+          </div>
+        )}
+
         {/* {isFilterPanelVisible && (
           <div className="p-6">
             <FilterPanel

@@ -133,7 +133,7 @@ const CreateTable = ({onClose}: CreateTableProps): JSX.Element => {
             <select
               value={delimiter}
               onChange={(e) => setDelimiter(e.target.value)}
-              className="bg-white border border-gray-300 rounded p-2"
+              className="bg-white border border-gray-300 rounded-lg p-2"
             >
               <option value="comma">Comma (,)</option>
               <option value="semicolon">Semicolon (;)</option>

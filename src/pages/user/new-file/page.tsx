@@ -1,5 +1,5 @@
 import Header from "../../../components/Dashboard/Header";
-import VerticalStepBar from "../../../components/NewFile/VerticalStepbar";
+import VerticalStepBar from "../../../components/Collection/VerticalStepbar";
 import { useState } from "react";
 import { PiFileTextBold } from "react-icons/pi";
 
