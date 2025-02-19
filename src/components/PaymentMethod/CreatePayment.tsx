@@ -29,6 +29,10 @@ const CreatePayment = ({ onClose }: CreatePaymentProps): JSX.Element => {
   const [accountOwner, setAccountOwner] = useState<string>("");
   const [bankLogo, setBankLogo] = useState<File | null>(null);
   const [qrCode, setQrCode] = useState<File | null>(null);
+  const [accountNumber, setAccountNumber] = useState<string>("");
+  const [iban, setIban] = useState<string>("");
+  const [rib, setRib] = useState<string>("");
+  const [swift, setSwift] = useState<string>("");
 
   const handleFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -55,6 +59,10 @@ const CreatePayment = ({ onClose }: CreatePaymentProps): JSX.Element => {
       const formData = new FormData();
       formData.append("bankName", bankName);
       formData.append("accountOwner", accountOwner);
+      formData.append("accountNumber", accountNumber);
+      formData.append("rib", rib);
+      formData.append("iban", iban);
+      formData.append("swift", swift);
       if (bankLogo) {
         formData.append("bankLogo", bankLogo);
       }
@@ -126,6 +134,39 @@ const CreatePayment = ({ onClose }: CreatePaymentProps): JSX.Element => {
                 handleClose={() => handleCloseFile("QR Code")}
               />
             </div>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="w-full p-6 border-b border-dashed border-light-gray-3">
+            <Input
+              label="Account Number"
+              value={accountNumber}
+              type="text"
+              error=""
+              onChange={(e) => setAccountNumber(e.target.value)}
+            />
+            <Input
+              label="RIB"
+              value={rib}
+              type="text"
+              error=""
+              onChange={(e) => setRib(e.target.value)}
+            />
+            <Input
+              label="IBAN"
+              value={iban}
+              type="text"
+              error=""
+              onChange={(e) => setIban(e.target.value)}
+            />
+            <Input
+              label="SWIFT"
+              value={swift}
+              type="text"
+              error=""
+              onChange={(e) => setSwift(e.target.value)}
+            />
           </div>
         )}
 
