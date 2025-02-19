@@ -68,10 +68,10 @@ export default function Collections() {
   };
 
   return (
-    <div>
+    <div className="h-full flex flex-col">
       <AdminHeader icon={<FaRegFolderOpen />} label="Collections" />
 
-      <div className="bg-light-gray border-b border-light-gray-1 flex">
+      <div className="h-full bg-light-gray border-b border-light-gray-1 flex">
         <div className="flex flex-col flex-1 border-r border-light-gray-1">
           <div className="px-8 py-4 border-b border-light-gray-1 flex items-center justify-between text-light-dark">
             {selectedCollections.length > 0 && (

@@ -120,9 +120,13 @@ export interface CollectionCreateErrors {
 export interface PaymentItem {
   _id: string;
   bankName: string;
-  accountOwner: string;
-  bankLogo: string;
-  qrCode: string;
-  status: string;
+  accountOwner?: string;
+  accountNumber?: string;
+  iban?: string;
+  rib?: string;
+  swift?: string;
+  bankLogo?: string;
+  qrCode?: string;
+  status?: string;
   createdAt: string;
 }

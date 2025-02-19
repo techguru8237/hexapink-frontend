@@ -177,7 +177,6 @@ export const CollectionListItem: React.FC<CollectionListItemProps> = ({
         </div>
       </div>
 
-      {/* Delete Icon */}
       {isSelected &&
         (loading ? (
           <LoadingElement width="32" color="blue" />

@@ -1,27 +1,33 @@
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
+
+import { CiFilter } from "react-icons/ci";
 import { PiBankLight } from "react-icons/pi";
 
-import { useState, useEffect } from "react";
-import { CiFilter } from "react-icons/ci";
-import AdminHeader from "../../components/Dashboard/AdminHeader";
+import api from "../../actions/api";
+import { updateStatus } from "../../actions/payment";
+import { PaymentItem } from "../../types";
+
 import Pagination from "../../components/Pagination";
+import AdminHeader from "../../components/Dashboard/AdminHeader";
+import LoadingElement from "../../components/Common/LoadingElement";
+import EditPayment from "../../components/PaymentMethod/EditPayment";
+import CreatePayment from "../../components/PaymentMethod/CreatePayment";
 import NewPaymentSkeleton from "../../components/PaymentMethod/NewPaymentSkeleton";
 import PaymentListHeader from "../../components/PaymentMethod/PaymentListHeader";
 import { PaymentListItem } from "../../components/PaymentMethod/PaymentListItem";
-import CreatePayment from "../../components/PaymentMethod/CreatePayment";
-import { PaymentItem } from "../../types";
-import api from "../../actions/api";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import LoadingElement from "../../components/Common/LoadingElement";
-import { toast } from "react-toastify";
-import { updateStatus } from "../../actions/payment";
 
 export default function PaymentMethods() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const [payments, setPayments] = useState<PaymentItem[]>([]);
+  const [editPayment, setEditPayment] = useState<PaymentItem>();
   const [selectePayments, selectedPayments] = useState<string[]>([]);
-  const [isNewPaymentPanelVisible, setIsNewPaymentPanelVisible] =
+  const [isNewPanelVisible, setIsNewPanelVisible] =
+    useState(false);
+  const [isEditPanelVisible, setIsEditPanelVisible] =
     useState(false);
   const [isFilterPanelVisible, setIsFilterPanelVisible] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -59,7 +65,18 @@ export default function PaymentMethods() {
   };
 
   const handleAddPaymentClick = () => {
-    setIsNewPaymentPanelVisible(!isNewPaymentPanelVisible);
+    setIsNewPanelVisible(!isNewPanelVisible);
+  };
+
+  const handleEditClick = (paymentId: string) => {
+    if (isEditPanelVisible) {
+      setIsEditPanelVisible(false);
+    } else {
+      const payment = payments.find((payment) => payment._id === paymentId);
+      setEditPayment(payment);
+      setIsNewPanelVisible(false);
+      setIsEditPanelVisible(true);
+    }
   };
 
   const handleCheckboxChange = (index: string) => {
@@ -91,10 +108,10 @@ export default function PaymentMethods() {
   };
 
   return (
-    <div>
+    <div className="h-full flex flex-col">
       <AdminHeader icon={<PiBankLight />} label="PaymentMethods" />
 
-      <div className="bg-light-gray border-b border-light-gray-1 flex">
+      <div className="h-full bg-light-gray border-b border-light-gray-1 flex">
         <div className="flex flex-col flex-1 border-r border-light-gray-1">
           <div className="px-8 py-4 border-b border-light-gray-1 flex items-center justify-between text-light-dark">
             {selectedPayments.length > 0 && (
@@ -146,18 +163,29 @@ export default function PaymentMethods() {
                   handleStatusChange={handleChangePaymentStatus}
                   fetchPaymentMethods={fetchPaymentMethods}
                   onCheckboxChange={handleCheckboxChange}
+                  handleEditClick={handleEditClick}
                 />
               ))
             )}
           </div>
         </div>
 
-        {isNewPaymentPanelVisible && (
+        {isNewPanelVisible && (
           <div className="w-96 px-4 py-4 border-l-2 border-light-gray-1 flex justify-center">
-            <CreatePayment onClose={() => setIsNewPaymentPanelVisible(false)} />
+            <CreatePayment onClose={() => setIsNewPanelVisible(false)} />
           </div>
         )}
 
+        {isEditPanelVisible && editPayment && (
+          <div className="w-96 px-4 py-4 border-l-2 border-light-gray-1 flex justify-center">
+            <EditPayment
+              paymentData={editPayment}
+              payments={payments}
+              setPayments={setPayments}
+              onClose={() => setIsEditPanelVisible(false)}
+            />
+          </div>
+        )}
         {/* {isFilterPanelVisible && (
           <div className="p-6">
             <FilterPanel

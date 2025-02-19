@@ -1,9 +1,14 @@
 import React, { useState } from "react";
-import { PiTableLight, PiPencilSimpleLight } from "react-icons/pi";
+import { PiTableLight } from "react-icons/pi";
 import { CiCircleInfo } from "react-icons/ci";
 import Checkbox from "../Checkbox";
 import { PaymentItem } from "../../types";
 import ConfirmDialog from "../Common/ConfirmDialog";
+import LoadingElement from "../Common/LoadingElement";
+import { BiPencil } from "react-icons/bi";
+import { BsTrash3 } from "react-icons/bs";
+import { toast } from "react-toastify";
+import api from "../../actions/api";
 
 interface PaymentListItemProps {
   index: string;
@@ -14,6 +19,7 @@ interface PaymentListItemProps {
   fetchPaymentMethods: () => Promise<void>;
   onCheckboxChange: (index: string) => void;
   handleStatusChange: (id: string) => void;
+  handleEditClick: (id: string) => void;
 }
 
 export const PaymentListItem: React.FC<PaymentListItemProps> = ({
@@ -22,33 +28,58 @@ export const PaymentListItem: React.FC<PaymentListItemProps> = ({
   isSelected,
   onCheckboxChange,
   handleStatusChange,
+  fetchPaymentMethods,
+  handleEditClick,
 }) => {
-  const [openDialog, setOpenDialog] = useState(false);
+  const [openStatusChangeConfirmDialog, setOpenStatusChangeConfirmDialog] =
+    useState(false);
+  const [openDeleteConfirmDialog, setOpenDeleteConfirmDialog] = useState(false);
+
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | null>(
     null
   );
 
   const onClickStatus = (event: React.MouseEvent, id: string) => {
     event.stopPropagation();
+    event.preventDefault();
     setSelectedPaymentId(id);
-    setOpenDialog(true);
+    setOpenStatusChangeConfirmDialog(true);
   };
 
   const handleConfirmChange = () => {
     if (selectedPaymentId) {
       handleStatusChange(selectedPaymentId);
     }
-    setOpenDialog(false);
+    setOpenStatusChangeConfirmDialog(false);
   };
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-    setSelectedPaymentId(null);
+  const handleDelete = () => {
+    setOpenDeleteConfirmDialog(true); // Open the delete confirmation dialog
+  };
+
+  const handleConfirmDelete = async () => {
+    setLoading(true);
+    try {
+      await api.delete(`/api/payment/delete/${data._id}`);
+      toast.success("Collection deleted successfully.");
+      fetchPaymentMethods();
+      setLoading(false);
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+    } finally {
+      setLoading(false);
+      setOpenDeleteConfirmDialog(false);
+    }
   };
 
   return (
-    <div className="w-full flex items-center gap-2 text-light-dark">
-      <Checkbox checked={isSelected} onChange={() => onCheckboxChange(index)} />
+    <div
+      onClick={() => onCheckboxChange(index)}
+      className="w-full flex items-center gap-2 text-light-dark cursor-pointer"
+    >
+      <Checkbox checked={isSelected} />
       {/* Payment Item */}
       <div
         className={`w-full bg-[#F7F7FC] flex justify-around border ${
@@ -86,19 +117,39 @@ export const PaymentListItem: React.FC<PaymentListItemProps> = ({
           >
             {data.status}
           </button>
-          <PiPencilSimpleLight className="text-xl ml-auto border rounded-md p-1 box-content" />
         </div>
         <div className="w-full p-3 flex items-center border-l border-dashed border-light-gray-3">
           {data.createdAt.split("T")[0]}
         </div>
       </div>
 
+      {isSelected &&
+        (loading ? (
+          <LoadingElement width="32" color="blue" />
+        ) : (
+          <div className="flex flex-col gap-2">
+            <BiPencil onClick={() => handleEditClick(data._id)} className="cursor-pointer hover:text-dark-blue" />
+            <BsTrash3
+              onClick={handleDelete}
+              className="cursor-pointer hover:text-red"
+            />
+          </div>
+        ))}
+
       <ConfirmDialog
         title="Confirm Status Change"
         description={`Are you sure you want to change the status of ${data.accountOwner}'s payment method?`}
         handleConfirmChange={handleConfirmChange}
-        handleCloseDialog={handleCloseDialog}
-        openDialog={openDialog}
+        handleCloseDialog={() => setOpenStatusChangeConfirmDialog(false)}
+        openDialog={openStatusChangeConfirmDialog}
+      />
+
+      <ConfirmDialog
+        title="Delete Payment"
+        description={`Are you sure you want delete this payment method?`}
+        handleConfirmChange={handleConfirmDelete}
+        handleCloseDialog={() => setOpenDeleteConfirmDialog(false)}
+        openDialog={openDeleteConfirmDialog}
       />
 
       {/* Preview Modal */}
