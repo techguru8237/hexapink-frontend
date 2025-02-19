@@ -8,7 +8,7 @@ import Mapping from "./Mapping";
 interface ColumnMappingProps {
   columns: Column[];
   setColumns: (columns: Column[]) => void;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 export default function ColumnMapping({

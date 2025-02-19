@@ -50,16 +50,17 @@ export default function TableAttachment({
     fetchTables();
   }, []);
 
-  useEffect(() => {
-    if (columns.length && tables.length) {
-      const attachedTables = tables.filter((table) =>
-        columns.some((column) =>
-          column.tableColumns?.some((tc) => tc.tableId === table._id)
-        )
-      );
-      setAttachedTables(attachedTables);
-    }
-  }, [columns, tables]);
+  // useEffect(() => {
+  //   if (columns.length && tables.length) {
+  //     const attachedTables = tables.filter((table) =>
+  //       columns.some((column) =>
+  //         column.tableColumns?.some((tc) => tc.tableId === table._id)
+  //       )
+  //     );
+  //     setAttachedTables(attachedTables);
+  //     setSelectedTable(attachedTables[0])
+  //   }
+  // }, [columns, tables]);
 
   useEffect(() => {
     if (search) {
@@ -77,9 +78,11 @@ export default function TableAttachment({
       const table = tables.find((table) => table._id === id);
       if (table) {
         setAttachedTables([...attachedTables, table]);
+        setSelectedTable(table)
       }
     }
   };
+
 
   const handleDettachTable = (id: string) => {
     const updatedTables = attachedTables.filter((table) => table._id !== id);

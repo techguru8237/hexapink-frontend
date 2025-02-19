@@ -27,7 +27,6 @@ export const PaymentListItem: React.FC<PaymentListItemProps> = ({
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | null>(
     null
   );
-  const [openPreview, setOpenPreview] = useState(false);
 
   const onClickStatus = (event: React.MouseEvent, id: string) => {
     event.stopPropagation();

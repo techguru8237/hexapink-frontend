@@ -8,7 +8,7 @@ interface FileUploadProps {
   fileName: string | undefined;
   accept: string;
   error: string;
-  disabled: boolean;
+  disabled?: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>, label: string) => void;
   handleClose: (label: string) => void;
 }
@@ -55,7 +55,7 @@ export default function FileUpload({
           name={label}
           id={`file-input-${label}`}
           accept={accept}
-          disabled={disabled}
+          disabled={disabled ?? false}
           onChange={handleFileChange}
           className="hidden"
         />

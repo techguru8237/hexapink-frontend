@@ -113,9 +113,9 @@ const CreatePayment = ({ onClose }: CreatePaymentProps): JSX.Element => {
                 label="Bank Logo"
                 fileName={bankLogo?.name}
                 accept="image/*"
-                error=""
                 onChange={(e) => handleFileChange(e, "Bank Logo")}
                 handleClose={() => handleCloseFile("Bank Logo")}
+                error=""
               />
               <FileUpload
                 label="QR Code"

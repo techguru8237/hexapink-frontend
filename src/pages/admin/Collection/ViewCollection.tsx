@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { PiCheckBold } from "react-icons/pi";
 import { FaRegFolderOpen } from "react-icons/fa";
 import { GoArrowRight, GoArrowLeft } from "react-icons/go";
+import { IoCloseSharp } from "react-icons/io5";
 
 import AdminHeader from "../../../components/Dashboard/AdminHeader";
 import VerticalStepBar from "../../../components/Collection/VerticalStepbar";
@@ -14,9 +14,7 @@ import ColumnGenerate from "../../../components/Collection/Column/ColumnGenerate
 import { CollectionCreateErrors, Column } from "../../../types";
 import ColumnMapping from "../../../components/Collection/Table/ColumnMapping";
 import StepSetting from "../../../components/Collection/Step/StepSetting";
-import { useLoading } from "../../../contexts/Loading";
-import api, { formApi } from "../../../actions/api";
-import { toast } from "react-toastify";
+import api from "../../../actions/api";
 
 const steps = [
   { label: "General", step: 1 },
@@ -30,7 +28,6 @@ const types = ["Business", "Client"];
 export default function ViewCollection() {
   const navigate = useNavigate();
   const params = useParams();
-  const { showLoading, hideLoading } = useLoading();
 
   const [step, setStep] = useState(1);
   const [title, setTitle] = useState("");
@@ -80,36 +77,7 @@ export default function ViewCollection() {
 
   const handleClickNextStep = async () => {
     if (step === steps.length) {
-      const formData = new FormData();
-      formData.append("title", title);
-      if (file) {
-        formData.append("file", file); // Append the file object
-      }
-      formData.append("type", type);
-      formData.append("description", description);
-      formData.append("countries", JSON.stringify(selectedCountries)); // Stringify the array
-      formData.append("fee", fee.toString());
-      formData.append("discount", discount.toString());
-      formData.append("columns", JSON.stringify(columns)); // Stringify the array
-
-      showLoading();
-      try {
-        const response = await formApi.put(
-          `${import.meta.env.VITE_BACKEND_URL}/api/collection/update/${
-            params.collectionId
-          }`,
-          formData
-        );
-
-        if (response.status === 200) {
-          toast.success("Updated Collection Correctly.");
-          navigate("/admin/collections");
-        }
-      } catch (error: any) {
-        toast.error("Error saving collection:", error.message);
-      } finally {
-        hideLoading();
-      }
+      navigate('/admin/collections')
     } else {
       if (step === 1) {
         if (title === "") {
@@ -147,8 +115,8 @@ export default function ViewCollection() {
                   : "border-dark hover:border-dark-blue hover:text-dark-blue"
               }`}
             >
-              <span>{step === steps.length ? "Edit Collection" : "Next"}</span>
-              {step === steps.length ? <PiCheckBold /> : <GoArrowRight />}
+              <span>{step === steps.length ? "Close" : "Next"}</span>
+              {step === steps.length ? <IoCloseSharp /> : <GoArrowRight />}
             </div>
           </div>
 
