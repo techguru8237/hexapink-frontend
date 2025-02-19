@@ -5,6 +5,7 @@ interface PricingProps {
   discount: number;
   setFee: (fee: number) => void;
   setDiscount: (discount: number) => void;
+  disabled?: boolean;
 }
 
 export default function Pricing({
@@ -12,6 +13,7 @@ export default function Pricing({
   setFee,
   discount,
   setDiscount,
+  disabled
 }: PricingProps) {
   return (
     <div className="max-w-3xl bg-white border border-light-gray-1 rounded-lg flex flex-col text-dark">
@@ -24,6 +26,7 @@ export default function Pricing({
           label="Base Fee Per Lead"
           type="number"
           value={fee}
+          disabled={disabled ?? false}
           onChange={setFee}
           error=""
         />
@@ -31,6 +34,7 @@ export default function Pricing({
           label="Discount Maximum"
           type="number"
           value={discount}
+          disabled={disabled ?? false}
           onChange={setDiscount}
           error=""
         />

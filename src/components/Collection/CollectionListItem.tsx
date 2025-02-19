@@ -88,7 +88,7 @@ export const CollectionListItem: React.FC<CollectionListItemProps> = ({
 
   const handleShowPreview = (event: React.MouseEvent) => {
     event.stopPropagation();
-    setOpenPreview(true);
+    navigate(`/admin/collections/view/${data._id}`)
   };
 
   const handleClosePreview = () => {

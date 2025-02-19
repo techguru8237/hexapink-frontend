@@ -4,6 +4,7 @@ interface SelectionProps {
   label: string;
   items: string[];
   selectedItem: string;
+  disabled: boolean;
   onChange: (item: string) => void;
 }
 
@@ -11,6 +12,7 @@ export default function Selection({
   label,
   items,
   selectedItem,
+  disabled,
   onChange,
 }: SelectionProps) {
   return (
@@ -18,11 +20,12 @@ export default function Selection({
       <label htmlFor="" className="text-dark text-left">{label}</label>
       <div className="flex flex-wrap gap-2">
         {items.map((item) => (
-          <div
+          <button
             key={item}
             className={`flex items-center gap-2 px-2 py-1 rounded-full border border-light-gray-3 cursor-pointer ${
               selectedItem === item ? "text-dark-blue" : "text-dark"
             }`}
+            disabled={disabled}
             onClick={() => onChange(item)}
           >
             <IoMdRadioButtonOn
@@ -31,7 +34,7 @@ export default function Selection({
               }`}
             />
             {item}
-          </div>
+          </button>
         ))}
       </div>
     </div>

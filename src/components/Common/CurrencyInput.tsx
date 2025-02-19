@@ -7,15 +7,17 @@ interface InputProps {
   label: string;
   type: string; // This can remain as is if you want to keep flexibility
   value: number | undefined;
-  error: string;
+  disabled: boolean;
   onChange: (value: number) => void;
+  error: string;
 }
 
 export default function CurrencyInput({
   label,
   value,
-  error,
+  disabled,
   onChange,
+  error,
 }: InputProps) {
   const { currency } = useCurrency();
 
@@ -47,6 +49,7 @@ export default function CurrencyInput({
           decimalScale={0} // Allow decimals if needed
           fixedDecimalScale={true} // Ensure two decimal places
           allowNegative={false} // Prevent negative values
+          disabled={disabled}
           onValueChange={(values) => {
             const { floatValue } = values; // Get the float value directly
             onChange(floatValue || 0); // Update the value
@@ -59,14 +62,20 @@ export default function CurrencyInput({
             {currency}
           </span>
           <div className="flex items-center border border-light-gray-3 rounded-md divide-x divide-light-gray-3 text-dark">
-            <FiMinus
-              className="p-2 box-content text-dark cursor-pointer"
+            <button
+              disabled={disabled}
               onClick={handleDecreaseInput}
-            />
-            <FiPlus
-              className="p-2 box-content text-dark cursor-pointer"
+              className="p-0 border-none"
+            >
+              <FiMinus className="p-2 box-content text-dark cursor-pointer" />
+            </button>
+            <button
+              disabled={disabled}
               onClick={handleIncreaseInput}
-            />
+              className="p-0 border-none"
+            >
+              <FiPlus className="p-2 box-content text-dark cursor-pointer" />
+            </button>
           </div>
         </div>
       </div>

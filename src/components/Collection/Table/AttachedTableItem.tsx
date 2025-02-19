@@ -7,6 +7,7 @@ import { TableItem } from "../../../types";
 interface AttachedTableItemProps {
   tableData: TableItem;
   selectedTable: TableItem | null;
+  disabled: boolean;
   onClickItem: (id: TableItem) => void;
   onDelete: (id: string) => void;
 }
@@ -14,6 +15,7 @@ interface AttachedTableItemProps {
 export default function AttachedTableItem({
   tableData,
   selectedTable,
+  disabled,
   onClickItem,
   onDelete,
 }: AttachedTableItemProps) {
@@ -43,7 +45,7 @@ export default function AttachedTableItem({
               Table-{tableData._id.slice(-5)}
             </span>
           </div>
-          {showDeleteIcon && (
+          {showDeleteIcon && !disabled && (
             <BsTrash3
               className="text-red cursor-pointer"
               onClick={() => onDelete(tableData._id)}

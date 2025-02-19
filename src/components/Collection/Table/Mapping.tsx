@@ -6,24 +6,28 @@ interface MappingProps {
   columns: Column[];
   setColumns: (columns: Column[]) => void;
   table: TableItem | null;
+  disabled: boolean;
 }
 
-export default function Mapping({ columns, setColumns, table }: MappingProps) {
+  
+export default function Mapping({ columns, setColumns, table, disabled}: MappingProps) {
   return (
     <div className="max-w-3xl h-full flex flex-1 flex-col gap-4 border-l border-light-gray-3 p-8">
       <h2 className="text-left text-lg font-semibold">Column Setting</h2>
 
       <div className="flex flex-col gap-4">
         <MappingHeader />
-        {table && columns.map((column) => (
-          <ColumnMappingItem
-            key={column.id}
-            column={column}
-            columns={columns}
-            setColumns={setColumns}
-            table={table}
-          />
-        ))}
+        {table &&
+          columns.map((column) => (
+            <ColumnMappingItem
+              key={column.id}
+              column={column}
+              columns={columns}
+              setColumns={setColumns}
+              table={table}
+              disabled={disabled}
+            />
+          ))}
       </div>
     </div>
   );

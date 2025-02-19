@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { IoMdRadioButtonOn } from "react-icons/io";
-
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
-
 import { Column, TableItem } from "../../../types";
 
 interface ColumnMappingItemProps {
@@ -11,6 +9,7 @@ interface ColumnMappingItemProps {
   columns: Column[];
   setColumns: (columns: Column[]) => void;
   table: TableItem | null;
+  disabled: boolean;
 }
 
 export default function ColumnMappingItem({
@@ -18,26 +17,54 @@ export default function ColumnMappingItem({
   columns,
   setColumns,
   table,
+  disabled,
 }: ColumnMappingItemProps) {
   const [expandTableColumns, setExpandTableColumns] = useState<boolean>(false);
 
   const handleMapColumn = (tableColumn: string) => {
     if (table) {
-      const updatedColumns = columns.map((item) =>
-        item.id === column.id
-          ? {
-              ...item,
-              tableColumns: [
-                ...(item.tableColumns ?? []),
-                { tableId: table._id, tableName: table.tableName, tableColumn: tableColumn },
-              ],
-            }
-          : item
+      const existingTableColumn = column.tableColumns?.find(
+        (item) => item.tableId === table._id
       );
+
+      const updatedColumns = existingTableColumn
+        ? columns.map((item) =>
+            item.id === column.id
+              ? {
+                  ...item,
+                  tableColumns: item.tableColumns?.map((tc) =>
+                    tc.tableId === table._id
+                      ? {
+                          ...tc,
+                          tableColumn: tableColumn, // Update the tableColumn
+                        }
+                      : tc
+                  ),
+                }
+              : item
+          )
+        : columns.map((item) =>
+            item.id === column.id
+              ? {
+                  ...item,
+                  tableColumns: [
+                    ...(item.tableColumns ?? []),
+                    {
+                      tableId: table._id,
+                      tableName: table.tableName,
+                      tableColumn: tableColumn,
+                    },
+                  ],
+                }
+              : item
+          );
+
       setColumns(updatedColumns);
       setExpandTableColumns(false);
     }
   };
+
+  console.log('columns', columns)
 
   const handleUnmapColumn = () => {
     const updatedColumns = columns.map((item) => {
@@ -45,10 +72,9 @@ export default function ColumnMappingItem({
         const updatedTableColumns =
           item.tableColumns?.filter((tcol) => tcol.tableId !== table?._id) ??
           [];
-        return { ...column, tableColumns: updatedTableColumns };
-      } else {
-        return item;
+        return { ...item, tableColumns: updatedTableColumns };
       }
+      return item;
     });
     setColumns(updatedColumns);
   };
@@ -84,6 +110,7 @@ export default function ColumnMappingItem({
               <span>{mappedTableColumn.tableColumn}</span>
               <button
                 onClick={handleUnmapColumn}
+                disabled={disabled}
                 className="w-4 h-4 ml-auto text-red border border-light-gray-3 rounded-full p-1 box-content"
               >
                 <IoClose />
@@ -99,17 +126,17 @@ export default function ColumnMappingItem({
               <span>Select A Table Column</span>
             </div>
           )}
-          {expandTableColumns ? (
-            <MdKeyboardArrowUp
-              onClick={() => setExpandTableColumns(!expandTableColumns)}
-              className="text-lg cursor-pointer"
-            />
-          ) : (
-            <MdKeyboardArrowDown
-              onClick={() => setExpandTableColumns(!expandTableColumns)}
-              className="text-lg cursor-pointer"
-            />
-          )}
+          <button
+            disabled={disabled}
+            className="border-none outline-none p-0"
+            onClick={() => setExpandTableColumns(!expandTableColumns)}
+          >
+            {expandTableColumns ? (
+              <MdKeyboardArrowUp className="text-lg" />
+            ) : (
+              <MdKeyboardArrowDown className="text-lg" />
+            )}
+          </button>
           <div
             className={`absolute top-1/2 -left-1 transform -translate-y-1/2 z-10 w-2 h-2 rounded-full bg-white border ${
               mappedTableColumn ? "border-dark-blue" : "border-light-gray-3"
@@ -120,15 +147,15 @@ export default function ColumnMappingItem({
 
       {expandTableColumns && (
         <div className="flex flex-wrap gap-2 p-2">
-          {table?.columns.map((column) => (
-            <div
-              key={column}
-              onClick={() => handleMapColumn(column)}
+          {table?.columns.map((tableColumn) => (
+            <button
+              key={tableColumn}
+              onClick={() => handleMapColumn(tableColumn)}
               className="flex items-center gap-2 px-2 py-1 rounded-full border border-light-gray-3 bg-light-gray-2 text-lightgray-3 hover:text-dark-blue cursor-pointer"
             >
               <IoMdRadioButtonOn className="text-light-gray-3" />
-              <span>{column}</span>
-            </div>
+              <span>{tableColumn}</span>
+            </button>
           ))}
         </div>
       )}

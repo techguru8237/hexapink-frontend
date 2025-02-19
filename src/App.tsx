@@ -2,8 +2,11 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { Bounce, ToastContainer } from "react-toastify";
 import "./App.css";
 
+import HomePage from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPasswordPage from "./pages/ResetPassword";
 
 import AdminLayout from "./pages/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
@@ -13,16 +16,14 @@ import Users from "./pages/admin/Users";
 import PaymentMethods from "./pages/admin/PaymentMethods";
 import Collections from "./pages/admin/Collection/Collections";
 import CreateCollection from "./pages/admin/Collection/CreateCollection";
+import EditCollection from "./pages/admin/Collection/EditCollection";
+import ViewCollection from "./pages/admin/Collection/ViewCollection";
 
 import UserLayout from "./pages/user/UserLayout";
-
 import Files from "./pages/user/Files";
 import Lookup from "./pages/user/Lookup";
 
-import HomePage from "./pages/Home";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPasswordPage from "./pages/ResetPassword";
-import EditCollection from "./pages/admin/Collection/EditCollection";
+
 
 function App() {
   return (
@@ -59,6 +60,10 @@ function App() {
           <Route
             path="collections/edit/:collectionId"
             element={<EditCollection />}
+          />
+          <Route
+            path="collections/view/:collectionId"
+            element={<ViewCollection />}
           />
           <Route path="tables/:page?" element={<Tables />} />
           <Route path="users" element={<Users />} />

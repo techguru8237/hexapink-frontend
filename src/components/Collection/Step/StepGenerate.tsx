@@ -10,6 +10,7 @@ interface StepGenerateProps {
   handleDrop: (stepId: number) => void;
   onClickNewStep: () => void;
   handleDeleteStep: (stepId: number) => void;
+  disabled: boolean;
 }
 
 export default function StepGenerate({
@@ -20,13 +21,13 @@ export default function StepGenerate({
   setSelectedStepId,
   setDraggedStepId,
   handleDeleteStep,
+  disabled,
 }: StepGenerateProps) {
-
   return (
     <div className="w-96 flex flex-col gap-4 p-6">
       <h2 className="text-left text-lg font-semibold">Steps</h2>
       <div className="flex flex-col gap-4">
-        <StepItemSkeleton onClickNewStep={onClickNewStep} />
+        <StepItemSkeleton disabled={disabled} onClickNewStep={onClickNewStep} />
         <div className="flex flex-col gap-2">
           {steps.map((step, index) => (
             <div
@@ -43,6 +44,7 @@ export default function StepGenerate({
                 onDelete={handleDeleteStep}
                 onDragStart={() => setDraggedStepId(step.id)}
                 onDragEnd={() => setDraggedStepId(null)}
+                disabled={disabled}
               />
             </div>
           ))}

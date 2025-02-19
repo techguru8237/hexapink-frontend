@@ -1,10 +1,9 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { PiCheckBold } from "react-icons/pi";
 import { FaRegFolderOpen } from "react-icons/fa";
 import { GoArrowRight, GoArrowLeft } from "react-icons/go";
-
 
 import AdminHeader from "../../../components/Dashboard/AdminHeader";
 import VerticalStepBar from "../../../components/Collection/VerticalStepbar";
@@ -16,7 +15,7 @@ import { CollectionCreateErrors, Column } from "../../../types";
 import ColumnMapping from "../../../components/Collection/Table/ColumnMapping";
 import StepSetting from "../../../components/Collection/Step/StepSetting";
 import { useLoading } from "../../../contexts/Loading";
-import { formApi } from "../../../actions/api";
+import api, { formApi } from "../../../actions/api";
 import { toast } from "react-toastify";
 
 const steps = [
@@ -28,8 +27,9 @@ const steps = [
 
 const types = ["Business", "Client"];
 
-export default function CreateCollection() {
+export default function ViewCollection() {
   const navigate = useNavigate();
+  const params = useParams();
   const { showLoading, hideLoading } = useLoading();
 
   const [step, setStep] = useState(1);
@@ -42,11 +42,33 @@ export default function CreateCollection() {
   const [discount, setDiscount] = useState<number>(0);
   const [columns, setColumns] = useState<Column[]>([]);
 
+  useEffect(() => {
+    const fetchCollection = async () => {
+      const response = await api.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/collection/${
+          params.collectionId
+        }`
+      );
+      const { title, type, description, countries, fee, discount, columns } =
+        response.data;
+
+      setTitle(title);
+      setDescription(description);
+      setType(type);
+      setSelectedCountries(countries);
+      setFee(fee);
+      setDiscount(discount);
+      setColumns(columns);
+    };
+
+    fetchCollection();
+  }, []);
+
   const [errors, setErrors] = useState<CollectionCreateErrors>({
     title: "",
     file: "",
-    columnMapping: ""
-  })
+    columnMapping: "",
+  });
 
   const handleClickBackStep = () => {
     if (step === 1) {
@@ -72,14 +94,16 @@ export default function CreateCollection() {
 
       showLoading();
       try {
-        const response = await formApi.post(
-          `${import.meta.env.VITE_BACKEND_URL}/api/collection/create`,
+        const response = await formApi.put(
+          `${import.meta.env.VITE_BACKEND_URL}/api/collection/update/${
+            params.collectionId
+          }`,
           formData
         );
 
-        if (response.status === 201) {
-          toast.success("Created Collection Correctly.");
-          navigate('/admin/collections')
+        if (response.status === 200) {
+          toast.success("Updated Collection Correctly.");
+          navigate("/admin/collections");
         }
       } catch (error: any) {
         toast.error("Error saving collection:", error.message);
@@ -92,10 +116,6 @@ export default function CreateCollection() {
           setErrors((prev) => ({ ...prev, title: "Title is required." }));
           return;
         }
-        if (!file) {
-          setErrors((prev) => ({ ...prev, file: "Image file is required." }));
-          return;
-        }
       }
       setStep(step + 1);
     }
@@ -103,7 +123,7 @@ export default function CreateCollection() {
 
   return (
     <div className="h-full flex flex-col">
-      <AdminHeader icon={<FaRegFolderOpen />} label="New Collection" />
+      <AdminHeader icon={<FaRegFolderOpen />} label="View Collection" />
 
       <div className="h-full flex bg-light-gray">
         <div className="border-r border-light-gray-1 px-12 py-8">
@@ -127,9 +147,7 @@ export default function CreateCollection() {
                   : "border-dark hover:border-dark-blue hover:text-dark-blue"
               }`}
             >
-              <span>
-                {step === steps.length ? "Create Collections" : "Next"}
-              </span>
+              <span>{step === steps.length ? "Edit Collection" : "Next"}</span>
               {step === steps.length ? <PiCheckBold /> : <GoArrowRight />}
             </div>
           </div>
@@ -146,32 +164,47 @@ export default function CreateCollection() {
                   setFile={setFile}
                   setType={setType}
                   setDescription={setDescription}
+                  disabled={true}
                   errors={errors}
                   setErrors={setErrors}
                 />
                 <CountrySelect
                   selectedCountries={selectedCountries}
                   setSelectedCountries={setSelectedCountries}
+                  disabled={true}
                 />
                 <Pricing
                   fee={fee}
                   discount={discount}
                   setFee={setFee}
                   setDiscount={setDiscount}
+                  disabled={true}
                 />
               </div>
             )}
 
             {step === 2 && (
-              <ColumnGenerate columns={columns} setColumns={setColumns} />
+              <ColumnGenerate
+                columns={columns}
+                setColumns={setColumns}
+                disabled={true}
+              />
             )}
 
             {step === 3 && (
-              <ColumnMapping columns={columns} setColumns={setColumns} />
+              <ColumnMapping
+                columns={columns}
+                setColumns={setColumns}
+                disabled={true}
+              />
             )}
 
             {step === 4 && (
-              <StepSetting columns={columns} setColumns={setColumns} />
+              <StepSetting
+                columns={columns}
+                setColumns={setColumns}
+                disabled={true}
+              />
             )}
           </div>
         </div>

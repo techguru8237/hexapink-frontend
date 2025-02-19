@@ -7,11 +7,13 @@ import { LiaSearchSolid } from "react-icons/lia";
 interface CountrySelectProps {
   selectedCountries: string[];
   setSelectedCountries: (countries: string[]) => void;
+  disabled?: boolean;
 }
 
 export default function CountrySelect({
   selectedCountries,
   setSelectedCountries,
+  disabled,
 }: CountrySelectProps) {
   const [countries, setCountries] = useState<string[]>([]);
   const [searchResults, setSearchResults] = useState<string[]>([]);
@@ -65,6 +67,7 @@ export default function CountrySelect({
             placeholder="Search Countries"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            disabled={disabled}
             className="bg-transparent border-none outline-none"
           />
         </div>
@@ -86,14 +89,15 @@ export default function CountrySelect({
 
       <div className="max-h-48 overflow-y-auto flex flex-wrap gap-2 p-6 border-b border-dashed border-light-gray-1">
         {searchResults.map((country) => (
-          <div
+          <button
             key={country}
             onClick={() => handleClickSearchedCountry(country)}
+            disabled={disabled}
             className="flex items-center gap-2 px-2 py-1 rounded-full border border-light-gray-3 cursor-pointer hover:bg-light-gray-1"
           >
             <IoMdRadioButtonOn className="text-light-gray-3" />
             {country}
-          </div>
+          </button>
         ))}
       </div>
 
@@ -110,6 +114,7 @@ export default function CountrySelect({
               <button
                 onClick={() => handleClickSearchedCountry(country)}
                 className="w-4 h-4 text-red border border-light-gray-3 rounded-full p-1 box-content"
+                disabled={disabled}
               >
                 <IoClose />
               </button>

@@ -6,9 +6,11 @@ import ColumnToStep from "./ColumnToStep";
 interface StepSettingProps {
   columns: Column[];
   setColumns: (columns: Column[]) => void;
+  disabled?: boolean;
 }
 
-export default function StepSetting({ columns, setColumns }: StepSettingProps) {
+  
+export default function StepSetting({ columns, setColumns, disabled }: StepSettingProps) {
   const [steps, setSteps] = useState<Step[]>([]);
   const [selectedStepId, setSelectedStepId] = useState<number | null>(null);
   const [draggedStepId, setDraggedStepId] = useState<number | null>(null);
@@ -65,6 +67,7 @@ export default function StepSetting({ columns, setColumns }: StepSettingProps) {
         onClickNewStep={handleClickNewStep}
         handleDeleteStep={handleDeleteStep}
         handleDrop={handleDrop}
+        disabled={disabled ?? false}
       />
 
       <ColumnToStep
@@ -73,6 +76,7 @@ export default function StepSetting({ columns, setColumns }: StepSettingProps) {
         setSteps={setSteps}
         selectedStepId={selectedStepId}
         setColumns={setColumns}
+        disabled={disabled ?? false}
       />
     </div>
   );

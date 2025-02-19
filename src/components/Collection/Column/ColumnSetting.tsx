@@ -9,12 +9,14 @@ interface ColumnSettingProps {
   columns: Column[];
   setColumns: (columns: Column[]) => void;
   selectedColumnId: number | null;
+  disabled: boolean
 }
 
 export default function ColumnSetting({
   selectedColumnId,
   columns,
   setColumns,
+  disabled
 }: ColumnSettingProps) {
   const [columnData, setColumnData] = useState<Column>({
     id: 0,
@@ -52,14 +54,16 @@ export default function ColumnSetting({
             label="Column Name"
             type="text"
             value={columnData.name}
-            error=""
+            disabled={disabled}
             onChange={(e) =>
               setColumnData({ ...columnData, name: e.target.value })
             }
+            error=""
           />
           <div className="flex items-center gap-2">
             <SwitchButton
               value={columnData.showToClient}
+              disabled={disabled}
               onChange={() =>
                 setColumnData((prev) => ({
                   ...prev,
@@ -75,6 +79,7 @@ export default function ColumnSetting({
         <div className="p-6">
           <ColumnTypeSelect
             selectedType={columnData.type}
+            disabled={disabled}
             onChange={(newType) =>
               setColumnData({ ...columnData, type: newType })
             }
@@ -90,6 +95,7 @@ export default function ColumnSetting({
           <div className="flex items-center gap-2">
             <SwitchButton
               value={columnData.isAdditionalFee}
+              disabled={disabled}
               onChange={() =>
                 setColumnData((prev) => ({
                   ...prev,
@@ -105,14 +111,16 @@ export default function ColumnSetting({
                 label="Additional Fee"
                 type="number"
                 value={columnData.additionalFee}
-                error=""
+                disabled={disabled}
                 onChange={(value) =>
                   setColumnData({ ...columnData, additionalFee: value })
                 }
+                error=""
               />
               <div className="flex items-center gap-2">
                 <SwitchButton
                   value={columnData.optional}
+                  disabled={disabled}
                   onChange={() =>
                     setColumnData((prev) => ({
                       ...prev,

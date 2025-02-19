@@ -8,6 +8,7 @@ interface FileUploadProps {
   fileName: string | undefined;
   accept: string;
   error: string;
+  disabled: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>, label: string) => void;
   handleClose: (label: string) => void;
 }
@@ -16,9 +17,10 @@ export default function FileUpload({
   label,
   fileName,
   accept,
-  error,
-  onChange,
+  disabled,
   handleClose,
+  onChange,
+  error,
 }: FileUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -49,12 +51,13 @@ export default function FileUpload({
         <span className="text-left text-sm w-full">{fileName}</span>
         <input
           ref={fileInputRef}
-          name={label}
-          onChange={handleFileChange}
           type="file"
-          className="hidden"
+          name={label}
           id={`file-input-${label}`}
           accept={accept}
+          disabled={disabled}
+          onChange={handleFileChange}
+          className="hidden"
         />
         <label htmlFor={`file-input-${label}`}>
           {fileName ? (

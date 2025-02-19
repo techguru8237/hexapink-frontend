@@ -13,6 +13,7 @@ interface ColumnToStepProps {
   setSteps: (steps: Step[]) => void;
   columns: Column[];
   setColumns: (columns: Column[]) => void;
+  disabled: boolean;
 }
 
 const ColumnToStep = React.memo(
@@ -22,6 +23,7 @@ const ColumnToStep = React.memo(
     steps,
     columns,
     setColumns,
+    disabled,
   }: ColumnToStepProps) => {
     const [search, setSearch] = useState<string>("");
     const [showSearch, setShowSearch] = useState<boolean>(true);
@@ -139,54 +141,56 @@ const ColumnToStep = React.memo(
             label="Step Name"
             type="text"
             value={selectedStep ? selectedStep.name : ""}
-            error=""
+            disabled={disabled}
             onChange={handleChangeStepName}
+            error=""
           />
 
-          {showSearch ? (
-            <div className="max-w-3xl bg-white border border-light-gray-1 rounded-lg flex flex-col text-dark">
-              <div className="p-4 border-b border-dashed border-light-gray-1 text-left">
-                <div className="flex items-center">
-                  <div className="flex flex-1 items-center gap-4">
-                    <LiaSearchSolid className="text-2xl" />
-                    <input
-                      type="text"
-                      placeholder="Search Countries"
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                      className="bg-transparent border-none outline-none"
+          {!disabled &&
+            (showSearch ? (
+              <div className="max-w-3xl bg-white border border-light-gray-1 rounded-lg flex flex-col text-dark">
+                <div className="p-4 border-b border-dashed border-light-gray-1 text-left">
+                  <div className="flex items-center">
+                    <div className="flex flex-1 items-center gap-4">
+                      <LiaSearchSolid className="text-2xl" />
+                      <input
+                        type="text"
+                        placeholder="Search Collections"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="bg-transparent border-none outline-none"
+                      />
+                    </div>
+                    <BsArrowLeftSquare
+                      onClick={() => setShowSearch(false)}
+                      className="cursor-pointer text-xl"
                     />
                   </div>
-                  <BsArrowLeftSquare
-                    onClick={() => setShowSearch(false)}
-                    className="cursor-pointer text-xl"
-                  />
+                </div>
+
+                <div className="flex flex-col p-2 gap-2 h-48 overflow-auto">
+                  {searchResults.map((column) => (
+                    <div
+                      key={column.id}
+                      onClick={() => handleAttachColumnToStep(column.id)}
+                      className={`border border-light-gray-3 rounded-lg p-2 flex items-center justify-between gap-2 cursor-pointer hover:border-dark-blue`}
+                    >
+                      <div className="flex flex-1 items-center">
+                        <span className="flex-1 text-left">{column.name}</span>
+                        <span className="bg-light-gray-2 text-xs">
+                          {column.type}
+                        </span>
+                      </div>
+                      <FaSquarePlus className="text-dark-blue text-xl" />
+                    </div>
+                  ))}
                 </div>
               </div>
-
-              <div className="flex flex-col p-2 gap-2 h-48 overflow-auto">
-                {searchResults.map((column) => (
-                  <div
-                    key={column.id}
-                    onClick={() => handleAttachColumnToStep(column.id)}
-                    className={`border border-light-gray-3 rounded-lg p-2 flex items-center justify-between gap-2 cursor-pointer hover:border-dark-blue`}
-                  >
-                    <div className="flex flex-1 items-center">
-                      <span className="flex-1 text-left">{column.name}</span>
-                      <span className="bg-light-gray-2 text-xs">
-                        {column.type}
-                      </span>
-                    </div>
-                    <FaSquarePlus className="text-dark-blue text-xl" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <TableListItemSkeleton
-              onClickAttachTable={() => setShowSearch(true)}
-            />
-          )}
+            ) : (
+              <TableListItemSkeleton
+                onClickAttachTable={() => setShowSearch(true)}
+              />
+            ))}
 
           <div className="flex flex-col gap-2">
             <div className="flex flex-col gap-2">
@@ -195,12 +199,13 @@ const ColumnToStep = React.memo(
                 {relatedColumns.map((column, index) => (
                   <StepedColumnItem
                     key={column.id}
+                    index={index}
                     column={column}
                     onDetachTable={handleDetachTable}
                     draggedColumnId={draggedColumnId}
                     setDraggedColumnId={setDraggedColumnId}
-                    index={index}
                     handleDrop={handleDrop}
+                    disabled={disabled}
                   />
                 ))}
               </div>

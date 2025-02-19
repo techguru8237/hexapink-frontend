@@ -14,14 +14,18 @@ import TableListItemSkeleton from "./TableListItemSkeleton";
 
 interface TableAttachmentProps {
   columns: Column[];
+  setColumns: (columns: Column[]) => void;
   selectedTable: TableItem | null;
   setSelectedTable: (table: TableItem) => void;
+  disabled: boolean;
 }
 
 export default function TableAttachment({
   columns,
+  setColumns,
   selectedTable,
   setSelectedTable,
+  disabled,
 }: TableAttachmentProps) {
   const [attachedTables, setAttachedTables] = useState<TableItem[]>([]);
   const [tableLoading, setTableLoading] = useState<boolean>(false);
@@ -79,6 +83,11 @@ export default function TableAttachment({
 
   const handleDettachTable = (id: string) => {
     const updatedTables = attachedTables.filter((table) => table._id !== id);
+    const updatedColumns = columns.map((col) => ({
+      ...col,
+      tableColumns: col.tableColumns?.filter((tc) => tc.tableId !== id),
+    }));
+    setColumns(updatedColumns);
     setAttachedTables(updatedTables);
   };
 
@@ -100,10 +109,13 @@ export default function TableAttachment({
                     className="bg-transparent border-none outline-none"
                   />
                 </div>
-                <BsArrowLeftSquare
+                <button
                   onClick={() => setShowSearch(false)}
-                  className="cursor-pointer text-xl"
-                />
+                  disabled={disabled}
+                  className="border-none outline-none p-0"
+                >
+                  <BsArrowLeftSquare className="text-xl" />
+                </button>
               </div>
             </div>
             {tableLoading ? (
@@ -116,6 +128,7 @@ export default function TableAttachment({
                   <TableListItem
                     key={table._id}
                     data={table}
+                    disabled={disabled}
                     handleAttachTable={handleAttachTable}
                   />
                 ))}
@@ -134,6 +147,7 @@ export default function TableAttachment({
               <AttachedTableItem
                 tableData={table}
                 selectedTable={selectedTable}
+                disabled={disabled}
                 onClickItem={(table) => setSelectedTable(table)}
                 onDelete={handleDettachTable}
               />

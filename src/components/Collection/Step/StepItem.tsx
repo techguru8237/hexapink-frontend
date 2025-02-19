@@ -12,6 +12,7 @@ interface StepItemProps {
   onDelete: (id: number) => void;
   onDragStart: () => void;
   onDragEnd: () => void;
+  disabled: boolean;
 }
 
 export default function StepItem({
@@ -21,6 +22,7 @@ export default function StepItem({
   onDelete,
   onDragStart,
   onDragEnd,
+  disabled,
 }: StepItemProps) {
   const isSelected = selectedStepId === step.id;
 
@@ -30,7 +32,7 @@ export default function StepItem({
     <div className="flex items-center">
       <div
         className="w-full flex items-center gap-2 cursor-pointer rounded-lg"
-        draggable
+        draggable={!disabled}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
       >
@@ -51,7 +53,7 @@ export default function StepItem({
             {isSelected ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp />}
             <span>{step.name}</span>
           </div>
-          {showDeleteIcon && (
+          {showDeleteIcon && !disabled && (
             <BsTrash3
               className="text-red cursor-pointer"
               onClick={() => onDelete(step.id)}

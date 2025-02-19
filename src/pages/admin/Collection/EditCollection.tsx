@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { PiCheckBold } from "react-icons/pi";
 import { FaRegFolderOpen } from "react-icons/fa";
-import { HiArrowNarrowRight, HiArrowNarrowLeft } from "react-icons/hi";
+import { GoArrowRight, GoArrowLeft } from "react-icons/go";
 
 import AdminHeader from "../../../components/Dashboard/AdminHeader";
 import VerticalStepBar from "../../../components/Collection/VerticalStepbar";
@@ -134,7 +134,7 @@ export default function EditCollection() {
               onClick={handleClickBackStep}
               className="flex items-center gap-1 border border-dark hover:border-dark-blue hover:text-dark-blue rounded-full px-4 py-2 cursor-pointer"
             >
-              <HiArrowNarrowLeft />
+              <GoArrowLeft />
               <span>{step === 1 ? "Back to Collections" : "Back"}</span>
             </div>
             <div
@@ -148,7 +148,7 @@ export default function EditCollection() {
               <span>
                 {step === steps.length ? "Edit Collection" : "Next"}
               </span>
-              {step === steps.length ? <PiCheckBold /> : <HiArrowNarrowRight />}
+              {step === steps.length ? <PiCheckBold /> : <GoArrowRight />}
             </div>
           </div>
 

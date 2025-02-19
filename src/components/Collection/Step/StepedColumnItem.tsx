@@ -3,12 +3,13 @@ import { BsTrash3 } from "react-icons/bs";
 import { RiDraggable } from "react-icons/ri";
 
 interface StepedColumnItemProps {
+  index: number;
   column: any; // Replace 'any' with your actual Column type if you have one
   onDetachTable: (columnId: number) => void;
   draggedColumnId: number | null;
   setDraggedColumnId: (columnId: number | null) => void;
-  index: number;
   handleDrop: (index: number) => void;
+  disabled: boolean;
 }
 
 const StepedColumnItem: React.FC<StepedColumnItemProps> = ({
@@ -17,6 +18,7 @@ const StepedColumnItem: React.FC<StepedColumnItemProps> = ({
   setDraggedColumnId,
   index,
   handleDrop,
+  disabled
 }) => {
   const [showDeleteIcon, setShowDeleteIcon] = useState(false);
 
@@ -24,7 +26,7 @@ const StepedColumnItem: React.FC<StepedColumnItemProps> = ({
     <div className="flex items-center">
       <div
         className="w-full flex items-center gap-2 cursor-pointer rounded-lg"
-        draggable
+        draggable={!disabled}
         onDragStart={() => setDraggedColumnId(column.id)}
         onDragEnd={() => setDraggedColumnId(null)}
         onDrop={() => handleDrop(index)}
@@ -44,7 +46,7 @@ const StepedColumnItem: React.FC<StepedColumnItemProps> = ({
               {column.type}
             </span>
           </div>
-          {showDeleteIcon && (
+          {showDeleteIcon && !disabled && (
             <BsTrash3
               className="text-red cursor-pointer"
               onClick={() => onDetachTable(column.id)}

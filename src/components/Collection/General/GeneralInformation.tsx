@@ -14,6 +14,7 @@ interface GeneralInformationProps {
   setFile: (file: File | null) => void;
   setType: (type: string) => void;
   setDescription: (description: string) => void;
+  disabled?: boolean;
   errors: CollectionCreateErrors;
   setErrors: (errors: CollectionCreateErrors) => void;
 }
@@ -27,6 +28,7 @@ export default function GeneralInformation({
   setFile,
   setType,
   setDescription,
+  disabled,
   errors,
   setErrors,
 }: GeneralInformationProps) {
@@ -59,6 +61,7 @@ export default function GeneralInformation({
             label="Title"
             type="text"
             value={title}
+            disabled={disabled ?? false}
             error={errors.title}
             onChange={handleChangeTitle}
           />
@@ -68,6 +71,7 @@ export default function GeneralInformation({
             fileName={fileName}
             accept="image/*"
             onChange={handleFileChange}
+            disabled={disabled ?? false}
             handleClose={() => setFile(null)}
             error={errors.file}
           />
@@ -76,6 +80,7 @@ export default function GeneralInformation({
             label="Type"
             selectedItem={type}
             onChange={(item) => setType(item)}
+            disabled={disabled ?? false}
             items={["Customer", "Business"]}
           />
         </div>
@@ -84,6 +89,7 @@ export default function GeneralInformation({
             label="Description"
             placeholder="Description"
             value={description}
+            disabled={disabled ?? false}
             error=""
             onChange={(e) => setDescription(e.target.value)}
           />
