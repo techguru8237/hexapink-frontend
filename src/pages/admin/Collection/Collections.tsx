@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { FaRegFolderOpen } from "react-icons/fa";
 import { CiFilter } from "react-icons/ci";
 import AdminHeader from "../../../components/Admin/AdminHeader";
-import Pagination from "../../../components/Pagination";
+import Pagination from "../../../components/Common/Pagination";
 import NewCollectionSkeleton from "../../../components/Collection/NewCollectionSkeleton";
 import CollectionListHeader from "../../../components/Collection/CollectionListHeader";
 import { CollectionListItem } from "../../../components/Collection/CollectionListItem";

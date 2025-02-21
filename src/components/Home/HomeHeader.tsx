@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import HexagonLoginButton from "./elements/desktop/HexagonLoginButton";
 import HexagonSignupButton from "./elements/desktop/HexagonSignupButton";
 import Login_M from "../../assets/TheHomePage/image/login_m.svg";
@@ -9,15 +9,15 @@ import LoginButton from "./elements/desktop/LoginButton";
 import CreateAccountButton_M from "./elements/desktop/CreateAccountButton_M";
 import CreateAccountButton from "../Signup/elements/CreateAccountButton";
 
-import useAuth from "../../hooks/useAuth";
 import Logo from "../../assets/TheHomePage/image/logo.svg";
 import "../../style/TheHomePage/font.css";
+import { useUserContext } from "../../contexts/User";
 
 const HomeHeader = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { isAuthenticated, logout } = useAuth();
+  const { currentUser, logout } = useUserContext();
 
   return (
     <div className="flex justify-between items-center w-full h-24 px-8 sm:px-12 md:px-20 lg:px-28 xl:px-36 2xl:px-48 border-b border-[#FFCCDD] dark:border-[#FFCCDD]">
@@ -34,7 +34,7 @@ const HomeHeader = () => {
       </div>
       {location.pathname == "/" && (
         <div className="flex justify-center items-center gap-3 lg:hidden z-10">
-          {isAuthenticated ? (
+          {currentUser ? (
             <div className="flex items-center gap-8">
               <div
                 className="login-button border"
@@ -71,14 +71,26 @@ const HomeHeader = () => {
       )}
       {location.pathname == "/" && (
         <div className="lg:flex justify-center items-center gap-7 hidden">
-          {isAuthenticated ? (
+          {currentUser ? (
             <div className="flex items-center gap-8">
-              <div
-                className="login-button border"
-                onClick={() => navigate("/admin")}
-              >
-                Dashboard
-              </div>
+              {currentUser.role === "admin" && (
+                <Link
+                  className="login-button border"
+                  to="/admin"
+                  // onClick={() => navigate("/admin")}
+                >
+                  Dashboard
+                </Link>
+              )}
+              {currentUser.role === "user" && (
+                <Link
+                  to="/user"
+                  className="login-button border"
+                  // onClick={() => navigate("/user")}
+                >
+                  Dashboard
+                </Link>
+              )}
               <div onClick={logout} className="home-button border">
                 Logout
               </div>

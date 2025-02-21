@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 interface StatCardProps {
   title: string;
-  value: string;
+  value: number;
   link?: string;
 }
 

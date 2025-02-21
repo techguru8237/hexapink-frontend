@@ -27,7 +27,7 @@ const steps = [
 
 const types = ["Business", "Client"];
 
-export default function CreateCollection() {
+export default function CreateFile() {
   const navigate = useNavigate();
   const { showLoading, hideLoading } = useLoading();
 

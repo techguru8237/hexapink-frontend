@@ -130,3 +130,22 @@ export interface PaymentItem {
   status?: string;
   createdAt: string;
 }
+
+// types.ts
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  balance: number;
+  status: string;
+  token: string;
+}
+
+export interface UserContextType {
+  currentUser: User | null;
+  login: (user: User) => void;
+  logout: () => void;
+}
+
+export type UserRole = "admin" | "manager" | "user";

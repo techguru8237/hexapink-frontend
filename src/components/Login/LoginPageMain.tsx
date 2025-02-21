@@ -16,23 +16,24 @@ import HomeButton from "../Home/elements/desktop/HomeButton";
 import "../../style/TheHomePage/style.css";
 
 // Hooks
-import useAuth from "../../hooks/useAuth";
 import { useLoading } from "../../contexts/Loading";
+import { useUserContext } from "../../contexts/User";
+import { User } from "../../types";
 
 export default function LoginPageMain() {
   const navigate = useNavigate();
-  const { isAuthenticated, login } = useAuth();
+  const { currentUser, login } = useUserContext();
   const { showLoading, hideLoading } = useLoading();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (currentUser) {
       navigate("/");
       toast.info("You are already logged in.");
     }
-  }, [isAuthenticated, navigate]);
+  }, [currentUser, navigate]);
 
   const handleSubmit = () => {
     if (!email || !password) {
@@ -46,8 +47,10 @@ export default function LoginPageMain() {
       password,
       (response) => {
         toast.success(response.message);
-        login(response.token, response.user);
-        navigate("/admin");
+        login(response.user as User);
+        response.user.role === "admin"
+          ? navigate("/admin")
+          : navigate("/user");
       },
       (error) => {
         if (error.response.data.errorType === "ACCOUNT_NOT_VERIFIED") {

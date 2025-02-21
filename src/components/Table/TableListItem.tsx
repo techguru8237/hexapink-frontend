@@ -8,7 +8,7 @@ import { PiTableLight } from "react-icons/pi";
 import { CiCircleInfo } from "react-icons/ci";
 import { MdOutlineModeEdit } from "react-icons/md";
 
-import Checkbox from "../Checkbox";
+import Checkbox from "../Common/Checkbox";
 import PreviewModal from "../Common/PreviewModal"; // Import the modal
 import LoadingElement from "../Common/LoadingElement";
 import { TableListItemProps } from "../../types";

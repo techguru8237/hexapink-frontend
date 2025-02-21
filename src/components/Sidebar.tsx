@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
+// React Icons
 import {
   PiDatabaseLight,
   PiDatabaseFill,
@@ -12,9 +13,9 @@ import {
   PiTableFill,
   PiBankLight,
   PiBankFill,
+  PiUserCircleLight,
 } from "react-icons/pi";
 import { RiDashboard3Line, RiDashboard3Fill } from "react-icons/ri";
-import { PiUserCircleLight } from "react-icons/pi";
 import { FaUserCircle, FaRegFolderOpen, FaFolderOpen } from "react-icons/fa";
 import {
   TbLayoutSidebarLeftExpand,
@@ -22,10 +23,17 @@ import {
 } from "react-icons/tb";
 import { BiLogOutCircle } from "react-icons/bi";
 
-import { SidebarItemType } from "./types";
-import logo from "../../assets/TheHomePage/image/logo.svg";
-import SidebarItem from "./SidebarItem";
-import useAuth from "../../hooks/useAuth";
+// Assets
+import logo from "../assets/TheHomePage/image/logo.svg";
+
+// Components
+import SidebarItem from "./Admin/SidebarItem";
+
+// Types
+import { SidebarItemType } from "./Admin/types";
+
+// Context
+import { useUserContext } from "../contexts/User";
 
 const items: SidebarItemType[] = [
   {
@@ -105,14 +113,16 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ type }) => {
-  const { isAuthenticated, logout } = useAuth();
-  const [isOpen, setIsOpen] = useState(false); 
+  const { currentUser, logout } = useUserContext();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div>
       {/* Mobile Toggle Button */}
       <div
-        className={`sm:hidden p-2 text-dark text-2xl border border-light-gray-3 rounded-full bg-white cursor-pointer absolute top-14 ${isOpen? "left-12" : "-left-4"}`}
+        className={`sm:hidden p-2 text-dark text-2xl border border-light-gray-3 rounded-full bg-white cursor-pointer absolute top-14 ${
+          isOpen ? "left-12" : "-left-4"
+        }`}
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? (
@@ -148,7 +158,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
             </div>
           </div>
 
-          {isAuthenticated && (
+          {currentUser && (
             <button
               onClick={logout}
               className="border border-dark-blue bg-transparent hover:bg-dark-blue text-dark hover:text-white flex items-center gap-2 p-1 sm:p-2"

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { PiTableLight } from "react-icons/pi";
 import { CiCircleInfo } from "react-icons/ci";
-import Checkbox from "../Checkbox";
+import Checkbox from "../Common/Checkbox";
 import { PaymentItem } from "../../types";
 import ConfirmDialog from "../Common/ConfirmDialog";
 import LoadingElement from "../Common/LoadingElement";

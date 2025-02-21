@@ -3,7 +3,7 @@ import { PiPackage } from "react-icons/pi";
 import { CiCircleInfo } from "react-icons/ci";
 import { FaRegUserCircle } from "react-icons/fa";
 import { GoPaperclip } from "react-icons/go";
-import Checkbox from "../Checkbox";
+import Checkbox from "../Common/Checkbox";
 
 interface OrderListItemProps {
   index: number;

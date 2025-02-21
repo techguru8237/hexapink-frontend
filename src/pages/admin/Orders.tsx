@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { CiFilter } from "react-icons/ci";
 import { PiPackage } from "react-icons/pi";
 import AdminHeader from "../../components/Admin/AdminHeader";
-import Pagination from "../../components/Pagination";
+import Pagination from "../../components/Common/Pagination";
 import OrderListHeader from "../../components/AdminOrder/OrderListHeader";
 import { OrderListItem } from "../../components/AdminOrder/OrderListItem";
 

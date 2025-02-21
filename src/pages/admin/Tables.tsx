@@ -12,7 +12,7 @@ import TableListHeader from "../../components/Table/TableListHeader";
 import CreateTable from "../../components/Table/CreateTable";
 import FilterPanel from "../../components/Table/FilterPanel";
 import AdminHeader from "../../components/Admin/AdminHeader";
-import Pagination from "../../components/Pagination";
+import Pagination from "../../components/Common/Pagination";
 
 import { TableItem } from "../../types";
 import LoadingElement from "../../components/Common/LoadingElement";

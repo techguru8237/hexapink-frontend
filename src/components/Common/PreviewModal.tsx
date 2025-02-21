@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { PreviewModalProps } from "../../types";
 import { IoCloseCircleOutline } from "react-icons/io5";
-import Pagination from "../Pagination";
+import Pagination from "./Pagination";
 
 const PreviewModal: React.FC<PreviewModalProps> = ({
   data,

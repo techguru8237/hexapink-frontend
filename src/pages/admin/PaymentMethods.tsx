@@ -9,7 +9,7 @@ import api from "../../actions/api";
 import { updateStatus } from "../../actions/payment";
 import { PaymentItem } from "../../types";
 
-import Pagination from "../../components/Pagination";
+import Pagination from "../../components/Common/Pagination";
 import AdminHeader from "../../components/Admin/AdminHeader";
 import LoadingElement from "../../components/Common/LoadingElement";
 import EditPayment from "../../components/PaymentMethod/EditPayment";

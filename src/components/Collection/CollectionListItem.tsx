@@ -10,7 +10,7 @@ import { BiPencil } from "react-icons/bi";
 
 import api from "../../actions/api";
 import { Collection } from "../../types";
-import Checkbox from "../Checkbox";
+import Checkbox from "../Common/Checkbox";
 import LoadingElement from "../Common/LoadingElement";
 import ConfirmDialog from "../Common/ConfirmDialog";
 import { IconButton, Tooltip } from "@mui/material";

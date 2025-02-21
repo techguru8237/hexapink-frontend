@@ -1,7 +1,8 @@
-import Sidebar from "../../components/Admin/Sidebar";
+import Sidebar from "../../components/Sidebar";
 import { Outlet } from "react-router-dom";
 
-const DashboardLayout = () => {
+
+const UserLayout = () => {
   return (
     <div className="max-h-screen flex font-raleway">
       <Sidebar type="user" />
@@ -12,4 +13,4 @@ const DashboardLayout = () => {
   );
 };
 
-export default DashboardLayout;
+export default UserLayout;

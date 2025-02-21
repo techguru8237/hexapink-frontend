@@ -6,8 +6,11 @@ import RecentFiles from "./RecentFiles";
 import RecentTopUp from "./RecentTopup";
 
 import StatCard from "./StateCard";
+import { useUserContext } from "../../../contexts/User";
 
 export default function Dashboard() {
+  const { currentUser } = useUserContext();
+
   return (
     <div className="h-full flex flex-col">
       <UserHeader
@@ -23,10 +26,14 @@ export default function Dashboard() {
         </div>
 
         <div className="w-80 h-full flex flex-col gap-6 p-4 border-l-2 border-light-gray-1">
-          <StatCard title="Balance" value="$5,200" link="/user/wallet" />
-          <StatCard title="Files" value="15" link="/user/files" />
-          <StatCard title="Leads" value="15000" />
-          <StatCard title="Look Ups" value="75" link="/user/lookups" />
+          <StatCard
+            title="Balance"
+            value={currentUser?.balance ?? 0}
+            link="/user/wallet"
+          />
+          <StatCard title="Files" value={15} link="/user/files" />
+          <StatCard title="Leads" value={15000} />
+          <StatCard title="Look Ups" value={75} link="/user/lookups" />
         </div>
       </div>
     </div>

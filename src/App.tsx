@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { Bounce, ToastContainer } from "react-toastify";
 import "./App.css";
 
+// Pages
 import HomePage from "./pages/Home";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
@@ -10,7 +11,6 @@ import ResetPasswordPage from "./pages/auth/ResetPassword";
 
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/Dashboard";
-import UserDashboard from './pages/user/Dashboard/Dashboard'
 import Tables from "./pages/admin/Tables";
 import Orders from "./pages/admin/Orders";
 import Users from "./pages/admin/Users";
@@ -21,10 +21,13 @@ import EditCollection from "./pages/admin/Collection/EditCollection";
 import ViewCollection from "./pages/admin/Collection/ViewCollection";
 
 import UserLayout from "./pages/user/UserLayout";
+import UserDashboard from "./pages/user/Dashboard/Dashboard";
 import Files from "./pages/user/File/Files";
 import Lookup from "./pages/user/Lookup";
 
-
+// Components
+import ProtectedRoute from "./pages/ProtectedRoute";
+import Wallet from "./pages/user/Wallet/Wallet";
 
 function App() {
   return (
@@ -51,7 +54,14 @@ function App() {
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
 
         {/* Admin Routes */}
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager"]} redirectTo="/">
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<Navigate to="dashboard" />} />
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="orders" element={<Orders />} />
@@ -71,12 +81,20 @@ function App() {
         </Route>
 
         {/* User Routes */}
-        <Route path="/user" element={<UserLayout />}>
+        <Route
+          path="/user"
+          element={
+            <ProtectedRoute allowedRoles={["user", "manager"]} redirectTo="/">
+              <UserLayout />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<Navigate to="dashboard" />} />
           <Route path="dashboard" element={<UserDashboard />} />
           <Route path="files" element={<Files />} />
           <Route path="orders" element={<Orders />} />
           <Route path="lookup" element={<Lookup />} />
+          <Route path="wallet" element={<Wallet />} />
         </Route>
 
         {/* Fallback Route */}

@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material";
 
+import { UserProvider } from "./contexts/User.tsx";
 import { LoadingProvider } from "./contexts/Loading.tsx";
 import { CurrencyProvider } from "./contexts/Currency.tsx";
 
@@ -73,7 +74,9 @@ createRoot(document.getElementById("root")!).render(
       <LoadingProvider>
         <CurrencyProvider>
           <ThemeProvider theme={theme}>
-            <App />
+            <UserProvider>
+                <App />
+            </UserProvider>
           </ThemeProvider>
         </CurrencyProvider>
       </LoadingProvider>

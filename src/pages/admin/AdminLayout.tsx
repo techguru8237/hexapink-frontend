@@ -1,21 +1,9 @@
-import Sidebar from "../../components/Admin/Sidebar";
-import { Outlet, useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import { useEffect } from "react";
+import { Outlet } from "react-router-dom";
+
+
+import Sidebar from "../../components/Sidebar";
 
 const DashboardLayout = () => {
-  const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-    } else {
-      if (localStorage.getItem("userType") != "Manager") {
-        navigate('/user')
-      }
-    }
-  }, [isAuthenticated]);
 
   return (
     <div className="h-full flex flex-row items-stretch border-b border-light-gray-3 font-raleway">

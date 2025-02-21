@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import api from "./api";
+import { User } from "../types";
 
 interface SignupData {
   firstName: string;
@@ -21,9 +22,7 @@ export interface Responsetype {
 interface LoginResponse {
   message: string;
   token: string;
-  user: {
-    id: string;
-  };
+  user: User
 }
 
 export const verifyEmail = async (

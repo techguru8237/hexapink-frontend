@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { PiFileTextBold } from "react-icons/pi";
 import { CiFilter } from "react-icons/ci";
 import Header from "../../../components/Admin/Header";
-import Pagination from "../../../components/Pagination";
+import Pagination from "../../../components/Common/Pagination";
 import NewFileSkeleton from "../../../components/File/NewFileSkeleton";
 import FileListHeader from "../../../components/File/FileListHeader";
 import { FileListItem } from "../../../components/File/FileListItem";
