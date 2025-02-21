@@ -1,7 +1,7 @@
 import React from "react";
-import FileUpload from "../../Common/FileUpload";
-import Input from "../../Common/Input";
-import TextArea from "../../Common/TextArea";
+import FileUpload from "../../Common/Inputs/FileUpload";
+import Input from "../../Common/Inputs/Input";
+import TextArea from "../../Common/Inputs/TextArea";
 import Selection from "../../Common/Selection";
 import { CollectionCreateErrors } from "../../../types";
 
@@ -10,12 +10,12 @@ interface GeneralInformationProps {
   fileName: string | undefined;
   type: string;
   description: string;
+  disabled?: boolean;
+  errors: CollectionCreateErrors;
   setTitle: (title: string) => void;
   setFile: (file: File | null) => void;
   setType: (type: string) => void;
   setDescription: (description: string) => void;
-  disabled?: boolean;
-  errors: CollectionCreateErrors;
   setErrors: (errors: CollectionCreateErrors) => void;
 }
 

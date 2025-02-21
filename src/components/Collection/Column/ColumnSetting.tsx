@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Column } from "../../../types";
-import Input from "../../Common/Input";
+import Input from "../../Common/Inputs/Input";
 import SwitchButton from "../../Common/SwitchButton";
 import ColumnTypeSelect from "./ColumnTypeSelect";
-import CurrencyInput from "../../Common/CurrencyInput";
+import CurrencyInput from "../../Common/Inputs/CurrencyInput";
 
 interface ColumnSettingProps {
   columns: Column[];

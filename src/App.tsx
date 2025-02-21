@@ -3,13 +3,14 @@ import { Bounce, ToastContainer } from "react-toastify";
 import "./App.css";
 
 import HomePage from "./pages/Home";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPasswordPage from "./pages/ResetPassword";
+import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPasswordPage from "./pages/auth/ResetPassword";
 
 import AdminLayout from "./pages/admin/AdminLayout";
-import Dashboard from "./pages/admin/Dashboard";
+import AdminDashboard from "./pages/admin/Dashboard";
+import UserDashboard from './pages/user/Dashboard/Dashboard'
 import Tables from "./pages/admin/Tables";
 import Orders from "./pages/admin/Orders";
 import Users from "./pages/admin/Users";
@@ -20,7 +21,7 @@ import EditCollection from "./pages/admin/Collection/EditCollection";
 import ViewCollection from "./pages/admin/Collection/ViewCollection";
 
 import UserLayout from "./pages/user/UserLayout";
-import Files from "./pages/user/Files";
+import Files from "./pages/user/File/Files";
 import Lookup from "./pages/user/Lookup";
 
 
@@ -52,7 +53,7 @@ function App() {
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Navigate to="dashboard" />} />
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="orders" element={<Orders />} />
           <Route path="payments/:page?" element={<PaymentMethods />} />
           <Route path="collections" element={<Collections />} />
@@ -72,7 +73,7 @@ function App() {
         {/* User Routes */}
         <Route path="/user" element={<UserLayout />}>
           <Route index element={<Navigate to="dashboard" />} />
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="dashboard" element={<UserDashboard />} />
           <Route path="files" element={<Files />} />
           <Route path="orders" element={<Orders />} />
           <Route path="lookup" element={<Lookup />} />

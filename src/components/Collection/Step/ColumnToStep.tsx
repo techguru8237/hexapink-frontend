@@ -4,7 +4,7 @@ import { BsArrowLeftSquare } from "react-icons/bs";
 import { FaSquarePlus } from "react-icons/fa6";
 import { Column, Step } from "../../../types";
 import TableListItemSkeleton from "../Table/TableListItemSkeleton";
-import Input from "../../Common/Input";
+import Input from "../../Common/Inputs/Input";
 import StepedColumnItem from "./StepedColumnItem";
 
 interface ColumnToStepProps {

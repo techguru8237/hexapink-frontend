@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 
 import { CiFilter } from "react-icons/ci";
-import AdminHeader from "../../components/Dashboard/AdminHeader";
+import { PiPackage } from "react-icons/pi";
+import AdminHeader from "../../components/Admin/AdminHeader";
 import Pagination from "../../components/Pagination";
 import OrderListHeader from "../../components/AdminOrder/OrderListHeader";
 import { OrderListItem } from "../../components/AdminOrder/OrderListItem";
-
-import { PiPackage } from "react-icons/pi";
 
 const dummyData = Array.from({ length: 25 }, (_, index) => ({
   id: index,
@@ -52,10 +51,10 @@ export default function Orders() {
   const currentFiles = filteredFiles.slice(startIndex, endIndex);
 
   return (
-    <div>
+    <div className="h-full flex flex-col">
       <AdminHeader icon={<PiPackage />} label="Orders" />
 
-      <div className="bg-light-gray border-b border-light-gray-1 flex">
+      <div className="h-full bg-light-gray border-b border-light-gray-1 flex">
         <div className="flex flex-col flex-1 border-r border-light-gray-1">
           <div className="px-8 py-4 border-b border-light-gray-1 flex items-center justify-between text-light-dark">
             {selectedFiles.length > 0 && (

@@ -42,13 +42,15 @@ export const PaymentListItem: React.FC<PaymentListItemProps> = ({
   );
 
   const onClickStatus = (event: React.MouseEvent, id: string) => {
-    event.stopPropagation();
     event.preventDefault();
+    event.stopPropagation();
     setSelectedPaymentId(id);
     setOpenStatusChangeConfirmDialog(true);
   };
 
-  const handleConfirmChange = () => {
+  const handleConfirmChange = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
     if (selectedPaymentId) {
       handleStatusChange(selectedPaymentId);
     }
@@ -128,7 +130,10 @@ export const PaymentListItem: React.FC<PaymentListItemProps> = ({
           <LoadingElement width="32" color="blue" />
         ) : (
           <div className="flex flex-col gap-2">
-            <BiPencil onClick={() => handleEditClick(data._id)} className="cursor-pointer hover:text-dark-blue" />
+            <BiPencil
+              onClick={() => handleEditClick(data._id)}
+              className="cursor-pointer hover:text-dark-blue"
+            />
             <BsTrash3
               onClick={handleDelete}
               className="cursor-pointer hover:text-red"

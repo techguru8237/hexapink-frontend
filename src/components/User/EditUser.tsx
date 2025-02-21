@@ -9,7 +9,7 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 
 import { UserItem } from "../../types";
 import { updateUser } from "../../actions/user";
-import Input from "../Common/Input";
+import Input from "../Common/Inputs/Input";
 
 interface CountryOption {
   value: string;

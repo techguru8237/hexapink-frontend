@@ -13,7 +13,7 @@ interface ConfirmDialogProps {
   description: string;
   openDialog: boolean;
   handleCloseDialog: () => void;
-  handleConfirmChange: () => void;
+  handleConfirmChange: (event: React.MouseEvent) => void;
 }
 
 export default function ConfirmDialog({

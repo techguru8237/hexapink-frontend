@@ -5,7 +5,7 @@ import { PiCheckBold } from "react-icons/pi";
 import { FaRegFolderOpen } from "react-icons/fa";
 import { GoArrowRight, GoArrowLeft } from "react-icons/go";
 
-import AdminHeader from "../../../components/Dashboard/AdminHeader";
+import AdminHeader from "../../../components/Admin/AdminHeader";
 import VerticalStepBar from "../../../components/Collection/VerticalStepbar";
 import GeneralInformation from "../../../components/Collection/General/GeneralInformation";
 import CountrySelect from "../../../components/Common/CountrySelect";

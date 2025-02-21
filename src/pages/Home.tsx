@@ -1,14 +1,13 @@
-import HomeHeader from "../components/TheHomePage/HomeHeader";
+import HomeHeader from "../components/Home/HomeHeader";
+import Hero from "../components/Home/Hero";
+import Features from "../components/Home/Features/Features";
+import Testimonical from "../components/Home/Testimonical";
+import NavigationGuide from "../components/Home/NavigationGuide";
+import RecommendedCollections from "../components/Home/RecommendedCollections";
+import Faq from "../components/Home/Faq";
+import ContactUs from "../components/Home/ContactUs";
+
 import BackgroundImage1 from "../assets/TheHomePage/image/bg1.svg";
-import HomeSectionOne from "../components/TheHomePage/HomeSectionOne";
-import HomeSectionTwo from "../components/TheHomePage/HomeSectionTwo";
-import HomeSectionThree from "../components/TheHomePage/HomeSectionThree";
-import HomeSectionFour from "../components/TheHomePage/HomeSectionFour";
-import HomeSectionFive from "../components/TheHomePage/HomeSectionFive";
-import HomeSectionSix from "../components/TheHomePage/HomeSectionSix";
-import HomeSectionSeven from "../components/TheHomePage/HomeSectionSeven";
-import HomeSectionEight from "../components/TheHomePage/HomeSectionEight";
-import HomeSectionNine from "../components/TheHomePage/HomeSectionNine";
 
 export default function HomePage() {
   return (
@@ -17,15 +16,13 @@ export default function HomePage() {
         <img src={BackgroundImage1} alt="" />
       </div>    
       <HomeHeader />
-      <HomeSectionOne />
-      <HomeSectionTwo />
-      <HomeSectionThree />
-      <HomeSectionFour />
-      <HomeSectionFive />
-      <HomeSectionSix />
-      <HomeSectionSeven />
-      <HomeSectionEight />
-      <HomeSectionNine />
+      <Hero />
+      <Features />
+      <Testimonical />
+      <NavigationGuide />
+      <RecommendedCollections />
+      <Faq />
+      <ContactUs />
     </div>
   );
 }

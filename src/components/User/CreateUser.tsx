@@ -7,7 +7,7 @@ import "react-phone-number-input/style.css";
 import { PiPlusCircle } from "react-icons/pi";
 import { IoCloseCircleOutline } from "react-icons/io5";
 
-import Input from "../Common/Input";
+import Input from "../Common/Inputs/Input";
 import { createUser } from "../../actions/user";
 
 interface CountryOption {

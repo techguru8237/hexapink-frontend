@@ -3,8 +3,8 @@ import { JSX, useEffect, useState } from "react";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { GoArrowRight, GoArrowLeft } from "react-icons/go";
 
-import Input from "../Common/Input";
-import FileUpload from "../Common/FileUpload";
+import Input from "../Common/Inputs/Input";
+import FileUpload from "../Common/Inputs/FileUpload";
 import { PiPlusCircle } from "react-icons/pi";
 import HorizontalStep from "./HorizontalStep";
 import { formApi } from "../../actions/api";

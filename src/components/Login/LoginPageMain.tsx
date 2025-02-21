@@ -2,14 +2,20 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 
+// Actions
 import { handleLogin, requireResendCode } from "../../actions/auth";
+
+// Components
 import PasswordField from "./elements/PasswordField";
 import InputField from "./elements/InputField";
-import CheckBox from "../TheHomePage/elements/desktop/CheckBox";
+import CheckBox from "../Home/elements/desktop/CheckBox";
 import LoginButton from "./elements/LoginButton";
-import HomeButton from "../TheHomePage/elements/desktop/HomeButton";
+import HomeButton from "../Home/elements/desktop/HomeButton";
 
+// Styles
 import "../../style/TheHomePage/style.css";
+
+// Hooks
 import useAuth from "../../hooks/useAuth";
 import { useLoading } from "../../contexts/Loading";
 

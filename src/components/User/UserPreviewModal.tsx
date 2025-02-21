@@ -37,14 +37,20 @@ const UserPreviewModal: React.FC<UserPreviewModalProps> = ({
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>User Details</DialogTitle>
       <DialogContent>
-        <table className="w-full border border-collapse font-raleway">
+        <table className="w-full font-raleway">
+          <thead>
+            <tr>
+              <th className="p-2">Key</th>
+              <th className="p-2">Value</th>
+            </tr>
+          </thead>
           <tbody>
             {userDetails.map((detail, index) => (
               <tr key={index}>
-                <td className="border border-light-gray-3 p-2">
+                <td className="p-2">
                   {detail.label}
                 </td>
-                <td className="border border-light-gray-3 p-2">
+                <td className="p-2">
                   {detail.label === "Verified" ? (
                     <span
                       className={`rounded-lg px-2 py-1 text-sm border ${

@@ -1,4 +1,4 @@
-import CurrencyInput from "../Common/CurrencyInput";
+import CurrencyInput from "../Common/Inputs/CurrencyInput";
 
 interface PricingProps {
   fee: number;

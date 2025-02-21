@@ -11,7 +11,7 @@ import NewTableSkeleton from "../../components/Table/NewTableSkeleton";
 import TableListHeader from "../../components/Table/TableListHeader";
 import CreateTable from "../../components/Table/CreateTable";
 import FilterPanel from "../../components/Table/FilterPanel";
-import AdminHeader from "../../components/Dashboard/AdminHeader";
+import AdminHeader from "../../components/Admin/AdminHeader";
 import Pagination from "../../components/Pagination";
 
 import { TableItem } from "../../types";

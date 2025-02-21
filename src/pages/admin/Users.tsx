@@ -6,7 +6,7 @@ import { CiFilter } from "react-icons/ci";
 import { FaRegUserCircle } from "react-icons/fa";
 
 import Pagination from "../../components/Pagination";
-import AdminHeader from "../../components/Dashboard/AdminHeader";
+import AdminHeader from "../../components/Admin/AdminHeader";
 import LoadingElement from "../../components/Common/LoadingElement";
 import UserListHeader from "../../components/User/UserListHeader";
 import { UserListItem } from "../../components/User/UserListItem";

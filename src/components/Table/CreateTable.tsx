@@ -2,11 +2,11 @@ import { JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import Input from "../Common/Input";
-import FileUpload from "../Common/FileUpload";
+import Input from "../Common/Inputs/Input";
+import FileUpload from "../Common/Inputs/FileUpload";
 import LoadingElement from "../Common/LoadingElement";
 import ProgressBar from "../Common/ProgressBar"; // Import the ProgressBar
-import { TagInput } from "../Common/TagInput"; // Import the TagInput component
+import { TagInput } from "../Common/Inputs/TagInput"; // Import the TagInput component
 
 import { PiPlusCircle } from "react-icons/pi";
 import { IoCloseCircleOutline } from "react-icons/io5";

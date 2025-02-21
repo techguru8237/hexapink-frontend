@@ -1,10 +1,8 @@
 import { JSX, useState } from "react";
-
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { GoArrowRight, GoArrowLeft } from "react-icons/go";
-
-import Input from "../Common/Input";
-import FileUpload from "../Common/FileUpload";
+import Input from "../Common/Inputs/Input";
+import FileUpload from "../Common/Inputs/FileUpload";
 import { PiPlusCircle } from "react-icons/pi";
 import HorizontalStep from "./HorizontalStep";
 import { formApi } from "../../actions/api";
@@ -17,8 +15,9 @@ interface CreatePaymentProps {
 
 const steps = [
   { label: "General", number: 1 },
-  { label: "Details", number: 2 },
-  { label: "Done", number: 3 },
+  { label: "Bank", number: 2 },
+  { label: "Stripe", number: 3 },
+  { label: "Done", number: 4 },
 ];
 
 const CreatePayment = ({ onClose }: CreatePaymentProps): JSX.Element => {
@@ -33,6 +32,8 @@ const CreatePayment = ({ onClose }: CreatePaymentProps): JSX.Element => {
   const [iban, setIban] = useState<string>("");
   const [rib, setRib] = useState<string>("");
   const [swift, setSwift] = useState<string>("");
+  const [stripePublicKey, setStripePublicKey] = useState<string>("");
+  const [stripeSecretKey, setStripeSecretKey] = useState<string>("");
 
   const handleFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -54,7 +55,7 @@ const CreatePayment = ({ onClose }: CreatePaymentProps): JSX.Element => {
     }
   };
 
-  const handleCreateBank = async () => {
+  const handleCreatePaymentMethod = async () => {
     try {
       const formData = new FormData();
       formData.append("bankName", bankName);
@@ -63,6 +64,8 @@ const CreatePayment = ({ onClose }: CreatePaymentProps): JSX.Element => {
       formData.append("rib", rib);
       formData.append("iban", iban);
       formData.append("swift", swift);
+      formData.append("stripePublicKey", stripePublicKey);
+      formData.append("stripeSecretKey", stripeSecretKey);
       if (bankLogo) {
         formData.append("bankLogo", bankLogo);
       }
@@ -75,12 +78,11 @@ const CreatePayment = ({ onClose }: CreatePaymentProps): JSX.Element => {
         formData
       );
       navigate("/admin/payments?page=0");
-
-      //   toast.success("Created Payment method successfully");
+      toast.success("Created Payment method successfully");
     } catch (error: any) {
       toast.error(error.response.data.message);
     }
-    setStep(3);
+    setStep(4);
   };
 
   return (
@@ -171,51 +173,61 @@ const CreatePayment = ({ onClose }: CreatePaymentProps): JSX.Element => {
         )}
 
         {step === 3 && (
+          <div className="w-full p-6 border-b border-dashed border-light-gray-3 flex flex-col gap-4">
+            <Input
+              label="Public Key"
+              value={stripePublicKey}
+              type="text"
+              error=""
+              onChange={(e) => setStripePublicKey(e.target.value)}
+            />
+            <Input
+              label="Secret Key"
+              value={stripeSecretKey}
+              type="text"
+              error=""
+              onChange={(e) => setStripeSecretKey(e.target.value)}
+            />
+          </div>
+        )}
+
+        {step === 4 && (
           <div className="w-full p-6 border-b border-dashed border-light-gray-3">
             <div className="w-full bg-light-green-2 border border-light-green-1 text-green p-2 rounded-lg text-sm">
-              Your Bank Was Created Successfully
+              Your Payment Method Was Created Successfully
             </div>
           </div>
         )}
 
         {/* Action Buttons */}
-        <div className="w-full p-6 text-sm text-dark-blue">
-          {step === 1 && (
+        <div className="w-full flex items-center gap-2 p-6 text-sm text-dark-blue">
+          {step > 1 && (
             <button
-              onClick={() => setStep(2)}
-              className="w-full border border-dark-blue rounded-full flex items-center justify-center gap-2"
+              onClick={() => setStep(step - 1)}
+              className="border border-dark-blue rounded-full flex items-center justify-center gap-2"
+            >
+              <GoArrowLeft />
+              Back
+            </button>
+          )}
+
+          {step < 3 && (
+            <button
+              onClick={() => setStep(step + 1)}
+              className="w-full border border-dark-blue rounded-full flex items-center justify-center gap-2 p-2"
             >
               Next
               <GoArrowRight />
             </button>
           )}
 
-          {step === 2 && (
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setStep(1)}
-                className="border border-dark-blue rounded-full flex items-center justify-center gap-2"
-              >
-                <GoArrowLeft />
-                Back
-              </button>
-              <button
-                onClick={handleCreateBank}
-                className="flex-1 bg-dark-blue text-white rounded-full flex items-center justify-center gap-2"
-              >
-                <PiPlusCircle className="text-xl" />
-                Create Bank
-              </button>
-            </div>
-          )}
-
           {step === 3 && (
             <button
-              onClick={() => setStep(1)}
-              className="w-full bg-dark-blue text-white rounded-full flex items-center justify-center gap-2"
+              onClick={handleCreatePaymentMethod}
+              className="flex-1 bg-dark-blue text-white rounded-full flex items-center justify-center gap-2"
             >
               <PiPlusCircle className="text-xl" />
-              Create Another Bank
+              Create Payment
             </button>
           )}
         </div>
