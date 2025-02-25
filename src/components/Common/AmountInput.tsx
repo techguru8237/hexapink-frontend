@@ -1,7 +1,7 @@
 import { NumericFormat } from "react-number-format";
 import { FiPlus, FiMinus } from "react-icons/fi";
 
-import { useCurrency } from "../../../contexts/Currency";
+import { useCurrency } from "../../contexts/Currency";
 import { IoMdRadioButtonOn } from "react-icons/io";
 
 interface InputProps {
@@ -12,7 +12,7 @@ interface InputProps {
   setAmountType: (value: string) => void;
 }
 
-export default function TopUpAmountInput({
+export default function AmountInput({
   label,
   amountType,
   amount,
@@ -89,7 +89,7 @@ export default function TopUpAmountInput({
             const { floatValue } = amount; // Get the float value directly
             setAmount(floatValue || 0); // Update the value
           }}
-          className="p-1.5 bg-transparent border-none outline-none"
+          className="w-full p-1.5 bg-transparent border-none outline-none"
         />
         <div className="flex items-center gap-1">
           <span className="bg-light-gray-1 px-2 box-content rounded-md text-sm">

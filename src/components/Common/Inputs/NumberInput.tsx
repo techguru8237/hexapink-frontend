@@ -5,17 +5,18 @@ import { useCurrency } from "../../../contexts/Currency";
 
 interface InputProps {
   label: string;
-  type: string; // This can remain as is if you want to keep flexibility
   value: number | undefined;
   disabled: boolean;
+  isCurrency: boolean;
   onChange: (value: number) => void;
   error: string;
 }
 
-export default function CurrencyInput({
+export default function NumberInput({
   label,
   value,
   disabled,
+  isCurrency,
   onChange,
   error,
 }: InputProps) {
@@ -58,9 +59,11 @@ export default function CurrencyInput({
         />
         <span>{error}</span>
         <div className="flex items-center gap-1">
-          <span className="bg-light-gray-1 px-2 box-content rounded-md text-sm">
-            {currency}
-          </span>
+          {isCurrency && (
+            <span className="bg-light-gray-1 px-2 box-content rounded-md text-sm">
+              {currency}
+            </span>
+          )}
           <div className="flex items-center border border-light-gray-3 rounded-md divide-x divide-light-gray-3 text-dark">
             <button
               disabled={disabled}

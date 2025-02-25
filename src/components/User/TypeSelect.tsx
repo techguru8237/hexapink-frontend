@@ -1,24 +1,25 @@
 import { IoMdRadioButtonOn } from "react-icons/io";
 
-interface SelectionProps {
-  label: string;
+interface TypeSelectProps {
   items: string[];
   selectedItem: string;
   disabled: boolean;
   onChange: (item: string) => void;
 }
 
-export default function Selection({
-  label,
+export default function TypeSelect({
   items,
   selectedItem,
   disabled,
   onChange,
-}: SelectionProps) {
+}: TypeSelectProps) {
   return (
-    <div className="flex flex-col gap-1">
-      <label htmlFor="" className="text-dark text-left text-sm">{label}</label>
-      <div className="flex flex-wrap gap-2">
+    <div className="max-w-3xl bg-white border border-light-gray-1 rounded-lg flex flex-col text-dark">
+      <div className="p-4 border-b border-dashed border-light-gray-1 text-left font-raleway font-bold">
+        Type
+      </div>
+
+      <div className="flex flex-wrap p-4 gap-2">
         {items.map((item) => (
           <button
             key={item}

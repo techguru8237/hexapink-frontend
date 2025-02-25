@@ -1,4 +1,4 @@
-import CurrencyInput from "../Common/Inputs/CurrencyInput";
+import NumberInput from "../Common/Inputs/NumberInput";
 
 interface PricingProps {
   fee: number;
@@ -22,18 +22,18 @@ export default function Pricing({
       </div>
 
       <div className="flex items-center gap-8 p-6">
-        <CurrencyInput
+        <NumberInput
           label="Base Fee Per Lead"
-          type="number"
           value={fee}
+          isCurrency={true}
           disabled={disabled ?? false}
           onChange={setFee}
           error=""
         />
-        <CurrencyInput
+        <NumberInput
           label="Discount Maximum"
-          type="number"
           value={discount}
+          isCurrency={true}
           disabled={disabled ?? false}
           onChange={setDiscount}
           error=""

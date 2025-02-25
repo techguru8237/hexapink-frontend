@@ -16,8 +16,8 @@ export default function Input({
   onChange,
 }: InputProps) {
   return (
-    <div className="w-full flex flex-col items-start">
-      <label htmlFor={label} className="text-md text-light-dark font-medium">
+    <div className="w-full flex flex-col gap-1 items-start">
+      <label htmlFor={label} className="text-sm text-light-dark font-medium">
         {label}
       </label>
       <input

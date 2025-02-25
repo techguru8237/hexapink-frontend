@@ -91,6 +91,12 @@ export interface Column {
   stepName?: string;
 }
 
+export interface NewColumn {
+  name: string;
+  type: string;
+  values: string[];
+}
+
 export interface Collection {
   _id: string;
   title: string;

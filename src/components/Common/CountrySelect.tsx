@@ -81,9 +81,9 @@ export default function CountrySelect({
             <FaChevronDown className="text-sm" />
           )}{" "}
           {/* Arrow icon */}
-          <span className="ml-1">
+          {/* <span className="ml-1">
             {showAllCountries ? "Show Less" : "Show All"}
-          </span>
+          </span> */}
         </button>
       </div>
 

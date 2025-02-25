@@ -1,7 +1,8 @@
 import React from "react";
 
 interface Step {
-  label: string;
+  id: number;
+  name: string;
 }
 
 interface VerticalStepBarProps {
@@ -48,7 +49,7 @@ const VerticalStepBar: React.FC<VerticalStepBarProps> = ({
                   : "text-light-gray-3"
               }`}
             >
-              {step.label}
+              {step.name}
             </span>
 
             {index != steps.length - 1 && (

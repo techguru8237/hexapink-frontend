@@ -17,10 +17,10 @@ import StepSetting from "../../../components/Collection/Step/StepSetting";
 import api from "../../../actions/api";
 
 const steps = [
-  { label: "General", step: 1 },
-  { label: "Columns", step: 2 },
-  { label: "Tables", step: 3 },
-  { label: "Steps", step: 4 },
+  { name: "General", id: 1 },
+  { name: "Columns", id: 2 },
+  { name: "Tables", id: 3 },
+  { name: "Steps", id: 4 },
 ];
 
 const types = ["Business", "Client"];

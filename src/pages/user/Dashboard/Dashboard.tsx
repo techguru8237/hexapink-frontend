@@ -18,8 +18,8 @@ export default function Dashboard() {
         label="Dashborad"
       />
 
-      <div className="w-full h-full overflow-y-auto flex bg-light-gray">
-        <div className="w-full h-full flex flex-col">
+      <div className="h-full overflow-y-auto flex flex-1 bg-light-gray">
+        <div className="h-full flex flex-1 flex-col">
           <RecenOrders />
           <RecentFiles />
           <RecentTopUp />

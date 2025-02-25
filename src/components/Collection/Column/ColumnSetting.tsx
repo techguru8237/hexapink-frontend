@@ -3,7 +3,7 @@ import { Column } from "../../../types";
 import Input from "../../Common/Inputs/Input";
 import SwitchButton from "../../Common/SwitchButton";
 import ColumnTypeSelect from "./ColumnTypeSelect";
-import CurrencyInput from "../../Common/Inputs/CurrencyInput";
+import NumberInput from "../../Common/Inputs/NumberInput";
 
 interface ColumnSettingProps {
   columns: Column[];
@@ -107,11 +107,11 @@ export default function ColumnSetting({
           </div>
           {columnData.isAdditionalFee && (
             <div className="flex flex-col gap-4">
-              <CurrencyInput
+              <NumberInput
                 label="Additional Fee"
-                type="number"
                 value={columnData.additionalFee}
                 disabled={disabled}
+                isCurrency={true}
                 onChange={(value) =>
                   setColumnData({ ...columnData, additionalFee: value })
                 }

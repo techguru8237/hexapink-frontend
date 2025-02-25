@@ -81,7 +81,7 @@ export default function GeneralInformation({
             selectedItem={type}
             onChange={(item) => setType(item)}
             disabled={disabled ?? false}
-            items={["Customer", "Business"]}
+            items={["Particular", "Business"]}
           />
         </div>
         <div className="flex-1">

@@ -24,16 +24,16 @@ import {
 import { BiLogOutCircle } from "react-icons/bi";
 
 // Assets
-import logo from "../assets/TheHomePage/image/logo.svg";
+import logo from "../../assets/TheHomePage/image/logo.svg";
 
 // Components
-import SidebarItem from "./Admin/SidebarItem";
+import SidebarItem from "../Admin/SidebarItem";
 
 // Types
-import { SidebarItemType } from "./Admin/types";
+import { SidebarItemType } from "../Admin/types";
 
 // Context
-import { useUserContext } from "../contexts/User";
+import { useUserContext } from "../../contexts/User";
 
 const items: SidebarItemType[] = [
   {

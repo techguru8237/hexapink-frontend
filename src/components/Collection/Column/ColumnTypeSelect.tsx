@@ -4,9 +4,11 @@ const valueTypes = [
   "Mixed",
   "Text",
   "Number",
+  "ZIP Code",
   "Boolean",
   "Email",
   "Phone Number",
+  "Mobile",
   "Date",
   "Duration",
 ];

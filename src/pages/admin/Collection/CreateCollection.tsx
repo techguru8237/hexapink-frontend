@@ -20,10 +20,10 @@ import { formApi } from "../../../actions/api";
 import { toast } from "react-toastify";
 
 const steps = [
-  { label: "General", step: 1 },
-  { label: "Columns", step: 2 },
-  { label: "Tables", step: 3 },
-  { label: "Steps", step: 4 },
+  { name: "General", id: 1 },
+  { name: "Columns", id: 2 },
+  { name: "Tables", id: 3 },
+  { name: "Steps", id: 4 },
 ];
 
 const types = ["Business", "Client"];

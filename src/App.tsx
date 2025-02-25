@@ -24,10 +24,11 @@ import UserLayout from "./pages/user/UserLayout";
 import UserDashboard from "./pages/user/Dashboard/Dashboard";
 import Files from "./pages/user/File/Files";
 import Lookup from "./pages/user/Lookup";
+import Wallet from "./pages/user/Wallet/Wallet";
+import CreateFile from "./pages/user/File/CreateFile";
 
 // Components
 import ProtectedRoute from "./pages/ProtectedRoute";
-import Wallet from "./pages/user/Wallet/Wallet";
 
 function App() {
   return (
@@ -92,6 +93,7 @@ function App() {
           <Route index element={<Navigate to="dashboard" />} />
           <Route path="dashboard" element={<UserDashboard />} />
           <Route path="files" element={<Files />} />
+          <Route path="files/new" element={<CreateFile />} />
           <Route path="orders" element={<Orders />} />
           <Route path="lookup" element={<Lookup />} />
           <Route path="wallet" element={<Wallet />} />

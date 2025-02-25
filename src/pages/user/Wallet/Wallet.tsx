@@ -13,7 +13,7 @@ import LoadingElement from "../../../components/Common/LoadingElement";
 
 import api from "../../../actions/api";
 import UserHeader from "../../../components/User/UserHeader";
-import TopUpForm from "../../../components/User/Wallet/TopUpForm";
+import TopUpForm from "../../../components/Wallet/TopUpForm";
 import { useUserContext } from "../../../contexts/User";
 
 export interface transactionItem {
@@ -89,6 +89,7 @@ export default function Wallet() {
     setBalance((prevBalance) => prevBalance + amount);
     toast.success(`Successfully topped up $${amount}`);
     // In a real implementation, you'd make an API call here
+    console.log('balance', balance)
   };
 
   return (
@@ -185,9 +186,10 @@ export default function Wallet() {
         </div>
 
         {/* Always show the TopUpForm */}
-        <div className="w-96 px-4 py-4 border-l border-light-gray-1 flex flex-col">
+        <div className="w-80 px-4 py-4 border-l border-light-gray-1 flex flex-col">
           <TopUpForm
             balance={currentUser?.balance ?? 0}
+            handleTopUpClick={handleTopUp}
           />
         </div>
 

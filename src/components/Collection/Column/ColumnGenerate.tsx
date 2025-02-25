@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Column } from "../../../types";
 import ColumnItem from "./ColumnItem";
 import ColumnSetting from "./ColumnSetting";
@@ -18,11 +18,11 @@ export default function ColumnGenerate({
   const [selectedColumnId, setSelectedColumnId] = useState<number | null>(null);
   const [draggedColumnId, setDraggedColumnId] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (columns && columns.length) {
-      setSelectedColumnId(columns[0].id);
-    }
-  }, [columns]);
+  // useEffect(() => {
+  //   if (columns && columns.length) {
+  //     setSelectedColumnId(columns[0].id);
+  //   }
+  // }, [columns]);
 
   const handleClickNewColumn = () => {
     const Ids = columns.map((column) => column.id);
