@@ -29,7 +29,7 @@ export default function Selection({
             onClick={() => onChange(item)}
           >
             <IoMdRadioButtonOn
-              className={`${
+              className={`text-xl ${
                 selectedItem === item ? "text-dark-blue" : "text-light-gray-3"
               }`}
             />

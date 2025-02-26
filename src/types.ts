@@ -123,7 +123,7 @@ export interface CollectionCreateErrors {
   columnMapping: string;
 }
 
-export interface PaymentItem {
+export interface BankItem {
   _id: string;
   bankName: string;
   accountOwner?: string;

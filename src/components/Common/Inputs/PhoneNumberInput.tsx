@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Combobox } from "@headlessui/react";
 import { ChevronDownIcon, CheckIcon } from "@heroicons/react/20/solid";
 import { countries } from "countries-list";
@@ -19,27 +19,20 @@ const countryArray: Country[] = Object.entries(countries).map(
   })
 );
 
-interface CountryCodeComboboxProps {
-  countryName: string;
+interface PhoneNumberInputProps {
+  label: string;
   setPhoneNumber: (phoneNumber: string) => void;
+  error: string;
 }
 
-export default function CountryCodeCombobox({
-  countryName,
+export default function PhoneNumberInput({
+  label,
   setPhoneNumber,
-}: CountryCodeComboboxProps) {
-  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
+  error
+}: PhoneNumberInputProps) {
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(countryArray[0]);
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    const country = countryArray.find(
-      (c) => c.name.toLowerCase() === countryName.toLowerCase()
-    );
-    if (country) {
-      setSelectedCountry(country);
-    }
-  }, [countryName]);
 
   const filteredCountries =
     query === ""
@@ -60,24 +53,27 @@ export default function CountryCodeCombobox({
         setSelectedCountry(country);
         setIsOpen(false);
       }}
-      style={{width: "100%"}}
+      style={{ width: "100%" }}
+      className="flex flex-col gap-1"
     >
-      <label
-        className={`block text-sm text-start font-raleway font-semibold ${
-          isOpen ? "text-pink-500" : "text-gray-900"
-        }`}
-      >
-        PHONE *
+      <label className="text-sm text-light-dark font-medium text-left">
+        {label}
       </label>
-      <div className="flex justify-center items-bottom">
-        <div className="relative mt-2">
+      <div className="flex justify-center items-bottom divide-x border border-light-gray-3 rounded-lg">
+        <div className="relative flex p-2">
           <Combobox.Input
-            className="peer block w-[100px] font-raleway font-medium bg-transparent py-1.5 pl-3 pr-12 text-base text-gray-900 placeholder:text-gray-400 border-b-2 border-gray-300 focus:border-pink-500 focus:outline-none sm:text-sm"
+            className="w-28 bg-transparent placeholder:text-gray-400 focus:outline-none text-dark-blue font-bold"
             onChange={(event) => setQuery(event.target.value)}
             onBlur={() => setQuery("")}
             displayValue={(country: Country) =>
               country ? `+${country.phone}` : ""
             }
+            maxLength={6}
+            onKeyPress={(event) => {
+              if (!/[0-9]/.test(event.key)) {
+                event.preventDefault();
+              }
+            }}
           />
           <Combobox.Button
             className="absolute inset-y-0 right-0 flex items-center px-2 focus:outline-none bg-transparent hover:bg-transparent hover:border-none outline-none border-none"
@@ -114,6 +110,7 @@ export default function CountryCodeCombobox({
           inputMode="numeric"
           name="phone-number"
           pattern="[0-9]*"
+          maxLength={12}
           onKeyPress={(event) => {
             if (!/[0-9]/.test(event.key)) {
               event.preventDefault();
@@ -122,9 +119,10 @@ export default function CountryCodeCombobox({
           onChange={(event) => {
             setPhoneNumber(selectedCountry?.phone + event.target.value);
           }}
-          className="bg-transparent block w-full border-gray-300 text-[15px] font-raleway font-medium border-b focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none p-0 m-0 leading-none align-bottom"
+          className="bg-transparent block w-full focus:outline-none p-2 text-dark-blue font-bold"
         />
       </div>
+      {error && <span className="text-red text-xs">{error}</span>}
     </Combobox>
   );
 }

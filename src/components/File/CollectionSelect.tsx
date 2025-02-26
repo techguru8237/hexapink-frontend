@@ -13,6 +13,7 @@ import LoadingElement from "../Common/LoadingElement";
 
 interface CollectionProps {
   type: string;
+  countries: string[];
   selectedCollection: Collection | undefined;
   setSelectedCollection: (collection: Collection) => void;
   disabled?: boolean;
@@ -20,6 +21,7 @@ interface CollectionProps {
 
 export default function CollectionSelect({
   type,
+  countries,
   selectedCollection,
   setSelectedCollection,
   disabled = false,
@@ -36,7 +38,10 @@ export default function CollectionSelect({
     const fetchCollections = async () => {
       try {
         setCollectionLoading(true);
-        const response = await api.get(`/api/collection/${type}`);
+        const response = await api.post(`/api/collection/one`, {
+          type,
+          countries,
+        });
         setCollections(response.data);
       } catch (error) {
         console.error("Error fetching collections:", error);
@@ -46,7 +51,7 @@ export default function CollectionSelect({
     };
 
     fetchCollections();
-  }, [type]);
+  }, [type, countries]);
 
   useEffect(() => {
     if (search) {
@@ -127,7 +132,11 @@ export default function CollectionSelect({
                       className="w-16 h-16 object-contain border border-light-gray-1 rounded-lg"
                     />
                     <div className="flex flex-col gap-1">
-                      <span className={`font-bold text-left ${isSelected ? "text-dark-blue" : "text-dark"}`}>
+                      <span
+                        className={`font-bold text-left ${
+                          isSelected ? "text-dark-blue" : "text-dark"
+                        }`}
+                      >
                         {collection.title}
                       </span>
                       <div className="flex flex-wrap items-center gap-0 lg:gap-3">

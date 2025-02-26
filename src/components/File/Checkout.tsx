@@ -1,25 +1,59 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { IoMdRadioButtonOn } from "react-icons/io";
+import { PiCopy } from "react-icons/pi";
+
 import { useUserContext } from "../../contexts/User";
+import api from "../../actions/api";
+import { BankItem } from "../../types";
+
 import Input from "../Common/Inputs/Input";
 import Selection from "../Common/Selection";
+import PhoneNumberInput from "../Common/Inputs/PhoneNumberInput";
 
 interface CheckoutProps {
   orderPrice: number;
 }
 
-export default function Checkout({
-  orderPrice,
-}: CheckoutProps) {
+export default function Checkout({ orderPrice }: CheckoutProps) {
   const { currentUser } = useUserContext();
 
-    const [firstName, setFirstName] = useState<string>("");
-    const [lastName, setLastName] = useState<string>("");
-    const [phone, setPhone] = useState<string>("");
-    const [email, setEmail] = useState<string>("");
-    const [address, setAddress] = useState<string>("");
-  
-    const paymentMethods = ["Balance", "Bank Transfer", "Credit Card"];
-    const [paymentMethod, setPaymentMethod] = useState<string>(paymentMethods[0]);
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string | undefined>("");
+  const [email, setEmail] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+
+  const paymentMethods = ["Balance", "Bank Transfer", "Credit Card"];
+  const [paymentMethod, setPaymentMethod] = useState<string>(paymentMethods[0]);
+
+  const [banks, setBanks] = useState<BankItem[]>([]);
+  const [selectedBank, setSelectedBank] = useState<BankItem>();
+  const [showQrCode, setShowQrCode] = useState<boolean>(false);
+
+  const fetchBanks = async () => {
+    try {
+      const response = await api.get("/api/bank/all");
+      setBanks(response.data);
+      setSelectedBank(response.data[0]);
+    } catch (error: any) {
+      console.log("error.response.data", error.response.data);
+    }
+  };
+
+  console.log('phoneNumber', phoneNumber)
+
+  useEffect(() => {
+    if (paymentMethod == "Bank Transfer") {
+      fetchBanks();
+    }
+  }, [paymentMethod]);
+
+  const handleChangeBank = (bankName: string) => {
+    const newBank = banks.find((bank) => bank.bankName === bankName);
+    if (newBank) {
+      setSelectedBank(newBank);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4 p-8">
@@ -28,7 +62,7 @@ export default function Checkout({
         <div className="p-4 border-b border-dashed border-light-gray-1 text-left font-bold">
           Billing
         </div>
-        <div className="fle`x flex-col gap-4 p-6">
+        <div className="flex flex-col gap-4 p-6">
           <div className="grid lg:grid-cols-2 gap-4">
             <Input
               label="First Name"
@@ -46,13 +80,10 @@ export default function Checkout({
               disabled={false}
               onChange={(e) => setLastName(e.target.value)}
             />
-            <Input
-              label="Phone"
-              type="text"
-              value={phone}
+            <PhoneNumberInput
+              label="Phone Number"
+              setPhoneNumber={setPhoneNumber}
               error=""
-              disabled={false}
-              onChange={(e) => setPhone(e.target.value)}
             />
             <Input
               label="Email"
@@ -79,7 +110,7 @@ export default function Checkout({
         <div className="p-4 border-b border-dashed border-light-gray-1 text-left font-bold">
           Payment
         </div>
-        <div className="flex flex-col gap-2 p-6 border-b border-dashed border-light-gray-1">
+        <div className="flex gap-2 p-6 border-b border-dashed border-light-gray-1">
           <Selection
             label="Payment Method"
             items={paymentMethods}
@@ -90,47 +121,132 @@ export default function Checkout({
         </div>
         {paymentMethod === "Balance" && (
           <div className="flex flex-col gap-2 p-6">
-            <table className="balance-table text-sm">
-              <tr>
-                <td className="w-[40%]">Balance Before Order</td>
-                <td>{currentUser?.balance}</td>
-              </tr>
-              <tr>
-                <td>Order Price</td>
-                <td>{orderPrice}</td>
-              </tr>
-              <tr>
-                <td>Balance After Order</td>
-                <td>
-                  {(currentUser?.balance ?? 0) > orderPrice
-                    ? (currentUser?.balance ?? 0) - orderPrice
-                    : 0}
-                </td>
-              </tr>
+            <table className="no-head text-sm">
+              <tbody>
+                <tr>
+                  <td className="w-[40%] label">Balance Before Order</td>
+                  <td>{currentUser?.balance}</td>
+                </tr>
+                <tr>
+                  <td className="label">Order Price</td>
+                  <td>{orderPrice}</td>
+                </tr>
+                <tr>
+                  <td className="label">Balance After Order</td>
+                  <td>
+                    {(currentUser?.balance ?? 0) > orderPrice
+                      ? (currentUser?.balance ?? 0) - orderPrice
+                      : 0}
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
         )}
 
-        {paymentMethod === "Bank Transfer" && (
-          <div className="flex flex-col gap-2 p-6">
-            <table className="balance-table text-sm">
-              <tr>
-                <td className="w-[40%]">Balance Before Order</td>
-                <td>{currentUser?.balance}</td>
-              </tr>
-              <tr>
-                <td>Order Price</td>
-                <td>{orderPrice}</td>
-              </tr>
-              <tr>
-                <td>Balance After Order</td>
-                <td>
-                  {(currentUser?.balance ?? 0) > orderPrice
-                    ? (currentUser?.balance ?? 0) - orderPrice
-                    : 0}
-                </td>
-              </tr>
-            </table>
+        {paymentMethod === "Bank Transfer" && banks.length > 0 && (
+          <div className="p-6 border-b border-dashed border-light-gray-1">
+            <Selection
+              label="Bank"
+              items={banks.map((bank) => bank.bankName)}
+              selectedItem={selectedBank?.bankName ?? banks[0].bankName}
+              disabled={false}
+              onChange={handleChangeBank}
+            />
+          </div>
+        )}
+
+        {selectedBank && (
+          <div className="flex flex-col">
+            {/* Select the method to get bank information */}
+            <div className="p-6 border-b border-dashed border-light-gray-1 flex flex-col gap-1">
+              <label htmlFor="" className="text-dark text-sm text-left">
+                To Make a transfer
+              </label>
+              <div className="flex items-center gap-4 divide-x-2 divide-light-gray-3">
+                <button
+                  className={`flex items-center gap-2 px-2 py-1 border-none bg-transparent focus:border-none focus:outline-none cursor-pointer ${
+                    showQrCode ? "text-dark" : "text-dark-blue"
+                  }`}
+                  onClick={() => setShowQrCode(false)}
+                >
+                  <IoMdRadioButtonOn
+                    className={`text-xl ${
+                      showQrCode ? "text-light-gray-3" : "text-dark-blue"
+                    }`}
+                  />
+                  Copy Information
+                </button>
+                <button
+                  className={`flex items-center gap-2 px-2 py-1 border-none bg-transparent focus:border-none focus:outline-none cursor-pointer ${
+                    showQrCode ? "text-dark-blue" : "text-dark"
+                  }`}
+                  onClick={() => setShowQrCode(true)}
+                >
+                  <IoMdRadioButtonOn
+                    className={`text-xl ${
+                      showQrCode ? "text-dark-blue" : "text-light-gray-3"
+                    }`}
+                  />
+                  Or Scan QR Code
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6 border-b border-dashed border-light-gray-1 flex flex-col gap-1">
+              {showQrCode ? (
+                <div className="flex flex-col gap-1 items-start">
+                  <label htmlFor="qr-code">Code QR</label>
+                  <img
+                    id="qr-code"
+                    src={`${
+                      import.meta.env.VITE_BACKEND_URL
+                    }/${selectedBank.qrCode?.replace("uploads", "")}`}
+                    alt="QR code"
+                    className="border border-light-gray-3 rounded-lg"
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col items-start">
+                  <table className="w-full no-head">
+                    <tbody>
+                      <tr>
+                        <td className="label">Bank Name</td>
+                        <td>{selectedBank.bankName}</td>
+                      </tr>
+                      <tr>
+                        <td className="label">Account Holder</td>
+                        <td>{selectedBank.accountOwner}</td>
+                      </tr>
+                      <tr>
+                        <td className="label">Account Number</td>
+                        <td>{selectedBank.accountNumber}</td>
+                      </tr>
+                      <tr>
+                        <td className="label">RIB</td>
+                        <td>
+                          <div className="flex items-center justify-between">
+                            {selectedBank.rib}
+                            <button className="flex items-center gap-2 rounded-full text-xs px-2 py-0.5 border border-light-gray-3 hover:border-dark-blue hover:text-dark-blue">
+                              <PiCopy className="text-sm" />
+                              Copy
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="label">IBAN</td>
+                        <td>{selectedBank.iban}</td>
+                      </tr>
+                      <tr>
+                        <td className="label">Code SWIFT</td>
+                        <td>{selectedBank.swift}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

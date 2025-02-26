@@ -25,9 +25,9 @@ interface CreateUserProps {
 }
 
 const userTypeOptions: UserTypeOption[] = [
-  { value: "Customer", label: "Customer" },
-  { value: "Partner", label: "Partner" },
+  { value: "User", label: "User" },
   { value: "Manager", label: "Manager" },
+  { value: "Admin", label: "Admin" },
 ];
 
 const CreateUser = ({ onClose }: CreateUserProps): JSX.Element => {

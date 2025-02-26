@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { PiTableLight } from "react-icons/pi";
 import { CiCircleInfo } from "react-icons/ci";
 import Checkbox from "../Common/Checkbox";
-import { PaymentItem } from "../../types";
+import { BankItem } from "../../types";
 import ConfirmDialog from "../Common/ConfirmDialog";
 import LoadingElement from "../Common/LoadingElement";
 import { BiPencil } from "react-icons/bi";
@@ -12,10 +12,10 @@ import api from "../../actions/api";
 
 interface PaymentListItemProps {
   index: string;
-  data: PaymentItem;
+  data: BankItem;
   isSelected: boolean;
-  payments: PaymentItem[];
-  setPayments: (updatedTables: PaymentItem[]) => void;
+  payments: BankItem[];
+  setPayments: (updatedTables: BankItem[]) => void;
   fetchPaymentMethods: () => Promise<void>;
   onCheckboxChange: (index: string) => void;
   handleStatusChange: (id: string) => void;
@@ -64,7 +64,7 @@ export const PaymentListItem: React.FC<PaymentListItemProps> = ({
   const handleConfirmDelete = async () => {
     setLoading(true);
     try {
-      await api.delete(`/api/payment/delete/${data._id}`);
+      await api.delete(`/api/bank/delete/${data._id}`);
       toast.success("Collection deleted successfully.");
       fetchPaymentMethods();
       setLoading(false);

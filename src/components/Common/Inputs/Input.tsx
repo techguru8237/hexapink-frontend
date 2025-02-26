@@ -26,7 +26,7 @@ export default function Input({
         onChange={onChange}
         type={type || "text"}
         disabled={disabled ?? false}
-        className="w-full bg-white border border-light-gray-3 focus:border-dark-blue rounded-lg p-2 transition duration-200 outline-none"
+        className="w-full text-dark-blue font-bold bg-white border border-light-gray-3 focus:border-dark-blue rounded-lg p-2 transition duration-200 outline-none"
       />
       {error && <span className="text-red text-xs">{error}</span>}
     </div>

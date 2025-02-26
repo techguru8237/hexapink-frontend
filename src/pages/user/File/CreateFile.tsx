@@ -3,11 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { PiCheckBold } from "react-icons/pi";
 import { FaRegFolderOpen } from "react-icons/fa";
 import { GoArrowRight, GoArrowLeft } from "react-icons/go";
-import {
-  Collection,
-  Column,
-  Step,
-} from "../../../types";
+import { Collection, Column, Step } from "../../../types";
 import AdminHeader from "../../../components/Admin/AdminHeader";
 import VerticalStepBar from "../../../components/Collection/VerticalStepbar";
 import CountrySelect from "../../../components/Common/CountrySelect";
@@ -80,7 +76,7 @@ export default function CreateFile() {
   return (
     <div className="h-full flex flex-col">
       <AdminHeader icon={<FaRegFolderOpen />} label="New Collection" />
-      <div className="flex bg-light-gray overflow-y-auto">
+      <div className="h-full flex bg-light-gray overflow-y-auto">
         <div className="px-12 py-8">
           <VerticalStepBar steps={steps} stepNumber={step} />
         </div>
@@ -93,23 +89,25 @@ export default function CreateFile() {
               <GoArrowLeft />
               <span>{step === 1 ? "Back to Collections" : "Back"}</span>
             </div>
-            <div
-              onClick={handleClickNextStep}
-              className={`flex items-center gap-1 border rounded-full px-4 py-2 cursor-pointer ${
-                step === steps.length
-                  ? "flex-row-reverse bg-dark-blue text-white"
-                  : "border-dark hover:border-dark-blue hover:text-dark-blue"
-              }`}
-            >
-              <span>
-                {step === steps.length
-                  ? "Confirm Orders"
-                  : step === steps.length - 1
-                  ? "Go to Checkout"
-                  : "Next"}
-              </span>
-              {step === steps.length ? <PiCheckBold /> : <GoArrowRight />}
-            </div>
+            {steps.length > 1 && (
+              <div
+                onClick={handleClickNextStep}
+                className={`flex items-center gap-1 border rounded-full px-4 py-2 cursor-pointer ${
+                  step === steps.length
+                    ? "flex-row-reverse bg-dark-blue text-white"
+                    : "border-dark hover:border-dark-blue hover:text-dark-blue"
+                }`}
+              >
+                <span>
+                  {step === steps.length
+                    ? "Confirm Orders"
+                    : step === steps.length - 1
+                    ? "Go to Checkout"
+                    : "Next"}
+                </span>
+                {step === steps.length ? <PiCheckBold /> : <GoArrowRight />}
+              </div>
+            )}
           </div>
           <div className="p-4">
             {step === 1 && (
@@ -126,6 +124,7 @@ export default function CreateFile() {
                 />
                 <CollectionSelect
                   type={type}
+                  countries={selectedCountries}
                   selectedCollection={selectedCollection}
                   setSelectedCollection={setSelectedCollection}
                 />

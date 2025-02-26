@@ -7,7 +7,7 @@ export const updateStatus = async (
   onSuccess: () => void
 ) => {
   try {
-    const response = await api.put(`/api/payment/update-status/${id}`, {
+    const response = await api.put(`/api/bank/update-status/${id}`, {
       status,
     });
     if (response.status === 200) {

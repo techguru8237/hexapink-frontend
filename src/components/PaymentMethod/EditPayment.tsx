@@ -10,12 +10,12 @@ import HorizontalStep from "./HorizontalStep";
 import { formApi } from "../../actions/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { PaymentItem } from "../../types";
+import { BankItem } from "../../types";
 
 interface EditPaymentProps {
-  paymentData: PaymentItem;
-  payments: PaymentItem[];
-  setPayments: (updatedPayments: PaymentItem[]) => void;
+  bankData: BankItem;
+  payments: BankItem[];
+  setPayments: (updatedPayments: BankItem[]) => void;
   onClose: () => void;
 }
 
@@ -26,7 +26,7 @@ const steps = [
 ];
 
 const EditPayment = ({
-  paymentData,
+  bankData,
   // payments,
   // setPayments,
   onClose,
@@ -45,15 +45,15 @@ const EditPayment = ({
   const [swift, setSwift] = useState<string | undefined>("");
 
   useEffect(() => {
-    if (paymentData) {
-      setBankName(paymentData.bankName);
-      setAccountOwner(paymentData.accountOwner);
-      setAccountNumber(paymentData.accountNumber);
-      setIban(paymentData.iban);
-      setRib(paymentData.rib);
-      setSwift(paymentData.swift);
+    if (bankData) {
+      setBankName(bankData.bankName);
+      setAccountOwner(bankData.accountOwner);
+      setAccountNumber(bankData.accountNumber);
+      setIban(bankData.iban);
+      setRib(bankData.rib);
+      setSwift(bankData.swift);
     }
-  }, [paymentData]);
+  }, [bankData]);
 
   const handleFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -91,8 +91,8 @@ const EditPayment = ({
         formData.append("qrCode", qrCode);
       }
 
-      await formApi.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/payment/edit/${paymentData._id}`,
+      await formApi.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/bank/update/${bankData._id}`,
         formData
       );
       navigate("/admin/payments?page=0");

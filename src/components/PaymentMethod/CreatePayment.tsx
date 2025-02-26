@@ -74,7 +74,7 @@ const CreatePayment = ({ onClose }: CreatePaymentProps): JSX.Element => {
       }
 
       await formApi.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/payment/create`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/bank/create`,
         formData
       );
       navigate("/admin/payments?page=0");

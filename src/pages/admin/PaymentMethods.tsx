@@ -7,7 +7,7 @@ import { PiBankLight } from "react-icons/pi";
 
 import api from "../../actions/api";
 import { updateStatus } from "../../actions/payment";
-import { PaymentItem } from "../../types";
+import { BankItem } from "../../types";
 
 import Pagination from "../../components/Common/Pagination";
 import AdminHeader from "../../components/Admin/AdminHeader";
@@ -22,8 +22,8 @@ export default function PaymentMethods() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const [payments, setPayments] = useState<PaymentItem[]>([]);
-  const [editPayment, setEditPayment] = useState<PaymentItem>();
+  const [payments, setPayments] = useState<BankItem[]>([]);
+  const [editPayment, setEditPayment] = useState<BankItem>();
   const [selectePayments, selectedPayments] = useState<string[]>([]);
   const [isNewPanelVisible, setIsNewPanelVisible] =
     useState(false);
@@ -43,7 +43,7 @@ export default function PaymentMethods() {
       const response = await api.get(
         `${
           import.meta.env.VITE_BACKEND_URL
-        }/api/payment?${queryParams.toString()}&limit=${rowsPerPage}`
+        }/api/bank?${queryParams.toString()}&limit=${rowsPerPage}`
       );
       setPayments(response.data.payments);
       setTotalPages(response.data.totalPages);
@@ -179,7 +179,7 @@ export default function PaymentMethods() {
         {isEditPanelVisible && editPayment && (
           <div className="w-96 px-4 py-4 border-l-2 border-light-gray-1 flex justify-center">
             <EditPayment
-              paymentData={editPayment}
+              bankData={editPayment}
               payments={payments}
               setPayments={setPayments}
               onClose={() => setIsEditPanelVisible(false)}
