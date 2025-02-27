@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 const UserLayout = () => {
   return (
-    <div className="max-h-screen flex font-raleway">
+    <div className="flex font-raleway">
       <Sidebar type="user" />
       <div className="min-h-screen flex-1 bg-white">
         <Outlet />

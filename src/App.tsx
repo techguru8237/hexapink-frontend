@@ -24,7 +24,8 @@ import UserLayout from "./pages/user/UserLayout";
 import UserDashboard from "./pages/user/Dashboard/Dashboard";
 import Files from "./pages/user/File/Files";
 import Lookup from "./pages/user/Lookup";
-import Wallet from "./pages/user/Wallet/Wallet";
+import Wallet from "./pages/user/Wallet";
+import Cart from "./pages/user/Carts";
 import CreateFile from "./pages/user/File/CreateFile";
 
 // Components
@@ -97,6 +98,7 @@ function App() {
           <Route path="orders" element={<Orders />} />
           <Route path="lookup" element={<Lookup />} />
           <Route path="wallet" element={<Wallet />} />
+          <Route path="cart" element={<Cart />} />
         </Route>
 
         {/* Fallback Route */}

@@ -1,22 +1,28 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { PiCheckBold } from "react-icons/pi";
 import { FaRegFolderOpen } from "react-icons/fa";
 import { GoArrowRight, GoArrowLeft } from "react-icons/go";
-import { Collection, Column, Step } from "../../../types";
-import AdminHeader from "../../../components/Admin/AdminHeader";
+
+import { BankItem, Collection, Column, Step } from "../../../types";
 import VerticalStepBar from "../../../components/Collection/VerticalStepbar";
 import CountrySelect from "../../../components/Common/CountrySelect";
-import TypeSelect from "../../../components/User/TypeSelect";
-import CollectionSelect from "../../../components/File/CollectionSelect";
-import ColumnBuild from "../../../components/File/ColumnBuild";
-import Checkout from "../../../components/File/Checkout";
+import TypeSelect from "../../../components/Admin/User/TypeSelect";
+import CollectionSelect from "../../../components/User/File/CollectionSelect";
+import ColumnBuild from "../../../components/User/File/ColumnBuild";
+import Checkout from "../../../components/User/File/Checkout";
+import useCartStore from "../../../Store/useCartStore";
+import UserHeader from "../../../components/User/UserHeader";
+import CollectionView from "../../../components/User/File/CollectionView";
 
 const types = ["Business", "Client"];
 const defaultStep = { id: 1, name: "Collection" };
+const paymentMethods = ["Balance", "Bank Transfer", "Credit Card"];
 
 export default function CreateFile() {
   const navigate = useNavigate();
+  const setCarts = useCartStore((state) => state.setCarts);
 
   const [steps, setSteps] = useState<Step[]>([defaultStep]);
   const [step, setStep] = useState(1);
@@ -25,8 +31,18 @@ export default function CreateFile() {
   const [selectedCollection, setSelectedCollection] = useState<
     Collection | undefined
   >(undefined);
+  const [volumn, setVolumn] = useState<number>(0);
   const [selectedStepColumns, setSelectedStepColumns] = useState<Column[]>([]);
   const [selectedData, setSelectedData] = useState<Record<string, any>>({}); // Modified type
+
+  // Checkout Status
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string | undefined>("");
+  const [email, setEmail] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<string>(paymentMethods[0]);
+  const [selectedBank, setSelectedBank] = useState<BankItem>();
 
   useEffect(() => {
     if (selectedCollection && Array.isArray(selectedCollection.columns)) {
@@ -62,7 +78,19 @@ export default function CreateFile() {
   const handleClickNextStep = async () => {
     if (step === steps.length) {
       // Handle final step logic here
-      console.log("Final step reached. Saving data:", selectedData);
+    } else if (step === steps.length - 1 && selectedCollection) {
+      const id = Math.random().toString(36).slice(2, 9);
+      const newCart = {
+        id,
+        type,
+        countries: selectedCountries,
+        collection: selectedCollection,
+        columns: selectedData,
+        volumn,
+      };
+      console.log("newCart", newCart);
+      setCarts(newCart);
+      setStep(step + 1);
     } else {
       setStep(step + 1);
     }
@@ -75,39 +103,46 @@ export default function CreateFile() {
 
   return (
     <div className="h-full flex flex-col">
-      <AdminHeader icon={<FaRegFolderOpen />} label="New Collection" />
+      <UserHeader icon={<FaRegFolderOpen />} label="New Collection" />
       <div className="h-full flex bg-light-gray overflow-y-auto">
         <div className="px-12 py-8">
           <VerticalStepBar steps={steps} stepNumber={step} />
         </div>
         <div className="min-w-min flex flex-1 flex-col border-l border-light-gray-1">
-          <div className="flex items-center justify-start gap-2 px-8 py-4 border-b border-light-gray-3">
-            <div
-              onClick={handleClickBackStep}
-              className="flex items-center gap-1 border border-dark hover:border-dark-blue hover:text-dark-blue rounded-full px-4 py-2 cursor-pointer"
-            >
-              <GoArrowLeft />
-              <span>{step === 1 ? "Back to Collections" : "Back"}</span>
-            </div>
-            {steps.length > 1 && (
-              <div
-                onClick={handleClickNextStep}
-                className={`flex items-center gap-1 border rounded-full px-4 py-2 cursor-pointer ${
-                  step === steps.length
-                    ? "flex-row-reverse bg-dark-blue text-white"
-                    : "border-dark hover:border-dark-blue hover:text-dark-blue"
-                }`}
+          <div className="flex items-center justify-between px-8 py-4 border-b border-light-gray-3">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleClickBackStep}
+                className="flex items-center gap-1 border border-dark hover:border-dark-blue hover:text-dark-blue rounded-full px-4 py-2 cursor-pointer"
               >
-                <span>
-                  {step === steps.length
-                    ? "Confirm Orders"
-                    : step === steps.length - 1
-                    ? "Go to Checkout"
-                    : "Next"}
-                </span>
-                {step === steps.length ? <PiCheckBold /> : <GoArrowRight />}
-              </div>
-            )}
+                <GoArrowLeft />
+                <span>{step === 1 ? "Back to Collections" : "Back"}</span>
+              </button>
+              {steps.length > 1 && (
+                <button
+                  onClick={handleClickNextStep}
+                  className={`flex items-center gap-1 border rounded-full px-4 py-2 cursor-pointer ${
+                    step === steps.length
+                      ? "flex-row-reverse bg-dark-blue text-white"
+                      : "border-dark hover:border-dark-blue hover:text-dark-blue"
+                  }`}
+                >
+                  <span>
+                    {step === steps.length
+                      ? "Confirm Orders"
+                      : step === steps.length - 1
+                      ? "Go to Checkout"
+                      : "Next"}
+                  </span>
+                  {step === steps.length ? <PiCheckBold /> : <GoArrowRight />}
+                </button>
+              )}
+            </div>
+            {selectedCollection && <div className="flex items-center gap-2">
+              <button onClick={() => setStep(steps.length)} className="bg-dark-blue text-white rounded-full flex items-center justify-center gap-2">
+                <span>Skip to Checkout</span> <GoArrowRight />
+              </button>
+            </div>}
           </div>
           <div className="p-4">
             {step === 1 && (
@@ -138,8 +173,8 @@ export default function CreateFile() {
                   index={index}
                   column={column}
                   selectedData={selectedData}
-                  setColumns={(selectedValue) =>
-                    handleColumnChange(column.name, selectedValue)
+                  setColumns={(columnName, selectedValue) =>
+                    handleColumnChange(columnName, selectedValue)
                   }
                 />
               ))}
@@ -147,14 +182,31 @@ export default function CreateFile() {
             {step > 1 && step === steps.length && (
               <Checkout
                 orderPrice={1250}
-                // data={selectedData} // Pass the collected data to Checkout
+                firstName={firstName}
+                setFirstName={setFirstName}
+                lastName={lastName}
+                setLastName={setLastName}
+                phoneNumber={phoneNumber}
+                setPhoneNumber={setPhoneNumber}
+                email={email}
+                setEmail={setEmail}
+                address={address}
+                setAddress={setAddress}
+                paymentMethod={paymentMethod}
+                setPaymentMethod={setPaymentMethod}
+                selectedBank={selectedBank}
+                setSelectedBank={setSelectedBank}
               />
             )}
           </div>
         </div>
         {selectedCollection && (
-          <div className="w-96 p-4 border-l border-light-gray-1">
-            {/* <CollectionView data={selectedCollection} /> */}
+          <div className="w-80 p-4 border-l border-light-gray-1">
+            <CollectionView
+              data={selectedCollection}
+              volumn={volumn}
+              setVolumn={setVolumn}
+            />
           </div>
         )}
       </div>

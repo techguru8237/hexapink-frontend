@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { CiCircleInfo } from "react-icons/ci";
 import { PiUserCircleLight, PiPencilSimpleLight } from "react-icons/pi";
-import { UserItem } from "../../types";
-import Checkbox from "../Common/Checkbox";
-import ConfirmDialog from "../Common/ConfirmDialog";
+import { UserItem } from "../../../types";
+import Checkbox from "../../Common/Checkbox";
+import ConfirmDialog from "../../Common/ConfirmDialog";
 import UserPreviewModal from "./UserPreviewModal"; // Import the modal
 import { IconButton, Tooltip } from "@mui/material";
 

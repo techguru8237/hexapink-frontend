@@ -12,20 +12,20 @@ export default function Dashboard() {
   const { currentUser } = useUserContext();
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="max-h-screen flex flex-col">
       <UserHeader
         icon={<RiDashboard3Line className="text-2xl" />}
         label="Dashborad"
       />
 
       <div className="h-full overflow-y-auto flex flex-1 bg-light-gray">
-        <div className="h-full flex flex-1 flex-col">
+        <div className="h-full flex flex-1 flex-col border-r-2 border-light-gray-1">
           <RecenOrders />
           <RecentFiles />
           <RecentTopUp />
         </div>
 
-        <div className="w-80 h-full flex flex-col gap-6 p-4 border-l-2 border-light-gray-1">
+        <div className="w-80 flex flex-col gap-6 p-4">
           <StatCard
             title="Balance"
             value={currentUser?.balance ?? 0}

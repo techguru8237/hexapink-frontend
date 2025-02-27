@@ -7,14 +7,14 @@ import { PiPackage } from "react-icons/pi"; // Import PiPackage
 
 import { toast } from "react-toastify";
 
-import Pagination from "../../../components/Common/Pagination";
-import LoadingElement from "../../../components/Common/LoadingElement";
+import Pagination from "../../components/Common/Pagination";
+import LoadingElement from "../../components/Common/LoadingElement";
 // import FilterPanel from "./components/Wallet/FilterPanel";
 
-import api from "../../../actions/api";
-import UserHeader from "../../../components/User/UserHeader";
-import TopUpForm from "../../../components/Wallet/TopUpForm";
-import { useUserContext } from "../../../contexts/User";
+import api from "../../actions/api";
+import UserHeader from "../../components/User/UserHeader";
+import TopUpForm from "../../components/User/Wallet/TopUpForm";
+import { useUserContext } from "../../contexts/User";
 
 export interface transactionItem {
   id: string;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Combobox } from "@headlessui/react";
 import { ChevronDownIcon, CheckIcon } from "@heroicons/react/20/solid";
 import { countries } from "countries-list";
@@ -21,18 +21,31 @@ const countryArray: Country[] = Object.entries(countries).map(
 
 interface PhoneNumberInputProps {
   label: string;
+  phoneNumber: string | undefined; // Ensure the type is defined
   setPhoneNumber: (phoneNumber: string) => void;
   error: string;
 }
 
 export default function PhoneNumberInput({
   label,
+  phoneNumber,
   setPhoneNumber,
-  error
+  error,
 }: PhoneNumberInputProps) {
-  const [selectedCountry, setSelectedCountry] = useState<Country | null>(countryArray[0]);
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(
+    countryArray[0]
+  );
   const [query, setQuery] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
+  const [phoneInput, setPhoneInput] = useState("");
+
+  // Initialize phoneInput from phoneNumber prop
+  useEffect(() => {
+    if (phoneNumber) {
+      setPhoneInput(
+        phoneNumber.replace(`+${selectedCountry?.phone}`, "").trim()
+      );
+    }
+  }, [phoneNumber, selectedCountry]);
 
   const filteredCountries =
     query === ""
@@ -44,15 +57,18 @@ export default function PhoneNumberInput({
             country.code.toLowerCase().includes(query.toLowerCase())
         );
 
+  const handleCountryChange = (country: Country) => {
+    setQuery("");
+    setSelectedCountry(country);
+    // Set the phone number with the selected country code and keep the existing number
+    setPhoneNumber(`+${country.phone}${phoneInput}`);
+  };
+
   return (
     <Combobox
       as="div"
       value={selectedCountry}
-      onChange={(country: Country) => {
-        setQuery("");
-        setSelectedCountry(country);
-        setIsOpen(false);
-      }}
+      onChange={handleCountryChange}
       style={{ width: "100%" }}
       className="flex flex-col gap-1"
     >
@@ -63,7 +79,9 @@ export default function PhoneNumberInput({
         <div className="relative flex p-2">
           <Combobox.Input
             className="w-28 bg-transparent placeholder:text-gray-400 focus:outline-none text-dark-blue font-bold"
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              setQuery(event.target.value);
+            }}
             onBlur={() => setQuery("")}
             displayValue={(country: Country) =>
               country ? `+${country.phone}` : ""
@@ -75,10 +93,7 @@ export default function PhoneNumberInput({
               }
             }}
           />
-          <Combobox.Button
-            className="absolute inset-y-0 right-0 flex items-center px-2 focus:outline-none bg-transparent hover:bg-transparent hover:border-none outline-none border-none"
-            onClick={() => setIsOpen(!isOpen)}
-          >
+          <Combobox.Button className="absolute inset-y-0 right-0 flex items-center px-2 focus:outline-none bg-transparent hover:bg-transparent hover:border-none outline-none border-none">
             <ChevronDownIcon
               className="h-5 w-5 text-gray-400 "
               aria-hidden="true"
@@ -117,8 +132,12 @@ export default function PhoneNumberInput({
             }
           }}
           onChange={(event) => {
-            setPhoneNumber(selectedCountry?.phone + event.target.value);
+            const newInput = event.target.value;
+            setPhoneInput(newInput);
+            // Update the phone number with the current input and selected country code
+            setPhoneNumber(`+${selectedCountry?.phone}${newInput}`);
           }}
+          value={phoneInput} // Set the value to the local phone input state
           className="bg-transparent block w-full focus:outline-none p-2 text-dark-blue font-bold"
         />
       </div>

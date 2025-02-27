@@ -7,16 +7,16 @@ import "react-phone-number-input/style.css";
 import { PiPlusCircle } from "react-icons/pi";
 import { IoCloseCircleOutline } from "react-icons/io5";
 
-import { UserItem } from "../../types";
-import { updateUser } from "../../actions/user";
-import Input from "../Common/Inputs/Input";
+import { UserItem } from "../../../types";
+import { updateUser } from "../../../actions/user";
+import Input from "../../Common/Inputs/Input";
 
 interface CountryOption {
   value: string;
   label: string;
 }
 
-interface UserTypeOption {
+interface UserRoleOption {
   value: string;
   label: string;
 }
@@ -28,10 +28,10 @@ interface EditUserProps {
   onClose: () => void;
 }
 
-const userTypeOptions: UserTypeOption[] = [
-  { value: "Customer", label: "Customer" },
-  { value: "Partner", label: "Partner" },
-  { value: "Manager", label: "Manager" },
+const userRoleOptions: UserRoleOption[] = [
+  { value: "user", label: "User" },
+  { value: "manger", label: "Manger" },
+  { value: "admin", label: "Admin" },
 ];
 
 const EditUser = ({
@@ -53,10 +53,12 @@ const EditUser = ({
   );
   const [industry, setIndustry] = useState(userData.industry);
   const [company, setCompany] = useState(userData.company);
-  const [userType, setUserType] = useState<UserTypeOption | null>(
-    userTypeOptions.find((option) => option.value === userData?.type) ||
-      userTypeOptions[0]
+  const [userRole, setUserRole] = useState<UserRoleOption | null>(
+    userRoleOptions.find((option) => option.value === userData?.role) ||
+      userRoleOptions[0]
   );
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (userData) {
@@ -67,9 +69,9 @@ const EditUser = ({
       setCountry(
         options.find((option) => option.label === userData.country) || null
       );
-      setUserType(
-        userTypeOptions.find((option) => option.value === userData.type) ||
-          userTypeOptions[0]
+      setUserRole(
+        userRoleOptions.find((option) => option.value === userData.role) ||
+          userRoleOptions[0]
       );
     }
   }, [userData, options]);
@@ -85,20 +87,29 @@ const EditUser = ({
       firstName,
       lastName,
       email,
+      password,
       phone,
       country: country ? country.label : "",
-      type: userType ? userType.value : "Customer", // Default to Customer
+      role: userRole ? userRole.value : "user", // Default to Customer
       industry,
       company,
     };
 
-    await updateUser(userData._id, updatedUser, (updatedUser) => {
-      const updatedUsers = users.map((user) =>
-        user._id === updatedUser._id ? updatedUser : user
-      );
-      setUsers(updatedUsers);
-      toast.success("User data udpated successfully.");
-    });
+    try {
+      setLoading(true);
+      await updateUser(userData._id, updatedUser, (updatedUser) => {
+        const updatedUsers = users.map((user) =>
+          user._id === updatedUser._id ? updatedUser : user
+        );
+        setUsers(updatedUsers);
+        toast.success("User data udpated successfully.");
+      });
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setLoading(false);
+    }
+
     onClose(); // Close the edit panel after submission
   };
 
@@ -163,9 +174,9 @@ const EditUser = ({
           <div className="w-full">
             <label className="block text-left">User Type</label>
             <Select
-              options={userTypeOptions}
-              value={userType}
-              onChange={(selectedOption) => setUserType(selectedOption)}
+              options={userRoleOptions}
+              value={userRole}
+              onChange={(selectedOption) => setUserRole(selectedOption)}
               className="text-left focus-within:border-dark-blue"
             />
           </div>
@@ -195,7 +206,7 @@ const EditUser = ({
         <div className="w-full p-6">
           <button
             onClick={handleSubmit}
-            disabled={!firstName || !lastName || !email}
+            disabled={!firstName || !lastName || !email || loading}
             className={`bg-dark-blue ${
               !firstName || !lastName || !email
                 ? "opacity-20 cursor-default read-only"

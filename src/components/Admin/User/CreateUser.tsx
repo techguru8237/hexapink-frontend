@@ -7,8 +7,8 @@ import "react-phone-number-input/style.css";
 import { PiPlusCircle } from "react-icons/pi";
 import { IoCloseCircleOutline } from "react-icons/io5";
 
-import Input from "../Common/Inputs/Input";
-import { createUser } from "../../actions/user";
+import Input from "../../Common/Inputs/Input";
+import { createUser } from "../../../actions/user";
 
 interface CountryOption {
   value: string;
@@ -25,9 +25,9 @@ interface CreateUserProps {
 }
 
 const userTypeOptions: UserTypeOption[] = [
-  { value: "User", label: "User" },
-  { value: "Manager", label: "Manager" },
-  { value: "Admin", label: "Admin" },
+  { value: "user", label: "User" },
+  { value: "manager", label: "Manager" },
+  { value: "admin", label: "Admin" },
 ];
 
 const CreateUser = ({ onClose }: CreateUserProps): JSX.Element => {

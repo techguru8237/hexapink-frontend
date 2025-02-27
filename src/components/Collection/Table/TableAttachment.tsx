@@ -14,8 +14,8 @@ import TableListItemSkeleton from "./TableListItemSkeleton";
 
 interface TableAttachmentProps {
   columns: Column[];
-  setColumns: (columns: Column[]) => void;
   selectedTable: TableItem | null;
+  setColumns: (columns: Column[]) => void;
   setSelectedTable: (table: TableItem) => void;
   disabled: boolean;
 }
@@ -50,17 +50,16 @@ export default function TableAttachment({
     fetchTables();
   }, []);
 
-  // useEffect(() => {
-  //   if (columns.length && tables.length) {
-  //     const attachedTables = tables.filter((table) =>
-  //       columns.some((column) =>
-  //         column.tableColumns?.some((tc) => tc.tableId === table._id)
-  //       )
-  //     );
-  //     setAttachedTables(attachedTables);
-  //     setSelectedTable(attachedTables[0])
-  //   }
-  // }, [columns, tables]);
+  useEffect(() => {
+    if (columns.length && tables.length) {
+      const attachedTables = tables.filter((table) =>
+        columns.some((column) =>
+          column.tableColumns?.some((tc) => tc.tableId === table._id)
+        )
+      );
+      setAttachedTables(attachedTables);
+    }
+  }, [columns, tables]);
 
   useEffect(() => {
     if (search) {

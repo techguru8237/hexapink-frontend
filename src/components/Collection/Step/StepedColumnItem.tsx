@@ -40,7 +40,7 @@ const StepedColumnItem: React.FC<StepedColumnItemProps> = ({
           onMouseLeave={() => setShowDeleteIcon(false)}
           className="w-full flex items-center gap-2"
         >
-          <div className="relative flex flex-1 items-center justify-between border p-2 rounded-lg bg-[#F7F7FC] border-light-gray-3">
+          <div className="relative flex flex-1 items-center justify-between border p-2 rounded-lg bg-white border-light-gray-3">
             <span>{column.name}</span>
             <span className="bg-light-gray-1 rounded-md p-1 box-content text-xs">
               {column.type}

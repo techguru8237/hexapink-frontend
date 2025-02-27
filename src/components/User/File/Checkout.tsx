@@ -2,32 +2,55 @@ import { useEffect, useState } from "react";
 import { IoMdRadioButtonOn } from "react-icons/io";
 import { PiCopy } from "react-icons/pi";
 
-import { useUserContext } from "../../contexts/User";
-import api from "../../actions/api";
-import { BankItem } from "../../types";
+import { useUserContext } from "../../../contexts/User";
+import api from "../../../actions/api";
+import { BankItem } from "../../../types";
 
-import Input from "../Common/Inputs/Input";
-import Selection from "../Common/Selection";
-import PhoneNumberInput from "../Common/Inputs/PhoneNumberInput";
+import Input from "../../Common/Inputs/Input";
+import Selection from "../../Common/Selection";
+import PhoneNumberInput from "../../Common/Inputs/PhoneNumberInput";
+import { toast } from "react-toastify";
 
 interface CheckoutProps {
   orderPrice: number;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string | undefined;
+  email: string;
+  address: string;
+  paymentMethod: string;
+  selectedBank: BankItem | undefined;
+  setFirstName: (value: string) => void;
+  setLastName: (value: string) => void;
+  setPhoneNumber: (value: string | undefined) => void;
+  setEmail: (value: string) => void;
+  setAddress: (value: string) => void;
+  setPaymentMethod: (value: string) => void;
+  setSelectedBank: (value: BankItem | undefined) => void;
 }
 
-export default function Checkout({ orderPrice }: CheckoutProps) {
+export default function Checkout({
+  firstName,
+  lastName,
+  email,
+  phoneNumber,
+  address,
+  paymentMethod,
+  selectedBank,
+  setFirstName,
+  setLastName,
+  setEmail,
+  setAddress,
+  setPhoneNumber,
+  setPaymentMethod,
+  setSelectedBank,
+  orderPrice,
+}: CheckoutProps) {
   const { currentUser } = useUserContext();
 
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState<string | undefined>("");
-  const [email, setEmail] = useState<string>("");
-  const [address, setAddress] = useState<string>("");
-
   const paymentMethods = ["Balance", "Bank Transfer", "Credit Card"];
-  const [paymentMethod, setPaymentMethod] = useState<string>(paymentMethods[0]);
 
   const [banks, setBanks] = useState<BankItem[]>([]);
-  const [selectedBank, setSelectedBank] = useState<BankItem>();
   const [showQrCode, setShowQrCode] = useState<boolean>(false);
 
   const fetchBanks = async () => {
@@ -39,8 +62,6 @@ export default function Checkout({ orderPrice }: CheckoutProps) {
       console.log("error.response.data", error.response.data);
     }
   };
-
-  console.log('phoneNumber', phoneNumber)
 
   useEffect(() => {
     if (paymentMethod == "Bank Transfer") {
@@ -82,6 +103,7 @@ export default function Checkout({ orderPrice }: CheckoutProps) {
             />
             <PhoneNumberInput
               label="Phone Number"
+              phoneNumber={phoneNumber}
               setPhoneNumber={setPhoneNumber}
               error=""
             />
@@ -227,10 +249,24 @@ export default function Checkout({ orderPrice }: CheckoutProps) {
                         <td>
                           <div className="flex items-center justify-between">
                             {selectedBank.rib}
-                            <button className="flex items-center gap-2 rounded-full text-xs px-2 py-0.5 border border-light-gray-3 hover:border-dark-blue hover:text-dark-blue">
-                              <PiCopy className="text-sm" />
-                              Copy
-                            </button>
+                            {selectedBank.rib && (
+                              <button
+                                onClick={() => {
+                                  navigator.clipboard
+                                    .writeText(selectedBank.rib ?? "")
+                                    .then(() => {
+                                      toast.success("RIB copied to clipboard!"); // Optional: Show a success message
+                                    })
+                                    .catch((err) => {
+                                      toast.error("Failed to copy: ", err); // Handle errors if any
+                                    });
+                                }}
+                                className="flex items-center gap-2 rounded-full text-xs px-2 py-0.5 border border-light-gray-3 hover:border-dark-blue hover:text-dark-blue"
+                              >
+                                <PiCopy className="text-sm" />
+                                Copy
+                              </button>
+                            )}
                           </div>
                         </td>
                       </tr>

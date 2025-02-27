@@ -24,11 +24,12 @@ export interface UserItem {
   firstName: string;
   lastName: string;
   email: string;
+  password?: string;
   phone?: string;
   country?: string;
   industry?: string;
   company?: string;
-  type?: string;
+  role?: string;
   status?: string;
   is_verified?: boolean;
   createdAt?: string;
@@ -155,3 +156,12 @@ export interface UserContextType {
 }
 
 export type UserRole = "admin" | "manager" | "user";
+
+export interface Cart {
+  id: string;
+  type: string;
+  countries: string[];
+  collection: Collection;
+  columns: Record<string, any>;
+  volumn: number;
+}

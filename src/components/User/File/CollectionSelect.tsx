@@ -6,10 +6,10 @@ import { HiUsers, HiMiniCircleStack } from "react-icons/hi2";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { IoMdRadioButtonOn } from "react-icons/io";
 
-import api from "../../actions/api";
-import { useCurrency } from "../../contexts/Currency";
-import { Collection } from "../../types";
-import LoadingElement from "../Common/LoadingElement";
+import api from "../../../actions/api";
+import { useCurrency } from "../../../contexts/Currency";
+import { Collection } from "../../../types";
+import LoadingElement from "../../Common/LoadingElement";
 
 interface CollectionProps {
   type: string;

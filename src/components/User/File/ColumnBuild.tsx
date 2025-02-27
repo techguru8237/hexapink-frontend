@@ -3,15 +3,15 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { IoMdRadioButtonOn } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import { LiaSearchSolid } from "react-icons/lia";
-import { Column } from "../../types";
-import api from "../../actions/api";
-import NumberInput from "../Common/Inputs/NumberInput";
-import DateInput from "../Common/Inputs/DateInput";
+import { Column } from "../../../types";
+import api from "../../../actions/api";
+import NumberInput from "../../Common/Inputs/NumberInput";
+import DateInput from "../../Common/Inputs/DateInput";
 import dayjs from "dayjs";
 
 interface ColumnBuildProps {
   selectedData: Record<string, any>;
-  setColumns: (selectedValues: any) => void;
+  setColumns: (columnName: string, selectedValues: any) => void;
   column: Column;
   index: number;
   step: number;
@@ -30,7 +30,6 @@ export default memo(function ColumnBuild({
   const [searchResults, setSearchResults] = useState<string[]>([]);
   const [showAllCountries, setShowAllCountries] = useState<boolean>(false);
   const [search, setSearch] = useState("");
-  const [rangeValues, setRangeValues] = useState({ min: "", max: "" });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -105,28 +104,39 @@ export default memo(function ColumnBuild({
   const handleClickSearchedItem = (item: string) => {
     if (
       !Object.keys(selectedData).includes(column.name) ||
-      selectedData[column.name].length === 0
+      !selectedData[column.name] ||
+      (Array.isArray(selectedData[column.name]) &&
+        selectedData[column.name].length === 0)
     ) {
-      setColumns([item]);
-    } else if (selectedData[column.name]?.includes(item)) {
+      handleParentChange(column.name, [item]); // setColumns([item]);
+    } else if (
+      Array.isArray(selectedData[column.name]) &&
+      selectedData[column.name]?.includes(item)
+    ) {
       const newItems = selectedData[column.name]?.filter(
         (c: string) => c !== item
       );
-      setColumns(newItems || []);
+      handleParentChange(column.name, newItems || []); // setColumns(newItems || []);
     } else {
-      setColumns([...selectedData[column.name], item]);
+      handleParentChange(column.name, [...selectedData[column.name], item]); // setColumns([...selectedData[column.name], item]);
     }
   };
 
+  const handleParentChange = (columnName: string, selectedValue: any) => {
+    // Notify the parent component about the change
+    setColumns(columnName, selectedValue);
+  };
+
   const handleRangeChange = (name: string, value: string) => {
-    setRangeValues((prev) => ({ ...prev, [name]: value }));
+    handleParentChange(column.name, {
+      ...selectedData[column.name],
+      [name]: value,
+    });
   };
 
   const toggleShowAllCountries = () => {
     setShowAllCountries((prev) => !prev);
   };
-
-  console.log("column", column);
 
   return (
     <div className="max-w-3xl bg-white border border-light-gray-1 rounded-lg flex flex-col text-dark">
@@ -137,7 +147,11 @@ export default memo(function ColumnBuild({
         <div className="flex items-center gap-4 p-6">
           <NumberInput
             label="From"
-            value={parseInt(rangeValues.min)}
+            value={
+              selectedData[column.name]?.min
+                ? parseInt(selectedData[column.name].min)
+                : 0
+            }
             disabled={disabled}
             isCurrency={false}
             onChange={(value) => handleRangeChange("min", value.toString())}
@@ -145,7 +159,11 @@ export default memo(function ColumnBuild({
           />
           <NumberInput
             label="To"
-            value={parseInt(rangeValues.max)}
+            value={
+              selectedData[column.name]?.max
+                ? parseInt(selectedData[column.name].max)
+                : 0
+            }
             disabled={disabled}
             isCurrency={false}
             onChange={(value) => handleRangeChange("max", value.toString())}
@@ -156,20 +174,28 @@ export default memo(function ColumnBuild({
         <div className="flex items-center gap-4 p-6">
           <DateInput
             label="From"
-            value={rangeValues.min ? dayjs(rangeValues.min) : null} // Convert to Dayjs or null
+            value={
+              selectedData[column.name]?.min
+                ? dayjs(selectedData[column.name].min)
+                : null
+            }
             disabled={disabled}
             onChange={(value) =>
               handleRangeChange("min", value ? value.format("YYYY-MM-DD") : "")
-            } // Convert back to string if needed
+            }
             error=""
           />
           <DateInput
             label="To"
-            value={rangeValues.max ? dayjs(rangeValues.max) : null} // Convert to Dayjs or null
+            value={
+              selectedData[column.name]?.max
+                ? dayjs(selectedData[column.name].max)
+                : null
+            }
             disabled={disabled}
             onChange={(value) =>
               handleRangeChange("max", value ? value.format("YYYY-MM-DD") : "")
-            } // Convert back to string if needed
+            }
             error=""
           />
         </div>
@@ -198,7 +224,6 @@ export default memo(function ColumnBuild({
               )}
             </button>
           </div>
-
           <div className="max-h-48 overflow-y-auto flex flex-wrap gap-2 p-6 border-b border-dashed border-light-gray-1">
             {searchResults.map((item) => (
               <button

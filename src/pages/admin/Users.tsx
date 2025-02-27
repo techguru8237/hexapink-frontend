@@ -8,12 +8,12 @@ import { FaRegUserCircle } from "react-icons/fa";
 import Pagination from "../../components/Common/Pagination";
 import AdminHeader from "../../components/Admin/AdminHeader";
 import LoadingElement from "../../components/Common/LoadingElement";
-import UserListHeader from "../../components/User/UserListHeader";
-import { UserListItem } from "../../components/User/UserListItem";
-import NewUserSkeleton from "../../components/User/NewUserSkeleton";
-import CreateUser from "../../components/User/CreateUser";
-import FilterPanel from "../../components/User/FilterPanel";
-import EditUser from "../../components/User/EditUser";
+import UserListHeader from "../../components/Admin/User/UserListHeader";
+import { UserListItem } from "../../components/Admin/User/UserListItem";
+import NewUserSkeleton from "../../components/Admin/User/NewUserSkeleton";
+import CreateUser from "../../components/Admin/User/CreateUser";
+import FilterPanel from "../../components/Admin/User/FilterPanel";
+import EditUser from "../../components/Admin/User/EditUser";
 
 import api from "../../actions/api";
 import { updateStatus } from "../../actions/user";

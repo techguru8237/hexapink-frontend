@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 
 import { PiFileTextBold } from "react-icons/pi";
 import { CiFilter } from "react-icons/ci";
-import Header from "../../../components/Admin/Header";
 import Pagination from "../../../components/Common/Pagination";
-import NewFileSkeleton from "../../../components/File/NewFileSkeleton";
-import FileListHeader from "../../../components/File/FileListHeader";
-import { FileListItem } from "../../../components/File/FileListItem";
+import NewFileSkeleton from "../../../components/User/File/NewFileSkeleton";
+import FileListHeader from "../../../components/User/File/FileListHeader";
+import { FileListItem } from "../../../components/User/File/FileListItem";
+import UserHeader from "../../../components/User/UserHeader";
 
 const dummyData = Array.from({ length: 25 }, (_, index) => ({
   id: index,
@@ -53,7 +53,7 @@ export default function Files() {
 
   return (
     <div className="h-full flex flex-col">
-      <Header icon={<PiFileTextBold />} label="Files" />
+      <UserHeader icon={<PiFileTextBold />} label="Files" />
 
       <div className="h-full bg-light-gray border-b border-light-gray-1 flex">
         <div className="flex flex-col flex-1 border-r border-light-gray-1">

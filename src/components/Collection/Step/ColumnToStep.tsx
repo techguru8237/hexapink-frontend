@@ -10,8 +10,8 @@ import StepedColumnItem from "./StepedColumnItem";
 interface ColumnToStepProps {
   selectedStepId: number | null;
   steps: Step[];
-  setSteps: (steps: Step[]) => void;
   columns: Column[];
+  setSteps: (steps: Step[]) => void;
   setColumns: (columns: Column[]) => void;
   disabled: boolean;
 }

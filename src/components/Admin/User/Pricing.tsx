@@ -1,4 +1,4 @@
-import NumberInput from "../Common/Inputs/NumberInput";
+import NumberInput from "../../Common/Inputs/NumberInput";
 
 interface PricingProps {
   fee: number;
@@ -10,10 +10,10 @@ interface PricingProps {
 
 export default function Pricing({
   fee,
-  setFee,
   discount,
+  disabled,
+  setFee,
   setDiscount,
-  disabled
 }: PricingProps) {
   return (
     <div className="max-w-3xl bg-white border border-light-gray-1 rounded-lg flex flex-col text-dark">

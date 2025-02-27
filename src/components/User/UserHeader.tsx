@@ -1,8 +1,16 @@
 import React, { JSX } from "react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { PiWalletLight, PiUserCircleLight, PiWalletFill } from "react-icons/pi";
+import {
+  PiWalletLight,
+  PiUserCircleLight,
+  PiWalletFill,
+  PiShoppingCartFill,
+  PiShoppingCartLight,
+} from "react-icons/pi";
+
 import { useUserContext } from "../../contexts/User";
+import useCartStore from "../../Store/useCartStore";
 
 interface UserHeaderProps {
   icon: JSX.Element;
@@ -11,8 +19,11 @@ interface UserHeaderProps {
 
 export default function UserHeader({ icon, label }: UserHeaderProps) {
   const location = useLocation();
-  const {currentUser} = useUserContext();
-  const isActive = location.pathname.includes(`/wallet`);
+  const { currentUser } = useUserContext();
+  const carts = useCartStore((state) => state.carts);
+
+  const isWallet = location.pathname.includes(`/wallet`);
+  const isCart = location.pathname.includes(`/cart`);
 
   return (
     <div className="h-20 min-h-20 max-h-20 box-border px-4 sm:px-8 border-b border-light-gray-3 flex justify-between items-center font-raleway">
@@ -25,24 +36,47 @@ export default function UserHeader({ icon, label }: UserHeaderProps) {
 
       <div className="flex items-center gap-8">
         <Link
-          to="/user/wallet"
-          className={`flex items-center gap-2 cursor-pointer ${isActive ? "p-2 bg-light-gray-1 border border-light-gray-3 rounded-lg" : ""}`}
+          to="/user/cart"
+          className={`flex items-center gap-2 cursor-pointer ${
+            isCart
+              ? "p-2 bg-light-gray-2 border border-light-gray-3 rounded-lg"
+              : ""
+          }`}
         >
-          {isActive ? (
-            <PiWalletFill className="text-2xl text-dark-blue" />
+          {isCart ? (
+            <PiShoppingCartFill className="text-xl text-dark-blue" />
           ) : (
-            <PiWalletLight className="text-2xl" />
+            <PiShoppingCartLight className="text-2xl text-dark" />
           )}
 
-          <span className={`${isActive ? "text-dark-blue" : "text-dark"}`}>
+          <span className={`${isCart ? "text-dark-blue" : "text-dark"}`}>
+            Cart{" "}
+            <span className={`px-2 py-1 rounded-md ${isCart ? "bg-white" : "bg-light-gray-1"}`}>
+              {carts.length}
+            </span>
+          </span>
+        </Link>
+        <Link
+          to="/user/wallet"
+          className={`flex items-center gap-2 cursor-pointer ${
+            isWallet
+              ? "p-2 bg-light-gray-2 border border-light-gray-3 rounded-lg"
+              : ""
+          }`}
+        >
+          {isWallet ? (
+            <PiWalletFill className="text-2xl text-dark-blue" />
+          ) : (
+            <PiWalletLight className="text-2xl text-dark" />
+          )}
+
+          <span className={`${isWallet ? "text-dark-blue" : "text-dark"}`}>
             Wallet
           </span>
         </Link>
         <div className="flex items-center gap-2 cursor-pointer">
           <PiUserCircleLight className="text-2xl" />
-          <span className="hidden sm:flex">
-            {currentUser?.name}
-          </span>
+          <span className="hidden sm:flex">{currentUser?.name}</span>
         </div>
       </div>
     </div>

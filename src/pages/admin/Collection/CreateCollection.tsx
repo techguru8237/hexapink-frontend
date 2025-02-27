@@ -10,7 +10,7 @@ import AdminHeader from "../../../components/Admin/AdminHeader";
 import VerticalStepBar from "../../../components/Collection/VerticalStepbar";
 import GeneralInformation from "../../../components/Collection/General/GeneralInformation";
 import CountrySelect from "../../../components/Common/CountrySelect";
-import Pricing from "../../../components/User/Pricing";
+import Pricing from "../../../components/Admin/User/Pricing";
 import ColumnGenerate from "../../../components/Collection/Column/ColumnGenerate";
 import { CollectionCreateErrors, Column } from "../../../types";
 import ColumnMapping from "../../../components/Collection/Table/ColumnMapping";

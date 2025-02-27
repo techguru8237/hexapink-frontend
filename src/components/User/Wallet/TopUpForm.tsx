@@ -1,6 +1,6 @@
 // components/Wallet/TopUpForm.tsx
 import React, { useState } from "react";
-import TopUpAmountInput from "../Common/AmountInput";
+import TopUpAmountInput from "../../Common/Inputs/AmountInput";
 import { PiArrowFatUpLight } from "react-icons/pi";
 
 interface TopUpFormProps {

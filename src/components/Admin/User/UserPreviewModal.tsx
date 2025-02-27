@@ -5,7 +5,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 
-import { UserItem } from "../../types";
+import { UserItem } from "../../../types";
 
 interface UserPreviewModalProps {
   open: boolean;

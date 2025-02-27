@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Input from "../Common/Inputs/Input";
+import Input from "../../Common/Inputs/Input";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 interface FilterPanelProps {
