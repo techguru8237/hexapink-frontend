@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { PiPackage, PiShoppingCartFill } from "react-icons/pi";
 import { GoArrowRight } from "react-icons/go";
 
@@ -14,6 +14,8 @@ import { useCurrency } from "../../contexts/Currency";
 
 export default function Carts() {
   const { currency } = useCurrency();
+  const navigate = useNavigate();
+
   const carts = useCartStore((state) => state.carts);
   const [selectedCartIds, setSelectedCartIds] = useState<string[]>([]);
 
@@ -40,6 +42,10 @@ export default function Carts() {
         ? prevSelectedIds.filter((fileId) => fileId !== id)
         : [...prevSelectedIds, id]
     );
+  };
+
+  const handleGotoCheckout = () => {
+    navigate("/user/files/new", { state: selectedCartIds });
   };
 
   return (
@@ -114,12 +120,13 @@ export default function Carts() {
               </div>
             </div>
             <div className="w-full p-6 gap-2">
-              <Link
-                to="/"
+              <button
+                onClick={handleGotoCheckout}
+                disabled={selectedCartIds.length > 0 ? false : true}
                 className="w-full flex items-center gap-2 justify-center bg-dark-blue text-white rounded-full p-2"
               >
                 Go to Checkout <GoArrowRight />
-              </Link>
+              </button>
             </div>
           </div>
         </div>

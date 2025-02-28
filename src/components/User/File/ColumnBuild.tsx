@@ -10,7 +10,7 @@ import DateInput from "../../Common/Inputs/DateInput";
 import dayjs from "dayjs";
 
 interface ColumnBuildProps {
-  selectedData: Record<string, any>;
+  selectedData: Record<string, { value: any; stepName: string }>;
   setColumns: (columnName: string, selectedValues: any) => void;
   column: Column;
   index: number;
@@ -104,21 +104,21 @@ export default memo(function ColumnBuild({
   const handleClickSearchedItem = (item: string) => {
     if (
       !Object.keys(selectedData).includes(column.name) ||
-      !selectedData[column.name] ||
-      (Array.isArray(selectedData[column.name]) &&
-        selectedData[column.name].length === 0)
+      !selectedData[column.name].value ||
+      (Array.isArray(selectedData[column.name].value) &&
+        selectedData[column.name].value.length === 0)
     ) {
       handleParentChange(column.name, [item]); // setColumns([item]);
     } else if (
-      Array.isArray(selectedData[column.name]) &&
-      selectedData[column.name]?.includes(item)
+      Array.isArray(selectedData[column.name].value) &&
+      selectedData[column.name]?.value?.includes(item)
     ) {
-      const newItems = selectedData[column.name]?.filter(
+      const newItems = selectedData[column.name]?.value?.filter(
         (c: string) => c !== item
       );
       handleParentChange(column.name, newItems || []); // setColumns(newItems || []);
     } else {
-      handleParentChange(column.name, [...selectedData[column.name], item]); // setColumns([...selectedData[column.name], item]);
+      handleParentChange(column.name, [...selectedData[column.name].value, item]); // setColumns([...selectedData[column.name], item]);
     }
   };
 
@@ -129,7 +129,7 @@ export default memo(function ColumnBuild({
 
   const handleRangeChange = (name: string, value: string) => {
     handleParentChange(column.name, {
-      ...selectedData[column.name],
+      ...selectedData[column.name]?.value,
       [name]: value,
     });
   };
@@ -148,8 +148,8 @@ export default memo(function ColumnBuild({
           <NumberInput
             label="From"
             value={
-              selectedData[column.name]?.min
-                ? parseInt(selectedData[column.name].min)
+              selectedData[column.name]?.value?.min
+                ? parseInt(selectedData[column.name].value.min)
                 : 0
             }
             disabled={disabled}
@@ -160,8 +160,8 @@ export default memo(function ColumnBuild({
           <NumberInput
             label="To"
             value={
-              selectedData[column.name]?.max
-                ? parseInt(selectedData[column.name].max)
+              selectedData[column.name]?.value?.max
+                ? parseInt(selectedData[column.name].value.max)
                 : 0
             }
             disabled={disabled}
@@ -175,26 +175,26 @@ export default memo(function ColumnBuild({
           <DateInput
             label="From"
             value={
-              selectedData[column.name]?.min
-                ? dayjs(selectedData[column.name].min)
+              selectedData[column.name]?.value?.min
+                ? dayjs(selectedData[column.name].value.min)
                 : null
             }
             disabled={disabled}
             onChange={(value) =>
-              handleRangeChange("min", value ? value.format("YYYY-MM-DD") : "")
+              handleRangeChange("min", value ? value.format("YYYY/MM/DD") : "")
             }
             error=""
           />
           <DateInput
             label="To"
             value={
-              selectedData[column.name]?.max
-                ? dayjs(selectedData[column.name].max)
+              selectedData[column.name]?.value?.max
+                ? dayjs(selectedData[column.name].value.max)
                 : null
             }
             disabled={disabled}
             onChange={(value) =>
-              handleRangeChange("max", value ? value.format("YYYY-MM-DD") : "")
+              handleRangeChange("max", value ? value.format("YYYY/MM/DD") : "")
             }
             error=""
           />
@@ -231,14 +231,14 @@ export default memo(function ColumnBuild({
                 onClick={() => handleClickSearchedItem(item)}
                 disabled={disabled}
                 className={`flex items-center gap-2 px-2 py-1 rounded-full border border-light-gray-3 cursor-pointer hover:bg-light-gray-1 ${
-                  selectedData[column.name]?.includes(item)
+                  selectedData[column.name]?.value?.includes(item)
                     ? "bg-light-gray-1"
                     : ""
                 }`}
               >
                 <IoMdRadioButtonOn
                   className={`${
-                    selectedData[column.name]?.includes(item)
+                    selectedData[column.name]?.value?.includes(item)
                       ? "text-dark-blue"
                       : "text-light-gray-3"
                   }`}
@@ -251,7 +251,7 @@ export default memo(function ColumnBuild({
           <div className="p-4 flex flex-col justify-start gap-2">
             <span className="font-bold text-left">Selected Results:</span>
             <div className="flex flex-wrap gap-2">
-              {selectedData[column.name]?.map((item: string) => (
+              {selectedData[column.name]?.value?.map((item: string) => (
                 <div
                   key={item}
                   className="flex items-center gap-2 px-2 py-1 rounded-full border border-light-gray-3 bg-light-gray-1"

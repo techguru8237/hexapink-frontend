@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { PiCheckBold } from "react-icons/pi";
 import { FaRegFolderOpen } from "react-icons/fa";
@@ -22,7 +22,10 @@ const paymentMethods = ["Balance", "Bank Transfer", "Credit Card"];
 
 export default function CreateFile() {
   const navigate = useNavigate();
-  const setCarts = useCartStore((state) => state.setCarts);
+  const location = useLocation();
+
+  const selectedCartIds = location.state;
+  const { carts, setCarts } = useCartStore((state) => state);
 
   const [steps, setSteps] = useState<Step[]>([defaultStep]);
   const [step, setStep] = useState(1);
@@ -33,16 +36,33 @@ export default function CreateFile() {
   >(undefined);
   const [volumn, setVolumn] = useState<number>(0);
   const [selectedStepColumns, setSelectedStepColumns] = useState<Column[]>([]);
-  const [selectedData, setSelectedData] = useState<Record<string, any>>({}); // Modified type
+  const [selectedData, setSelectedData] = useState<
+    Record<string, { value: any; stepName: string }>
+  >({});
 
   // Checkout Status
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState<string | undefined>("");
-  const [email, setEmail] = useState<string>("");
-  const [address, setAddress] = useState<string>("");
+  // const [firstName, setFirstName] = useState<string>("");
+  // const [lastName, setLastName] = useState<string>("");
+  // const [phoneNumber, setPhoneNumber] = useState<string | undefined>("");
+  // const [email, setEmail] = useState<string>("");
+  // const [address, setAddress] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<string>(paymentMethods[0]);
   const [selectedBank, setSelectedBank] = useState<BankItem>();
+
+  useEffect(() => {
+    if (selectedCartIds && carts.length) {
+      setSteps([...steps, { id: 2, name: "Checkout" }]);
+      setStep(2);
+      const selectedCarts = carts.filter((cart) =>
+        selectedCartIds.includes(cart.id)
+      );
+      const totalVolum = selectedCarts.reduce(
+        (amount, cart) => amount + cart.volumn,
+        0
+      );
+      setVolumn(totalVolum);
+    }
+  }, [selectedCartIds, carts]);
 
   useEffect(() => {
     if (selectedCollection && Array.isArray(selectedCollection.columns)) {
@@ -77,7 +97,6 @@ export default function CreateFile() {
 
   const handleClickNextStep = async () => {
     if (step === steps.length) {
-      // Handle final step logic here
     } else if (step === steps.length - 1 && selectedCollection) {
       const id = Math.random().toString(36).slice(2, 9);
       const newCart = {
@@ -88,7 +107,6 @@ export default function CreateFile() {
         columns: selectedData,
         volumn,
       };
-      console.log("newCart", newCart);
       setCarts(newCart);
       setStep(step + 1);
     } else {
@@ -96,14 +114,20 @@ export default function CreateFile() {
     }
   };
 
-  const handleColumnChange = (columnName: string, selectedValue: any) => {
-    // modified function
-    setSelectedData((prev) => ({ ...prev, [columnName]: selectedValue }));
+  const handleColumnChange = (
+    columnName: string,
+    selectedValue: any,
+    stepName: string
+  ) => {
+    setSelectedData((prev) => ({
+      ...prev,
+      [columnName]: { value: selectedValue, stepName: stepName },
+    }));
   };
 
   return (
     <div className="h-full flex flex-col">
-      <UserHeader icon={<FaRegFolderOpen />} label="New Collection" />
+      <UserHeader icon={<FaRegFolderOpen />} label="New File" />
       <div className="h-full flex bg-light-gray overflow-y-auto">
         <div className="px-12 py-8">
           <VerticalStepBar steps={steps} stepNumber={step} />
@@ -138,11 +162,16 @@ export default function CreateFile() {
                 </button>
               )}
             </div>
-            {selectedCollection && <div className="flex items-center gap-2">
-              <button onClick={() => setStep(steps.length)} className="bg-dark-blue text-white rounded-full flex items-center justify-center gap-2">
-                <span>Skip to Checkout</span> <GoArrowRight />
-              </button>
-            </div>}
+            {selectedCollection && (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setStep(steps.length)}
+                  className="bg-dark-blue text-white rounded-full flex items-center justify-center gap-2"
+                >
+                  <span>Skip to Checkout</span> <GoArrowRight />
+                </button>
+              </div>
+            )}
           </div>
           <div className="p-4">
             {step === 1 && (
@@ -173,25 +202,30 @@ export default function CreateFile() {
                   index={index}
                   column={column}
                   selectedData={selectedData}
-                  setColumns={(columnName, selectedValue) =>
-                    handleColumnChange(columnName, selectedValue)
+                  setColumns={
+                    (columnName, selectedValue) =>
+                      handleColumnChange(
+                        columnName,
+                        selectedValue,
+                        steps[step - 1].name
+                      ) // Pass step name
                   }
                 />
               ))}
             </div>
             {step > 1 && step === steps.length && (
               <Checkout
+                // firstName={firstName}
+                // setFirstName={setFirstName}
+                // lastName={lastName}
+                // setLastName={setLastName}
+                // phoneNumber={phoneNumber}
+                // setPhoneNumber={setPhoneNumber}
+                // email={email}
+                // setEmail={setEmail}
+                // address={address}
+                // setAddress={setAddress}
                 orderPrice={1250}
-                firstName={firstName}
-                setFirstName={setFirstName}
-                lastName={lastName}
-                setLastName={setLastName}
-                phoneNumber={phoneNumber}
-                setPhoneNumber={setPhoneNumber}
-                email={email}
-                setEmail={setEmail}
-                address={address}
-                setAddress={setAddress}
                 paymentMethod={paymentMethod}
                 setPaymentMethod={setPaymentMethod}
                 selectedBank={selectedBank}
@@ -204,6 +238,8 @@ export default function CreateFile() {
           <div className="w-80 p-4 border-l border-light-gray-1">
             <CollectionView
               data={selectedCollection}
+              steps={steps.slice(1, -1).map((step) => step.name)}
+              columns={selectedData}
               volumn={volumn}
               setVolumn={setVolumn}
             />

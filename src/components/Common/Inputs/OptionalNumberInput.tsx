@@ -51,6 +51,7 @@ export default function OptionalNumberInput({
       <div className="flex items-center gap-4 divide-x-2 divide-light-gray-3">
         {options.map((item) => (
           <button
+            key={item}
             className={`flex items-center gap-2 px-0 py-2 border-none bg-transparent focus:border-none focus:outline-none cursor-pointer ${
               option === item ? "text-dark-blue" : "text-dark"
             }`}
