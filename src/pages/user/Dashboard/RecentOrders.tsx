@@ -3,28 +3,40 @@ import { Link } from "react-router-dom";
 import { PiPackage } from "react-icons/pi";
 import { GoArrowUpRight } from "react-icons/go";
 
-import { orders } from "../data";
+import api from "../../../actions/api";
+import { Order } from "../../../types";
+import LoadingElement from "../../../components/Common/LoadingElement";
 
-const filterOptions = ["All", "Unpaid", "Waiting", "Paid"];
-
-interface Order {
-  id: string;
-  files: string;
-  leads: string;
-  price: string;
-  status: string;
-  date: string;
-}
+const filterOptions = ["All", "Unpaid", "Processing", "Paid"];
 
 export default function OrdersTable() {
   const [currentFilter, setCurrentFilter] = useState<string>("All");
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get(`/api/order/recent?filter=${currentFilter}`);
+
+        setOrders(response.data);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   useEffect(() => {
     const filtered =
       currentFilter === "All"
         ? orders
-        : orders?.filter((order) => order.status === currentFilter);
+        : orders?.filter((order) => order.paid === currentFilter);
     setFilteredOrders(filtered);
   }, [currentFilter, orders]);
 
@@ -35,7 +47,10 @@ export default function OrdersTable() {
           <PiPackage />
           Recent Orders
         </div>
-        <Link to="/user/orders" className="flex items-center gap-1 ml-2 underline text-xs">
+        <Link
+          to="/user/orders"
+          className="flex items-center gap-1 ml-2 underline text-xs"
+        >
           See All <GoArrowUpRight />
         </Link>
 
@@ -73,36 +88,38 @@ export default function OrdersTable() {
             </tr>
           </thead>
           <tbody className="divide-y divide-light-gray-1">
-            {filteredOrders.length === 0 ? (
+            {loading ? (
+              <LoadingElement width="32" color="blue" />
+            ) : filteredOrders.length === 0 ? (
               <tr>
                 <td colSpan={6} className="text-center py-3 text-gray-500">
                   No orders available
                 </td>
               </tr>
             ) : (
-              filteredOrders.slice(0, 3).map((order, index) => (
+              orders.map((order, index) => (
                 <tr key={index} className="hover:bg-gray-50">
                   <td className="px-4 py-3 font-medium text-light-dark">
                     <PiPackage className="inline-block mr-1 text-xl" />
-                    {order.id}
+                    {order._id.slice(-5)}
                   </td>
-                  <td className="px-4 py-3">{order.files}</td>
-                  <td className="px-4 py-3">{order.leads}</td>
-                  <td className="px-4 py-3">{order.price}</td>
+                  <td className="px-4 py-3">{order.files.length}</td>
+                  <td className="px-4 py-3">{order.volume}</td>
+                  <td className="px-4 py-3">{order.prix}</td>
                   <td className="px-4 py-3">
                     <span
                       className={`border px-2 py-1 rounded-md text-xs ${
-                        order.status === "Paid"
+                        order.paid === "Paid"
                           ? "bg-light-green-2 border-light-green-1 text-green"
-                          : order.status === "Waiting"
+                          : order.paid === "Processing"
                           ? "bg-[#FAFAFA] border-[#E6E6E6] text-dark"
                           : "bg-light-red-2 border-light-red-1 text-red"
                       }`}
                     >
-                      {order.status}
+                      {order.paid}
                     </span>
                   </td>
-                  <td className="px-4 py-3">{order.date}</td>
+                  <td className="px-4 py-3">{order.createdAt.split("T")[0]}</td>
                 </tr>
               ))
             )}

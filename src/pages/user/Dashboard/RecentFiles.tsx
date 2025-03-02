@@ -7,34 +7,37 @@ import {
   PiSquareSplitVerticalThin,
 } from "react-icons/pi";
 import { GoArrowUpRight } from "react-icons/go";
-
-import { fileData } from "../data";
 import { GiPositionMarker } from "react-icons/gi";
+
+import { File } from "../../../types";
+import api from "../../../actions/api";
+import LoadingElement from "../../../components/Common/LoadingElement";
 
 const filterOptions = ["All", "Ready", "Waiting"];
 
-interface File {
-  id: string;
-  type: string;
-  image: string;
-  country: string;
-  column: string;
-  leads: string;
-  date: string;
-  status: string;
-}
-
 export default function RecentFiles() {
   const [currentFilter, setCurrentFilter] = useState<string>("All");
-  const [filteredFileData, setFilteredFileData] = useState<File[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [files, setFiles] = useState<File[]>([]);
 
   useEffect(() => {
-    const filtered =
-      currentFilter === "All"
-        ? fileData
-        : fileData.filter((file) => file.status === currentFilter);
-    setFilteredFileData(filtered);
-  }, [currentFilter, fileData]);
+    const fetchOrders = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get(
+          `/api/file/recent?filter=${currentFilter}`
+        );
+
+        setFiles(response.data);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   return (
     <div className="w-full flex flex-col gap-4 p-8 text-dark border-b-2 border-light-gray-1">
@@ -83,18 +86,20 @@ export default function RecentFiles() {
             </tr>
           </thead>
           <tbody className="divide-y divide-light-gray-1">
-            {filteredFileData.length === 0 ? (
+            {loading ? (
+              <LoadingElement width="32" color="blue" />
+            ) : files.length === 0 ? (
               <tr>
                 <td colSpan={6} className="px-4 py-3 text-center text-gray-500">
                   No files available.
                 </td>
               </tr>
             ) : (
-              filteredFileData.slice(0, 3).map((file, index) => (
+              files.map((file, index) => (
                 <tr key={index} className="hover:bg-gray-50">
                   <td className="px-4 py-3">
                     <PiDatabaseLight className="inline-block mr-1 text-xl" />
-                    {file.id}
+                    {file._id?.slice(-5)}
                   </td>
                   <td className="px-4 py-3">
                     <div className="w-full flex items-center gap-2">
@@ -120,15 +125,15 @@ export default function RecentFiles() {
                     <div className="w-full flex items-center divide-x">
                       <div className="flex items-center pr-2">
                         <PiSquareSplitHorizontalThin className="text-2xl" />
-                        <span>{file.column}</span>
+                        <span>{Object.keys(file.columns).length}</span>
                       </div>
                       <div className="flex items-center pl-2">
                         <PiSquareSplitVerticalThin className="text-2xl" />
-                        <span>{file.leads}</span>
+                        <span>{file.volume}</span>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3">{file.date}</td>
+                  <td className="px-4 py-3">{file.createdAt?.split("T")[0]}</td>
                   <td className="px-4 py-3">
                     <span
                       className={`border px-2 py-1 rounded-md text-xs ${

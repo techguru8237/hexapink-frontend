@@ -12,7 +12,7 @@ import ResetPasswordPage from "./pages/auth/ResetPassword";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/Dashboard";
 import Tables from "./pages/admin/Tables";
-import Orders from "./pages/admin/Orders";
+import AdminOrders from "./pages/admin/Orders";
 import Users from "./pages/admin/Users";
 import PaymentMethods from "./pages/admin/PaymentMethods";
 import Collections from "./pages/admin/Collection/Collections";
@@ -30,6 +30,7 @@ import CreateFile from "./pages/user/File/CreateFile";
 
 // Components
 import ProtectedRoute from "./pages/ProtectedRoute";
+import UserOrders from "./pages/user/Orders";
 
 function App() {
   return (
@@ -66,7 +67,7 @@ function App() {
         >
           <Route index element={<Navigate to="dashboard" />} />
           <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="orders" element={<Orders />} />
+          <Route path="orders" element={<AdminOrders />} />
           <Route path="payments/:page?" element={<PaymentMethods />} />
           <Route path="collections" element={<Collections />} />
           <Route path="collections/new" element={<CreateCollection />} />
@@ -95,7 +96,7 @@ function App() {
           <Route path="dashboard" element={<UserDashboard />} />
           <Route path="files" element={<Files />} />
           <Route path="files/new" element={<CreateFile />} />
-          <Route path="orders" element={<Orders />} />
+          <Route path="orders/:page?" element={<UserOrders />} />
           <Route path="lookup" element={<Lookup />} />
           <Route path="wallet" element={<Wallet />} />
           <Route path="cart" element={<Cart />} />

@@ -7,11 +7,11 @@ import {
   PiWalletFill,
   PiShoppingCartFill,
   PiShoppingCartLight,
+  PiPlusCircleLight,
 } from "react-icons/pi";
 
 import { useUserContext } from "../../contexts/User";
 import useCartStore from "../../Store/useCartStore";
-import { GoArrowRight } from "react-icons/go";
 
 interface UserHeaderProps {
   icon: JSX.Element;
@@ -40,9 +40,9 @@ export default function UserHeader({ icon, label }: UserHeaderProps) {
         {isDashboard && (
           <Link
             to="/user/files/new"
-            className="w-full flex items-center gap-2 justify-center bg-dark-blue text-white rounded-full p-2"
+            className="w-full flex items-center gap-2 justify-center bg-dark-blue text-white rounded-full px-4 py-2"
           >
-            Create File <GoArrowRight />
+            <PiPlusCircleLight className="text-xl" /> New File
           </Link>
         )}
         <Link

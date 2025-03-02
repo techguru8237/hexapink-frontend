@@ -23,9 +23,9 @@ export default function Carts() {
     selectedCartIds.includes(cart.id)
   );
 
-  const totalLeads = selectedCarts.reduce((acc, cart) => acc + cart.volumn, 0);
+  const totalLeads = selectedCarts.reduce((acc, cart) => acc + cart.volume, 0);
   const totalPrice = selectedCarts.reduce(
-    (acc, cart) => acc + cart.volumn * (cart.collection.fee || 1),
+    (acc, cart) => acc + cart.volume * (cart.unitPrice || 1),
     0
   );
 

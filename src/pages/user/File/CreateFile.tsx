@@ -15,6 +15,7 @@ import Checkout from "../../../components/User/File/Checkout";
 import useCartStore from "../../../Store/useCartStore";
 import UserHeader from "../../../components/User/UserHeader";
 import CollectionView from "../../../components/User/File/CollectionView";
+import api from "../../../actions/api";
 
 const types = ["Business", "Client"];
 const defaultStep = { id: 1, name: "Collection" };
@@ -25,7 +26,7 @@ export default function CreateFile() {
   const location = useLocation();
 
   const selectedCartIds = location.state;
-  const { carts, setCarts } = useCartStore((state) => state);
+  const { carts, setCarts, removeCarts } = useCartStore((state) => state);
 
   const [steps, setSteps] = useState<Step[]>([defaultStep]);
   const [step, setStep] = useState(1);
@@ -34,7 +35,8 @@ export default function CreateFile() {
   const [selectedCollection, setSelectedCollection] = useState<
     Collection | undefined
   >(undefined);
-  const [volumn, setVolumn] = useState<number>(0);
+  const [volume, setVolume] = useState<number>(0);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
   const [selectedStepColumns, setSelectedStepColumns] = useState<Column[]>([]);
   const [selectedData, setSelectedData] = useState<
     Record<string, { value: any; stepName: string }>
@@ -49,18 +51,20 @@ export default function CreateFile() {
   const [paymentMethod, setPaymentMethod] = useState<string>(paymentMethods[0]);
   const [selectedBank, setSelectedBank] = useState<BankItem>();
 
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
   useEffect(() => {
-    if (selectedCartIds && carts.length) {
-      setSteps([...steps, { id: 2, name: "Checkout" }]);
+    if (selectedCartIds && selectedCartIds.length && carts.length) {
+      setSteps([defaultStep, { id: 2, name: "Checkout" }]);
       setStep(2);
       const selectedCarts = carts.filter((cart) =>
         selectedCartIds.includes(cart.id)
       );
-      const totalVolum = selectedCarts.reduce(
-        (amount, cart) => amount + cart.volumn,
+      const totalPrice = selectedCarts.reduce(
+        (amount, cart) => amount + cart.volume * (cart.unitPrice ?? 1),
         0
       );
-      setVolumn(totalVolum);
+      setTotalPrice(totalPrice);
     }
   }, [selectedCartIds, carts]);
 
@@ -95,21 +99,93 @@ export default function CreateFile() {
     }
   };
 
+  console.log(volume, step);
+
   const handleClickNextStep = async () => {
     if (step === steps.length) {
+      let files = [];
+      if (selectedCartIds) {
+        // If selectedCartIds is truthy, map carts and create the files array
+        files = carts.map((cart) => ({
+          title: cart.title,
+          type: cart.type,
+          countries: cart.countries,
+          collectionId: cart.collectionId,
+          image: cart.image,
+          unitPrice: cart.unitPrice,
+          volume: cart.volume,
+          columns: JSON.stringify(cart.columns),
+        }));
+      } else {
+        // If selectedCartIds is falsy, push a new item into files
+        if (selectedCollection) {
+          files.push({
+            type,
+            countries: selectedCountries,
+            title: selectedCollection.title,
+            collectionId: selectedCollection._id,
+            image: selectedCollection.image,
+            unitPrice: selectedCollection.fee,
+            columns: JSON.stringify(selectedData),
+            volume,
+          });
+        }
+      }
+
+      try {
+        // Send the files array to the backend
+        const volume = files.reduce((amount, file) => amount + file.volume, 0);
+        const prix = files.reduce(
+          (amount, file) => amount + file.volume * (file.unitPrice || 1),
+          0
+        );
+        const response = await api.post("/api/order/create", {
+          files: JSON.stringify(files),
+          volume,
+          prix,
+        });
+        if (response.status == 201) {
+          setStep(1);
+          setSteps([defaultStep]);
+          setSelectedData({});
+          setSelectedCollection(undefined);
+          setSelectedCountries([]);
+          setType("");
+          navigate("/user/orders/1");
+          removeCarts(selectedCartIds);
+        }
+      } catch (error) {
+        console.error("Error creating order:", error);
+      }
     } else if (step === steps.length - 1 && selectedCollection) {
+      if (volume == 0) {
+        // Set volume error
+        setErrors((prev) => ({ ...prev, volume: "Volume is required" }));
+        return;
+      }
+      // Handle the logic for the last step before finishing
       const id = Math.random().toString(36).slice(2, 9);
       const newCart = {
         id,
+        title: selectedCollection?.title || "",
         type,
         countries: selectedCountries,
+        collectionId: selectedCollection._id,
+        image: selectedCollection.image || "",
+        unitPrice: selectedCollection.fee || 1,
         collection: selectedCollection,
         columns: selectedData,
-        volumn,
+        volume,
       };
-      setCarts(newCart);
+
+      const updatedCarts = carts.filter(
+        (cart) => cart.collectionId !== selectedCollection._id
+      );
+      setCarts([...updatedCarts, newCart]);
+
       setStep(step + 1);
     } else {
+      // Move to the next step
       setStep(step + 1);
     }
   };
@@ -225,7 +301,7 @@ export default function CreateFile() {
                 // setEmail={setEmail}
                 // address={address}
                 // setAddress={setAddress}
-                orderPrice={1250}
+                orderPrice={totalPrice}
                 paymentMethod={paymentMethod}
                 setPaymentMethod={setPaymentMethod}
                 selectedBank={selectedBank}
@@ -240,8 +316,12 @@ export default function CreateFile() {
               data={selectedCollection}
               steps={steps.slice(1, -1).map((step) => step.name)}
               columns={selectedData}
-              volumn={volumn}
-              setVolumn={setVolumn}
+              volume={volume}
+              totalPrice={totalPrice}
+              errors={errors}
+              setVolume={setVolume}
+              setTotalPrice={setTotalPrice}
+              setErrors={setErrors}
             />
           </div>
         )}

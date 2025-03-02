@@ -34,7 +34,7 @@ export const CartListItem: React.FC<CartListItemProps> = ({
             <img
               src={
                 import.meta.env.VITE_BACKEND_URL +
-                cart.collection.image?.replace("uploads", "")
+                cart.image?.replace("uploads", "")
               }
               alt="file image"
             />
@@ -54,13 +54,13 @@ export const CartListItem: React.FC<CartListItemProps> = ({
           </div>
         </div>
         <div className="w-[20%] p-2 flex items-center border-l border-dashed border-light-gray-3">
-          {cart.volumn}
+          {cart.volume}
         </div>
         <div className="w-[20%] p-2 flex items-center border-l border-dashed border-light-gray-3">
-          {currency}&nbsp;{cart.collection.fee}
+          {currency}&nbsp;{cart.unitPrice}
         </div>
         <div className="w-[20%] p-2 flex items-center gap-2 border-l border-dashed border-light-gray-3">
-          {currency}&nbsp;{cart.volumn * (cart.collection.fee || 1)}
+          {currency}&nbsp;{cart.volume * (cart.unitPrice || 1)}
         </div>
       </div>
     </div>

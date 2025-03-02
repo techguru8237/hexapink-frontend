@@ -2,43 +2,51 @@ import { useState, useEffect } from "react";
 
 import { PiFileTextBold } from "react-icons/pi";
 import { CiFilter } from "react-icons/ci";
+
+import api from "../../../actions/api";
+import { File } from "../../../types";
 import Pagination from "../../../components/Common/Pagination";
 import NewFileSkeleton from "../../../components/User/File/NewFileSkeleton";
 import FileListHeader from "../../../components/User/File/FileListHeader";
 import { FileListItem } from "../../../components/User/File/FileListItem";
 import UserHeader from "../../../components/User/UserHeader";
 
-const dummyData = Array.from({ length: 25 }, (_, index) => ({
-  id: index,
-  name: `file_${index + 1}`,
-  date: "11 Nov 2024",
-  status: "Ready",
-  order: `ord_${index + 124}`,
-}));
-
 export default function Files() {
-  const [selectedFiles, setSelectedFiles] = useState<number[]>([]);
-  const [filteredFiles, setFilteredFiles] = useState<
-    { id: number; name: string; date: string; status: string; order: string }[]
-  >([]);
+  const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
+  const [filteredFiles, setFilteredFiles] = useState<File[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilterPanelVisible, setIsFilterPanelVisible] = useState(false);
   const itemsPerPage = 5; // Number of items per page
-  const totalPages = Math.ceil(dummyData.length / itemsPerPage);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    setFilteredFiles(dummyData);
-  }, []);
+    const fetchFiles = async () => {
+      try {
+        const response = await api.get("/api/file/read", {
+          params: {
+            page: currentPage,
+            limit: itemsPerPage,
+          },
+        });
+        setFilteredFiles(response.data);
+        setTotalPages(Math.ceil(response.data.length / itemsPerPage));
+      } catch (error) {
+        console.error("Error fetching files:", error);
+      }
+    };
+
+    fetchFiles();
+  }, [currentPage]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  const handleCheckboxChange = (index: number) => {
+  const handleCheckboxChange = (id: string) => {
     setSelectedFiles((prevSelectedFiles) =>
-      prevSelectedFiles.includes(index)
-        ? prevSelectedFiles.filter((fileIndex) => fileIndex !== index)
-        : [...prevSelectedFiles, index]
+      prevSelectedFiles.includes(id)
+        ? prevSelectedFiles.filter((fileId) => fileId !== id)
+        : [...prevSelectedFiles, id]
     );
   };
 
@@ -93,9 +101,10 @@ export default function Files() {
             <FileListHeader />
             {currentFiles.map((item) => (
               <FileListItem
-                key={item.id}
-                index={item.id}
-                isSelected={selectedFiles.includes(item.id)}
+                key={item._id}
+                index={item._id || ""}
+                fileData={item}
+                isSelected={item._id && selectedFiles.includes(item._id) || false}
                 onCheckboxChange={handleCheckboxChange}
               />
             ))}

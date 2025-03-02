@@ -159,9 +159,36 @@ export type UserRole = "admin" | "manager" | "user";
 
 export interface Cart {
   id: string;
+  title: string;
   type: string;
   countries: string[];
-  collection: Collection;
-  columns: Record<string, any>;
-  volumn: number;
+  collectionId: string;
+  image: string;
+  unitPrice: number;
+  columns: Record<string, { value: any; stepName: string }>;
+  volume: number;
 }
+
+export interface File {
+  _id?: string;
+  title: string;
+  type: string;
+  countries: string[];
+  collectionId: string;
+  image: string;
+  unitPrice: number;
+  volume: number;
+  columns: Record<string, { value: any; stepName: string }>;
+  status: string;
+  createdAt?: string;
+}
+
+export interface Order {
+  _id: string;
+  files: File[];
+  volume: number;
+  prix: number;
+  paid: "Paid" | "Unpaid" | "Processing";
+  createdAt: string;
+}
+
