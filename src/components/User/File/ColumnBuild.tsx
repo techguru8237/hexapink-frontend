@@ -1,31 +1,35 @@
-import { useState, memo, useEffect } from "react";
+import { useState, memo, useEffect, useCallback } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { IoMdRadioButtonOn } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import { LiaSearchSolid } from "react-icons/lia";
 import { Column } from "../../../types";
-import api from "../../../actions/api";
 import NumberInput from "../../Common/Inputs/NumberInput";
 import DateInput from "../../Common/Inputs/DateInput";
 import dayjs from "dayjs";
+import useFileDataStore from "../../../Store/userFileDataStore";
 
 interface ColumnBuildProps {
   selectedData: Record<string, { value: any; stepName: string }>;
-  setColumns: (columnName: string, selectedValues: any) => void;
   column: Column;
   index: number;
   step: number;
   disabled?: boolean;
+  setColumns: (columnName: string, selectedValues: any) => void;
+  setVolume: (volume: number) => void;
 }
 
 export default memo(function ColumnBuild({
-  setColumns,
   column,
   index,
   step,
   disabled = false,
   selectedData,
+  setColumns,
+  setVolume,
 }: ColumnBuildProps) {
+  const { fileData } = useFileDataStore((state) => state);
+
   const [initialValues, setInitialValues] = useState<string[]>([]);
   const [searchResults, setSearchResults] = useState<string[]>([]);
   const [showAllCountries, setShowAllCountries] = useState<boolean>(false);
@@ -39,56 +43,61 @@ export default memo(function ColumnBuild({
           return;
         }
 
-        let selectedDataForQuery = { ...selectedData };
-        if (index > 0) {
-          const previousColumn = Object.keys(selectedDataForQuery)[index - 1];
-          if (previousColumn) {
-            selectedDataForQuery = {
-              [previousColumn]: selectedDataForQuery[previousColumn],
-            };
-          }
-        }
+        let totalVolume = 0;
 
         const allTableData = await Promise.all(
           column.tableColumns.map(async (col) => {
-            const response = await api.post("/api/table/table-data", {
-              id: col.tableId,
-            });
+            const data = fileData.find((file) => file.id === col.tableId)?.data;
 
-            const data = response.data.data;
-
-            if (step === 2 && index === 0) {
-              return data.map((item: any) => item[col.tableColumn]);
-            } else {
-              const filteredData = data.filter((item: any) => {
-                return Object.keys(selectedData).some((key) => {
-                  const selectedValue = selectedData[key];
+            const filteredData = data.filter((item: any) => {
+              return Object.keys(selectedData)
+                .filter((selectedDataKey) => selectedDataKey !== column.name)
+                .every((key) => {
+                  const selectedValue = selectedData[key].value;
                   if (Array.isArray(selectedValue)) {
+                    if (selectedValue.length === 0) return true;
                     return selectedValue.some((value) => {
                       return Object.values(item).includes(value);
                     });
-                  } else if (selectedValue) {
-                    return Object.values(item).includes(selectedValue);
+                  } else if (
+                    typeof selectedValue === "object" &&
+                    selectedValue !== null
+                  ) {
+                    if (selectedValue.min !== undefined) {
+                      return parseInt(item[col.tableColumn]) >= parseInt(selectedValue.min);
+                    } else if (selectedValue.max !== undefined) {
+                      return parseInt(item[col.tableColumn]) <= parseInt(selectedValue.max);
+                    } else if (
+                      selectedValue.min !== undefined &&
+                      selectedValue.max !== undefined
+                    ) {
+                      return (
+                        parseInt(item[col.tableColumn]) >= parseInt(selectedValue.min) &&
+                        parseInt(item[col.tableColumn]) <= parseInt(selectedValue.max)
+                      );
+                    } else {
+                      return true;
+                    }
                   }
-                  return false;
+                  return Object.values(item).includes(selectedValue);
                 });
-              });
-
-              return filteredData.map((item: any) => item[col.tableColumn]);
-            }
+            });
+            totalVolume += filteredData.length;
+            return filteredData.map((item: any) => item[col.tableColumn]);
           })
         );
 
         const uniqueValues = [...new Set(allTableData.flat())];
         setInitialValues(uniqueValues);
         setSearchResults(uniqueValues);
+        setVolume(totalVolume);
       } catch (error) {
         console.error("Error fetching table data:", error);
       }
     };
 
     fetchData();
-  }, [column, index, step, selectedData]);
+  }, [column, index, step, selectedData, fileData, setVolume]);
 
   useEffect(() => {
     if (search !== "") {
@@ -101,42 +110,65 @@ export default memo(function ColumnBuild({
     }
   }, [search, initialValues]);
 
-  const handleClickSearchedItem = (item: string) => {
-    if (
-      !Object.keys(selectedData).includes(column.name) ||
-      !selectedData[column.name].value ||
-      (Array.isArray(selectedData[column.name].value) &&
-        selectedData[column.name].value.length === 0)
-    ) {
-      handleParentChange(column.name, [item]); // setColumns([item]);
-    } else if (
-      Array.isArray(selectedData[column.name].value) &&
-      selectedData[column.name]?.value?.includes(item)
-    ) {
-      const newItems = selectedData[column.name]?.value?.filter(
-        (c: string) => c !== item
-      );
-      handleParentChange(column.name, newItems || []); // setColumns(newItems || []);
-    } else {
-      handleParentChange(column.name, [...selectedData[column.name].value, item]); // setColumns([...selectedData[column.name], item]);
-    }
-  };
+  const handleClickSearchedItem = useCallback(
+    (item: string) => {
+      if (
+        !Object.keys(selectedData).includes(column.name) ||
+        !selectedData[column.name].value ||
+        (Array.isArray(selectedData[column.name].value) &&
+          selectedData[column.name].value.length === 0)
+      ) {
+        handleParentChange(column.name, [item]);
+      } else if (
+        Array.isArray(selectedData[column.name].value) &&
+        selectedData[column.name]?.value?.includes(item)
+      ) {
+        const newItems = selectedData[column.name]?.value?.filter(
+          (c: string) => c !== item
+        );
+        handleParentChange(column.name, newItems || []);
+      } else {
+        handleParentChange(column.name, [
+          ...(Array.isArray(selectedData[column.name].value)
+            ? selectedData[column.name].value
+            : []),
+          item,
+        ]);
+      }
+    },
+    [selectedData, column.name]
+  );
 
-  const handleParentChange = (columnName: string, selectedValue: any) => {
-    // Notify the parent component about the change
-    setColumns(columnName, selectedValue);
-  };
+  const handleParentChange = useCallback(
+    (columnName: string, selectedValue: any) => {
+      setColumns(columnName, selectedValue);
+    },
+    [setColumns]
+  );
 
-  const handleRangeChange = (name: string, value: string) => {
-    handleParentChange(column.name, {
-      ...selectedData[column.name]?.value,
-      [name]: value,
-    });
-  };
+  const handleRangeChange = useCallback(
+    (name: string, value: string) => {
+      const updatedValue = {
+        ...selectedData[column.name]?.value,
+        [name]: value,
+      };
+      handleParentChange(column.name, updatedValue);
 
-  const toggleShowAllCountries = () => {
+      // Recalculate volume based on the updated range
+      const filteredData = initialValues.filter((item) => {
+        const itemValue = parseInt(item);
+        const min = parseInt(updatedValue.min);
+        const max = parseInt(updatedValue.max);
+        return itemValue >= min && itemValue <= max;
+      });
+      setVolume(filteredData.length);
+    },
+    [column.name, selectedData, initialValues, handleParentChange, setVolume]
+  );
+
+  const toggleShowAllCountries = useCallback(() => {
     setShowAllCountries((prev) => !prev);
-  };
+  }, []);
 
   return (
     <div className="max-w-3xl bg-white border border-light-gray-1 rounded-lg flex flex-col text-dark">
@@ -231,6 +263,7 @@ export default memo(function ColumnBuild({
                 onClick={() => handleClickSearchedItem(item)}
                 disabled={disabled}
                 className={`flex items-center gap-2 px-2 py-1 rounded-full border border-light-gray-3 cursor-pointer hover:bg-light-gray-1 ${
+                  selectedData[column.name]?.value.length > 0 &&
                   selectedData[column.name]?.value?.includes(item)
                     ? "bg-light-gray-1"
                     : ""
@@ -238,6 +271,7 @@ export default memo(function ColumnBuild({
               >
                 <IoMdRadioButtonOn
                   className={`${
+                    selectedData[column.name]?.value.length > 0 &&
                     selectedData[column.name]?.value?.includes(item)
                       ? "text-dark-blue"
                       : "text-light-gray-3"
@@ -251,22 +285,23 @@ export default memo(function ColumnBuild({
           <div className="p-4 flex flex-col justify-start gap-2">
             <span className="font-bold text-left">Selected Results:</span>
             <div className="flex flex-wrap gap-2">
-              {selectedData[column.name]?.value?.map((item: string) => (
-                <div
-                  key={item}
-                  className="flex items-center gap-2 px-2 py-1 rounded-full border border-light-gray-3 bg-light-gray-1"
-                >
-                  <IoMdRadioButtonOn className="text-dark-blue" />
-                  <span className="text-dark-blue">{item}</span>
-                  <button
-                    onClick={() => handleClickSearchedItem(item)}
-                    className="w-4 h-4 text-red border border-light-gray-3 rounded-full p-1 box-content"
-                    disabled={disabled}
+              {selectedData[column.name]?.value.length > 0 &&
+                selectedData[column.name]?.value?.map((item: string) => (
+                  <div
+                    key={item}
+                    className="flex items-center gap-2 px-2 py-1 rounded-full border border-light-gray-3 bg-light-gray-1"
                   >
-                    <IoClose />
-                  </button>
-                </div>
-              ))}
+                    <IoMdRadioButtonOn className="text-dark-blue" />
+                    <span className="text-dark-blue">{item}</span>
+                    <button
+                      onClick={() => handleClickSearchedItem(item)}
+                      className="w-4 h-4 text-red border border-light-gray-3 rounded-full p-1 box-content"
+                      disabled={disabled}
+                    >
+                      <IoClose />
+                    </button>
+                  </div>
+                ))}
             </div>
           </div>
         </>

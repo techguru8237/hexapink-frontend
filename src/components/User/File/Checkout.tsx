@@ -26,6 +26,7 @@ interface CheckoutProps {
   orderPrice: number;
   paymentMethod: string;
   selectedBank: BankItem | undefined;
+  cardElement: JSX.Element;
   setPaymentMethod: (value: string) => void;
   setSelectedBank: (value: BankItem | undefined) => void;
 }
@@ -43,6 +44,7 @@ export default function Checkout({
   // setPhoneNumber,
   paymentMethod,
   selectedBank,
+  cardElement,
   setPaymentMethod,
   setSelectedBank,
   orderPrice,
@@ -163,9 +165,7 @@ export default function Checkout({
                 </tr>
                 <tr>
                   <td className="label">Balance After Order</td>
-                  <td>
-                    {(currentUser?.balance ?? 0) - orderPrice}
-                  </td>
+                  <td>{(currentUser?.balance ?? 0) - orderPrice}</td>
                 </tr>
               </tbody>
             </table>
@@ -184,7 +184,13 @@ export default function Checkout({
           </div>
         )}
 
-        {selectedBank && (
+        {paymentMethod === "Credit Card" && (
+          <div className="p-6 border-b border-dashed border-light-gray-1">
+            {cardElement}
+          </div>
+        )}
+
+        {selectedBank && paymentMethod === "Bank Transfer" && (
           <div className="flex flex-col">
             {/* Select the method to get bank information */}
             <div className="p-6 border-b border-dashed border-light-gray-1 flex flex-col gap-1">

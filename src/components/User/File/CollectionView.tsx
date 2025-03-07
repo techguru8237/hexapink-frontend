@@ -37,21 +37,21 @@ export default function CollectionView({
   const handleChangeValue = (option: string, value: number) => {
     if (option === "Volumn") {
       setVolume(value);
-      setTotalPrice(value * (data.fee || 1)); // Calculate total price when volumn changes
+      setTotalPrice(value * (data.fee || 1));
       setErrors({ ...errors, volume: "" });
     } else {
       setTotalPrice(value);
-      setVolume(Math.ceil(value / (data.fee || 1))); // Calculate volumn when price changes
+      setVolume(Math.ceil(value / (data.fee || 1)));
     }
   };
 
   const handleOptionChange = (option: string) => {
     if (option === "Volumn") {
       setCalcMode(option);
-      setVolume(Math.ceil(totalPrice / (data.fee || 1))); // Update volume when switching
+      setVolume(Math.ceil(totalPrice / (data.fee || 1)));
     } else {
       setCalcMode(option);
-      setTotalPrice(volume * (data.fee || 1)); // Update total price when switching
+      setTotalPrice(volume * (data.fee || 1));
     }
   };
 
@@ -169,7 +169,10 @@ export default function CollectionView({
 
       <div className="w-full flex flex-col">
         {steps.map((step) => (
-          <div className="w-full p-6 flex flex-col items-start gap-2 border-b border-dashed border-light-gray-3 last:border-none">
+          <div
+            key={step}
+            className="w-full p-6 flex flex-col items-start gap-2 border-b border-dashed border-light-gray-3 last:border-none"
+          >
             <SelectedColumnData step={step} columns={columns} />
           </div>
         ))}

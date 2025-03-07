@@ -19,7 +19,9 @@ export default function OrdersTable() {
     const fetchOrders = async () => {
       try {
         setLoading(true);
-        const response = await api.get(`/api/order/recent?filter=${currentFilter}`);
+        const response = await api.get(
+          `/api/order/recent?paid=${currentFilter}`
+        );
 
         setOrders(response.data);
       } catch (error) {
@@ -89,7 +91,13 @@ export default function OrdersTable() {
           </thead>
           <tbody className="divide-y divide-light-gray-1">
             {loading ? (
-              <LoadingElement width="32" color="blue" />
+              <tr>
+                <td colSpan={5} className="text-center py-4">
+                  <div className="flex justify-center">
+                    <LoadingElement width="24" color="#4040BF" />
+                  </div>
+                </td>
+              </tr>
             ) : filteredOrders.length === 0 ? (
               <tr>
                 <td colSpan={6} className="text-center py-3 text-gray-500">

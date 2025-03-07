@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa6"; // Import arrow icons
 import { IoMdRadioButtonOn } from "react-icons/io";
-import { IoClose } from "react-icons/io5";
 import { LiaSearchSolid } from "react-icons/lia";
+import { IoClose } from "react-icons/io5";
+
+import LoadingElement from "./LoadingElement";
 
 interface CountrySelectProps {
   selectedCountries: string[];
@@ -19,13 +21,16 @@ export default function CountrySelect({
   const [searchResults, setSearchResults] = useState<string[]>([]);
   const [showAllCountries, setShowAllCountries] = useState<boolean>(false);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     fetch("https://restcountries.com/v3.1/all")
       .then((response) => response.json())
       .then((data) => {
         const countryNames = data.map((country: any) => country.name.common);
         setCountries(countryNames);
+        setLoading(false);
       });
   }, []);
 
@@ -88,17 +93,23 @@ export default function CountrySelect({
       </div>
 
       <div className="max-h-48 overflow-y-auto flex flex-wrap gap-2 p-6 border-b border-dashed border-light-gray-1">
-        {searchResults.map((country) => (
-          <button
-            key={country}
-            onClick={() => handleClickSearchedCountry(country)}
-            disabled={disabled}
-            className="flex items-center gap-2 px-2 py-1 rounded-full border border-light-gray-3 cursor-pointer hover:bg-light-gray-1"
-          >
-            <IoMdRadioButtonOn className="text-light-gray-3" />
-            {country}
-          </button>
-        ))}
+        {loading ? (
+          <div>
+            <LoadingElement width="24" color="#4040BF" />
+          </div>
+        ) : (
+          searchResults.map((country) => (
+            <button
+              key={country}
+              onClick={() => handleClickSearchedCountry(country)}
+              disabled={disabled}
+              className="flex items-center gap-2 px-2 py-1 rounded-full border border-light-gray-3 cursor-pointer hover:bg-light-gray-1"
+            >
+              <IoMdRadioButtonOn className="text-light-gray-3" />
+              {country}
+            </button>
+          ))
+        )}
       </div>
 
       <div className="p-4 flex flex-col justify-start gap-2">

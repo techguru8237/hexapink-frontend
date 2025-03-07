@@ -1,10 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
 import { PiCheckBold } from "react-icons/pi";
 import { FaRegFolderOpen } from "react-icons/fa";
 import { GoArrowRight, GoArrowLeft } from "react-icons/go";
 
+import api from "../../../actions/api";
+import { useUserContext } from "../../../contexts/User";
 import { BankItem, Collection, Column, Step } from "../../../types";
 import VerticalStepBar from "../../../components/Collection/VerticalStepbar";
 import CountrySelect from "../../../components/Common/CountrySelect";
@@ -15,7 +18,10 @@ import Checkout from "../../../components/User/File/Checkout";
 import useCartStore from "../../../Store/useCartStore";
 import UserHeader from "../../../components/User/UserHeader";
 import CollectionView from "../../../components/User/File/CollectionView";
-import api from "../../../actions/api";
+
+import CartAddIcon from "../../../assets/icons/ShoppingCart.svg";
+import { getTotalLeads } from "../../../actions/collection";
+import useFileDataStore from "../../../Store/userFileDataStore";
 
 const types = ["Business", "Client"];
 const defaultStep = { id: 1, name: "Collection" };
@@ -26,7 +32,9 @@ export default function CreateFile() {
   const location = useLocation();
 
   const selectedCartIds = location.state;
+  const { currentUser } = useUserContext();
   const { carts, setCarts, removeCarts } = useCartStore((state) => state);
+  const { setFileData } = useFileDataStore((state) => state);
 
   const [steps, setSteps] = useState<Step[]>([defaultStep]);
   const [step, setStep] = useState(1);
@@ -42,16 +50,13 @@ export default function CreateFile() {
     Record<string, { value: any; stepName: string }>
   >({});
 
-  // Checkout Status
-  // const [firstName, setFirstName] = useState<string>("");
-  // const [lastName, setLastName] = useState<string>("");
-  // const [phoneNumber, setPhoneNumber] = useState<string | undefined>("");
-  // const [email, setEmail] = useState<string>("");
-  // const [address, setAddress] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<string>(paymentMethods[0]);
   const [selectedBank, setSelectedBank] = useState<BankItem>();
-
   const [errors, setErrors] = useState<Record<string, string>>({});
+  // const [loading, setLoading] = useState<boolean>(false);
+
+  const stripe = useStripe();
+  const elements = useElements();
 
   useEffect(() => {
     if (selectedCartIds && selectedCartIds.length && carts.length) {
@@ -73,12 +78,27 @@ export default function CreateFile() {
       const stepItems = Array.from(
         new Set(selectedCollection.columns.map((col) => col.stepName))
       ).map((name, index) => ({ id: index + 2, name: name || "" }));
-
       setSteps([
         defaultStep,
         ...stepItems,
         { id: stepItems.length + 2, name: "Checkout" },
       ]);
+
+      const fetchTotalLeads = async () => {
+        const response = await getTotalLeads(selectedCollection);
+        setVolume(response);
+      };
+      const fetchRelatedTables = async () => {
+        const tableIds = selectedCollection.columns.map((col) =>
+          col.tableColumns?.map((tc) => tc.tableId)
+        );
+        const response = await api.post("/api/table/tables", { tableIds });
+        if (response.status === 200) {
+          setFileData(response.data);
+        }
+      };
+      fetchTotalLeads();
+      fetchRelatedTables();
     }
   }, [selectedCollection]);
 
@@ -91,21 +111,18 @@ export default function CreateFile() {
     }
   }, [step, selectedCollection, steps]);
 
-  const handleClickBackStep = () => {
+  const handleClickBackStep = useCallback(() => {
     if (step === 1) {
       navigate("/admin/collections");
     } else {
       setStep(step - 1);
     }
-  };
+  }, [step, navigate]);
 
-  console.log(volume, step);
-
-  const handleClickNextStep = async () => {
+  const handleClickNextStep = useCallback(async () => {
     if (step === steps.length) {
       let files = [];
       if (selectedCartIds) {
-        // If selectedCartIds is truthy, map carts and create the files array
         files = carts.map((cart) => ({
           title: cart.title,
           type: cart.type,
@@ -117,7 +134,6 @@ export default function CreateFile() {
           columns: JSON.stringify(cart.columns),
         }));
       } else {
-        // If selectedCartIds is falsy, push a new item into files
         if (selectedCollection) {
           files.push({
             type,
@@ -133,37 +149,63 @@ export default function CreateFile() {
       }
 
       try {
-        // Send the files array to the backend
         const volume = files.reduce((amount, file) => amount + file.volume, 0);
         const prix = files.reduce(
           (amount, file) => amount + file.volume * (file.unitPrice || 1),
           0
         );
-        const response = await api.post("/api/order/create", {
-          files: JSON.stringify(files),
-          volume,
-          prix,
-        });
-        if (response.status == 201) {
-          setStep(1);
-          setSteps([defaultStep]);
-          setSelectedData({});
-          setSelectedCollection(undefined);
-          setSelectedCountries([]);
-          setType("");
-          navigate("/user/orders/1");
-          removeCarts(selectedCartIds);
+
+        if (paymentMethod === "Credit Card") {
+          const response = await api.post("/api/order/create-intent", {
+            files: JSON.stringify(files),
+            volume,
+            prix,
+          });
+          const { clientSecret } = response.data;
+
+          if (!stripe || !elements) {
+            return;
+          }
+
+          const cardElement = elements.getElement(CardElement);
+          const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+              card: cardElement!,
+              billing_details: {
+                name: "User Name", // Replace with actual user name
+              },
+            },
+          });
+
+          if (paymentResult.error) {
+            console.error("Payment failed:", paymentResult.error.message);
+            return;
+          } else if (paymentResult.paymentIntent?.status === "succeeded") {
+            await createOrder(files, volume, prix);
+          }
+        } else if (paymentMethod === "Balance") {
+          if ((currentUser?.balance ?? 0) < prix) {
+            console.error("Insufficient balance");
+            return;
+          }
+          await createOrder(files, volume, prix);
+        } else {
+          await createOrder(files, volume, prix);
         }
       } catch (error) {
         console.error("Error creating order:", error);
       }
-    } else if (step === steps.length - 1 && selectedCollection) {
+    } else {
+      setStep(step + 1);
+    }
+  }, [step, steps, selectedCartIds, carts, selectedCollection, type, selectedCountries, selectedData, volume, paymentMethod, stripe, elements, currentUser, navigate, removeCarts]);
+
+  const handleAddCart = useCallback(() => {
+    if (selectedCollection) {
       if (volume == 0) {
-        // Set volume error
         setErrors((prev) => ({ ...prev, volume: "Volume is required" }));
         return;
       }
-      // Handle the logic for the last step before finishing
       const id = Math.random().toString(36).slice(2, 9);
       const newCart = {
         id,
@@ -182,24 +224,37 @@ export default function CreateFile() {
         (cart) => cart.collectionId !== selectedCollection._id
       );
       setCarts([...updatedCarts, newCart]);
+    }
+  }, [selectedCollection, volume, type, selectedCountries, selectedData, carts, setCarts]);
 
-      setStep(step + 1);
-    } else {
-      // Move to the next step
-      setStep(step + 1);
+  const createOrder = async (files: any[], volume: number, prix: number) => {
+    const response = await api.post("/api/order/create", {
+      files: JSON.stringify(files),
+      volume,
+      prix,
+      paid: "Paid",
+    });
+    if (response.status == 201) {
+      setStep(1);
+      setSteps([defaultStep]);
+      setSelectedData({});
+      setSelectedCollection(undefined);
+      setSelectedCountries([]);
+      setType("");
+      navigate("/user/orders/1");
+      removeCarts(selectedCartIds);
     }
   };
 
-  const handleColumnChange = (
-    columnName: string,
-    selectedValue: any,
-    stepName: string
-  ) => {
-    setSelectedData((prev) => ({
-      ...prev,
-      [columnName]: { value: selectedValue, stepName: stepName },
-    }));
-  };
+  const handleColumnChange = useCallback(
+    (columnName: string, selectedValue: any, stepName: string) => {
+      setSelectedData((prev) => ({
+        ...prev,
+        [columnName]: { value: selectedValue, stepName: stepName },
+      }));
+    },
+    []
+  );
 
   return (
     <div className="h-full flex flex-col">
@@ -209,7 +264,7 @@ export default function CreateFile() {
           <VerticalStepBar steps={steps} stepNumber={step} />
         </div>
         <div className="min-w-min flex flex-1 flex-col border-l border-light-gray-1">
-          <div className="flex items-center justify-between px-8 py-4 border-b border-light-gray-3">
+          <div className="flex items-center justify-between flex-wrap gap-2 px-8 py-4 border-b border-light-gray-3">
             <div className="flex items-center gap-2">
               <button
                 onClick={handleClickBackStep}
@@ -246,6 +301,12 @@ export default function CreateFile() {
                 >
                   <span>Skip to Checkout</span> <GoArrowRight />
                 </button>
+                <button
+                  onClick={handleAddCart}
+                  className="border border-dark-blue rounded-full p-3"
+                >
+                  <img src={CartAddIcon} className="w-6 h-6" />
+                </button>
               </div>
             )}
           </div>
@@ -278,34 +339,27 @@ export default function CreateFile() {
                   index={index}
                   column={column}
                   selectedData={selectedData}
-                  setColumns={
-                    (columnName, selectedValue) =>
-                      handleColumnChange(
-                        columnName,
-                        selectedValue,
-                        steps[step - 1].name
-                      ) // Pass step name
+                  setColumns={(columnName, selectedValue) =>
+                    handleColumnChange(
+                      columnName,
+                      selectedValue,
+                      steps[step - 1].name
+                    )
                   }
+                  setVolume={setVolume}
                 />
               ))}
             </div>
             {step > 1 && step === steps.length && (
               <Checkout
-                // firstName={firstName}
-                // setFirstName={setFirstName}
-                // lastName={lastName}
-                // setLastName={setLastName}
-                // phoneNumber={phoneNumber}
-                // setPhoneNumber={setPhoneNumber}
-                // email={email}
-                // setEmail={setEmail}
-                // address={address}
-                // setAddress={setAddress}
                 orderPrice={totalPrice}
                 paymentMethod={paymentMethod}
                 setPaymentMethod={setPaymentMethod}
                 selectedBank={selectedBank}
                 setSelectedBank={setSelectedBank}
+                cardElement={
+                  <CardElement className="w-full mb-4 p-2 border border-light-gray-3 rounded-md" />
+                }
               />
             )}
           </div>

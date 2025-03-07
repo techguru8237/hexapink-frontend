@@ -32,7 +32,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ currentUser, login, logout }}>
+    <UserContext.Provider value={{ currentUser, setCurrentUser, login, logout }}>
       {children}
     </UserContext.Provider>
   );

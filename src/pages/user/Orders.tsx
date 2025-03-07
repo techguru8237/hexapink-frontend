@@ -142,7 +142,7 @@ export default function UserOrders() {
         </div>
 
         {isFilterPanelVisible && (
-          <div className="p-6">
+          <div className="p-6 transition duration-300 ease-in">
             <OrderFilterPanel
               onClose={() => setIsFilterPanelVisible(false)}
               onFilterChange={handleFilterChange}

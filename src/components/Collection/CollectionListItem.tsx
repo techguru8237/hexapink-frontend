@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { PiDatabaseLight } from "react-icons/pi";
@@ -7,13 +7,14 @@ import { CiCircleInfo } from "react-icons/ci";
 import { PiMapPinLight } from "react-icons/pi";
 import { BsTrash3 } from "react-icons/bs";
 import { BiPencil } from "react-icons/bi";
+import { IconButton, Tooltip } from "@mui/material";
 
 import api from "../../actions/api";
+import { getTotalLeads } from "../../actions/collection";
 import { Collection } from "../../types";
 import Checkbox from "../Common/Checkbox";
 import LoadingElement from "../Common/LoadingElement";
 import ConfirmDialog from "../Common/ConfirmDialog";
-import { IconButton, Tooltip } from "@mui/material";
 import CollectionPreviewModal from "./CollectionPreviewModal";
 
 interface CollectionListItemProps {
@@ -40,6 +41,15 @@ export const CollectionListItem: React.FC<CollectionListItemProps> = ({
   const [stateUpdateLoading, setStateUpdateLoading] = useState<boolean>(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openPreview, setOpenPreview] = useState(false);
+  const [totalLeads, setTotalLeads] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchTotalLeads = async () => {
+      const response = await getTotalLeads(data);
+      setTotalLeads(response);
+    };
+    fetchTotalLeads();
+  }, [data]);
 
   const handleDelete = () => {
     setOpenDeleteDialog(true); // Open the delete confirmation dialog
@@ -88,7 +98,7 @@ export const CollectionListItem: React.FC<CollectionListItemProps> = ({
 
   const handleShowPreview = (event: React.MouseEvent) => {
     event.stopPropagation();
-    navigate(`/admin/collections/view/${data._id}`)
+    navigate(`/admin/collections/view/${data._id}`);
   };
 
   const handleClosePreview = () => {
@@ -151,7 +161,7 @@ export const CollectionListItem: React.FC<CollectionListItemProps> = ({
           <span>{data.columns.length}</span>
         </div>
         <div className="w-[10%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
-          <span>1500</span>
+          <span>{totalLeads}</span>
         </div>
         <div className="w-[10%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
           <span>1500-5</span>

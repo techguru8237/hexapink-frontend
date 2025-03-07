@@ -3,26 +3,22 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { CiFilter } from "react-icons/ci";
 import { FaWallet } from "react-icons/fa";
-import { PiPackage } from "react-icons/pi"; // Import PiPackage
-
-import { toast } from "react-toastify";
-
-import Pagination from "../../components/Common/Pagination";
-import LoadingElement from "../../components/Common/LoadingElement";
-// import FilterPanel from "./components/Wallet/FilterPanel";
+import { PiArrowFatUpLight, PiBinoculars, PiPackage } from "react-icons/pi"; // Import PiPackage
 
 import api from "../../actions/api";
 import UserHeader from "../../components/User/UserHeader";
 import TopUpForm from "../../components/User/Wallet/TopUpForm";
-import { useUserContext } from "../../contexts/User";
+import Pagination from "../../components/Common/Pagination";
+import LoadingElement from "../../components/Common/LoadingElement";
+// import FilterPanel from "./components/Wallet/FilterPanel";
 
 export interface transactionItem {
-  id: string;
-  operation: string;
-  paymentMethod: string;
-  price: string;
+  _id: string;
+  price: number;
+  type: string;
+  paymentmethod: string;
   status: string;
-  date: string;
+  createdAt: string;
 }
 
 export default function Wallet() {
@@ -34,7 +30,6 @@ export default function Wallet() {
   >([]);
   const [totalPages, setTotalPages] = useState(0);
   const [isFilterPanelVisible, setIsFilterPanelVisible] = useState(false);
-  const [balance, setBalance] = useState(5200);
 
   const itemsPerPage = 5;
   const currentPage = parseInt(searchParams.get("page") || "1");
@@ -46,7 +41,7 @@ export default function Wallet() {
       try {
         setLoading(true);
         const response = await api.get(
-          `/api/wallet-transactions?${queryParams.toString()}&limit=${itemsPerPage}`
+          `/api/transaction/transactions?${queryParams.toString()}&limit=${itemsPerPage}`
         );
 
         setWalletTransactions(response.data.transactions);
@@ -64,7 +59,7 @@ export default function Wallet() {
   const handlePageChange = (page: number) => {
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set("page", page.toString());
-    navigate(`/admin/wallet?${newSearchParams.toString()}`);
+    navigate(`/user/wallet?${newSearchParams.toString()}`);
   };
 
   const handleClickFilter = () => {
@@ -81,15 +76,6 @@ export default function Wallet() {
       "endDate",
     ];
     return filterParams.filter((param) => searchParams.has(param)).length;
-  };
-
-  const { currentUser } = useUserContext();
-
-  const handleTopUp = (amount: number) => {
-    setBalance((prevBalance) => prevBalance + amount);
-    toast.success(`Successfully topped up $${amount}`);
-    // In a real implementation, you'd make an API call here
-    console.log('balance', balance)
   };
 
   return (
@@ -147,7 +133,13 @@ export default function Wallet() {
               </thead>
               <tbody className="divide-y divide-light-gray-1">
                 {loading ? (
-                  <LoadingElement width="32" color="#4040BF" />
+                  <tr>
+                    <td colSpan={5} className="text-center py-4">
+                      <div className="flex justify-center">
+                        <LoadingElement width="24" color="#4040BF" />
+                      </div>
+                    </td>
+                  </tr>
                 ) : walletTransactions.length === 0 ? (
                   <tr>
                     <td colSpan={5} className="text-center py-3 text-gray-500">
@@ -156,27 +148,35 @@ export default function Wallet() {
                   </tr>
                 ) : (
                   walletTransactions.map((transaction) => (
-                    <tr key={transaction.id} className="hover:bg-gray-50">
+                    <tr key={transaction._id} className="hover:bg-gray-50">
                       <td className="px-4 py-3 font-medium text-light-dark">
-                        <PiPackage className="inline-block mr-1 text-xl" />
-                        {transaction.operation}
+                        {transaction.type === "Topup" ? (
+                          <PiArrowFatUpLight className="inline-block mr-1 text-xl" />
+                        ) : transaction.type === "Order" ? (
+                          <PiPackage className="inline-block mr-1 text-xl" />
+                        ) : (
+                          <PiBinoculars className="inline-block mr-1 text-xl" />
+                        )}
+                        {transaction._id.slice(-5)}
                       </td>
-                      <td className="px-4 py-3">{transaction.paymentMethod}</td>
+                      <td className="px-4 py-3">{transaction.paymentmethod}</td>
                       <td className="px-4 py-3">{transaction.price}</td>
                       <td className="px-4 py-3">
                         <span
                           className={`border px-2 py-1 rounded-md text-xs ${
                             transaction.status === "Completed"
                               ? "bg-light-green-2 border-light-green-1 text-green"
-                              : transaction.status === "Pending"
-                              ? "bg-[#FAFAFA] border-[#E6E6E6] text-dark"
-                              : "bg-light-red-2 border-light-red-1 text-red"
+                              : transaction.status === "Waiting"
+                              ? "bg-light-gray-2 border-light-gray-1 text-dark-blue"
+                              : "bg-[#FAFAFA] border-[#E6E6E6] text-dark"
                           }`}
                         >
                           {transaction.status}
                         </span>
                       </td>
-                      <td className="px-4 py-3">{transaction.date}</td>
+                      <td className="px-4 py-3">
+                        {transaction.createdAt.split("T")[0]}
+                      </td>
                     </tr>
                   ))
                 )}
@@ -187,10 +187,7 @@ export default function Wallet() {
 
         {/* Always show the TopUpForm */}
         <div className="w-80 px-4 py-4 border-l border-light-gray-1 flex flex-col">
-          <TopUpForm
-            balance={currentUser?.balance ?? 0}
-            handleTopUpClick={handleTopUp}
-          />
+          <TopUpForm />
         </div>
 
         {/* {isFilterPanelVisible && (

@@ -25,7 +25,7 @@ export default function RecentFiles() {
       try {
         setLoading(true);
         const response = await api.get(
-          `/api/file/recent?filter=${currentFilter}`
+          `/api/file/recent?status=${currentFilter}`
         );
 
         setFiles(response.data);
@@ -37,7 +37,7 @@ export default function RecentFiles() {
     };
 
     fetchOrders();
-  }, []);
+  }, [currentFilter]);
 
   return (
     <div className="w-full flex flex-col gap-4 p-8 text-dark border-b-2 border-light-gray-1">
@@ -87,7 +87,13 @@ export default function RecentFiles() {
           </thead>
           <tbody className="divide-y divide-light-gray-1">
             {loading ? (
-              <LoadingElement width="32" color="blue" />
+              <tr>
+                <td colSpan={5} className="text-center py-4">
+                  <div className="flex justify-center">
+                    <LoadingElement width="24" color="#4040BF" />
+                  </div>
+                </td>
+              </tr>
             ) : files.length === 0 ? (
               <tr>
                 <td colSpan={6} className="px-4 py-3 text-center text-gray-500">
@@ -122,12 +128,12 @@ export default function RecentFiles() {
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <div className="w-full flex items-center divide-x">
-                      <div className="flex items-center pr-2">
+                    <div className="w-full flex items-center gap-2 flex-wrap 2xl:divide-x">
+                      <div className="flex items-center 2xl:pr-2">
                         <PiSquareSplitHorizontalThin className="text-2xl" />
-                        <span>{Object.keys(file.columns).length}</span>
+                        <span>{file.columns && Object.keys(file.columns).length || 0}</span>
                       </div>
-                      <div className="flex items-center pl-2">
+                      <div className="flex items-center 2xl:pl-2">
                         <PiSquareSplitVerticalThin className="text-2xl" />
                         <span>{file.volume}</span>
                       </div>
@@ -147,7 +153,7 @@ export default function RecentFiles() {
                   </td>
                   <td className="px-4 py-3">
                     <div
-                      className={`w-full flex justify-center items-center gap-2 text-sm ${
+                      className={`w-full flex justify-center items-center flex-wrap gap-2 text-sm ${
                         file.status === "Ready"
                           ? "text-dark-blue"
                           : "text-light-gray-3"

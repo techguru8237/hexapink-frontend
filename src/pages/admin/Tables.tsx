@@ -51,7 +51,6 @@ export default function Tables() {
   };
 
   useEffect(() => {
-    console.log('searchParams', searchParams)
     fetchTables();
   }, [searchParams]); // Now depends on searchParams instead of just page
 

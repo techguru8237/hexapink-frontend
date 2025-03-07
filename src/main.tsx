@@ -9,6 +9,7 @@ import { CurrencyProvider } from "./contexts/Currency.tsx";
 
 import "./index.css";
 import App from "./App.tsx";
+import StripeContext from "./contexts/StripeContext.tsx";
 
 // Create a custom theme
 const theme = createTheme({
@@ -75,7 +76,9 @@ createRoot(document.getElementById("root")!).render(
         <CurrencyProvider>
           <ThemeProvider theme={theme}>
             <UserProvider>
+              <StripeContext>
                 <App />
+              </StripeContext>
             </UserProvider>
           </ThemeProvider>
         </CurrencyProvider>

@@ -98,7 +98,7 @@ function App() {
           <Route path="files/new" element={<CreateFile />} />
           <Route path="orders/:page?" element={<UserOrders />} />
           <Route path="lookup" element={<Lookup />} />
-          <Route path="wallet" element={<Wallet />} />
+          <Route path="wallet/:page?" element={<Wallet />} />
           <Route path="cart" element={<Cart />} />
         </Route>
 

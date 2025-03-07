@@ -19,7 +19,10 @@ export default function SelectedColumnData({
           const value = columns[colName]?.value;
           if (value) {
             return (
-              <div className="flex items-center gap-2 border border-light-gray-3 rounded-lg pl-3 p-1">
+              <div
+                key={colName}
+                className="flex items-center gap-2 border border-light-gray-3 rounded-lg pl-3 p-1"
+              >
                 <span className="text-sm font-semibold">{colName}</span>
                 <span className="text-xs bg-light-gray-2 text-dark-blue font-semibold px-2 py-1 rounded-md">
                   {Array.isArray(value)

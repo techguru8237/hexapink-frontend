@@ -43,7 +43,6 @@ export const TableListItem: React.FC<TableListItemProps> = ({
   const confirmDelete = () => {
     setLoading(true);
     deleteTableById(data._id, () => {
-      toast.success("Table deleted successfully.");
       fetchTables();
       setLoading(false);
     }).finally(() => {

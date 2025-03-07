@@ -123,7 +123,9 @@ export default function Carts() {
               <button
                 onClick={handleGotoCheckout}
                 disabled={selectedCartIds.length > 0 ? false : true}
-                className="w-full flex items-center gap-2 justify-center bg-dark-blue text-white rounded-full p-2"
+                className={`w-full flex items-center gap-2 justify-center ${
+                  selectedCartIds.length > 0 ? "bg-dark-blue" : "bg-dark-blue/50"
+                } text-white rounded-full p-2`}
               >
                 Go to Checkout <GoArrowRight />
               </button>

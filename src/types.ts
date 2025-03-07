@@ -151,6 +151,7 @@ export interface User {
 
 export interface UserContextType {
   currentUser: User | null;
+  setCurrentUser: (user: User) => void;
   login: (user: User) => void;
   logout: () => void;
 }
@@ -192,3 +193,10 @@ export interface Order {
   createdAt: string;
 }
 
+export interface CardDetails {
+  cardNumber: string;
+  cardHolder: string;
+  expiryMonth: string;
+  expiryYear: string;
+  cvv: string;
+}
