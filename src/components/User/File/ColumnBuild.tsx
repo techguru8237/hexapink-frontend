@@ -8,6 +8,10 @@ import NumberInput from "../../Common/Inputs/NumberInput";
 import DateInput from "../../Common/Inputs/DateInput";
 import dayjs from "dayjs";
 import useFileDataStore from "../../../Store/userFileDataStore";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 interface ColumnBuildProps {
   selectedData: Record<string, { value: any; stepName: string }>;
@@ -15,8 +19,13 @@ interface ColumnBuildProps {
   index: number;
   step: number;
   disabled?: boolean;
-  setColumns: (columnName: string, selectedValues: any) => void;
+  setColumns: (
+    columnType: string,
+    columnName: string,
+    selectedValues: any
+  ) => void;
   setVolume: (volume: number) => void;
+  setFilteredData: (filteredData: any) => void;
 }
 
 export default memo(function ColumnBuild({
@@ -27,6 +36,7 @@ export default memo(function ColumnBuild({
   selectedData,
   setColumns,
   setVolume,
+  setFilteredData
 }: ColumnBuildProps) {
   const { fileData } = useFileDataStore((state) => state);
 
@@ -43,8 +53,6 @@ export default memo(function ColumnBuild({
           return;
         }
 
-        let totalVolume = 0;
-
         const allTableData = await Promise.all(
           column.tableColumns.map(async (col) => {
             const data = fileData.find((file) => file.id === col.tableId)?.data;
@@ -59,37 +67,82 @@ export default memo(function ColumnBuild({
                     return selectedValue.some((value) => {
                       return Object.values(item).includes(value);
                     });
-                  } else if (
-                    typeof selectedValue === "object" &&
-                    selectedValue !== null
-                  ) {
-                    if (selectedValue.min !== undefined) {
-                      return parseInt(item[col.tableColumn]) >= parseInt(selectedValue.min);
-                    } else if (selectedValue.max !== undefined) {
-                      return parseInt(item[col.tableColumn]) <= parseInt(selectedValue.max);
-                    } else if (
+                  } else if (typeof selectedValue === "object") {
+                    if (
                       selectedValue.min !== undefined &&
                       selectedValue.max !== undefined
                     ) {
-                      return (
-                        parseInt(item[col.tableColumn]) >= parseInt(selectedValue.min) &&
-                        parseInt(item[col.tableColumn]) <= parseInt(selectedValue.max)
-                      );
-                    } else {
-                      return true;
+                      if (selectedValue.type === "Date") {
+                        return (
+                          dayjs(item[key]).isSameOrAfter(
+                            dayjs(selectedValue.min)
+                          ) &&
+                          dayjs(item[key]).isSameOrBefore(
+                            dayjs(selectedValue.max)
+                          )
+                        );
+                      } else {
+                        return (
+                          parseInt(item[key]) >= parseInt(selectedValue.min) &&
+                          parseInt(item[key]) <= parseInt(selectedValue.max)
+                        );
+                      }
                     }
+                    return true
                   }
-                  return Object.values(item).includes(selectedValue);
                 });
             });
-            totalVolume += filteredData.length;
             return filteredData.map((item: any) => item[col.tableColumn]);
           })
         );
-
         const uniqueValues = [...new Set(allTableData.flat())];
         setInitialValues(uniqueValues);
         setSearchResults(uniqueValues);
+
+        let totalVolume = 0;
+        let allFilteredData: any[] = []
+        await Promise.all(
+          column.tableColumns.map(async (col) => {
+            const data = fileData.find((file) => file.id === col.tableId)?.data;
+
+            const filteredData = data.filter((item: any) => {
+              return Object.keys(selectedData).every((key) => {
+                const selectedValue = selectedData[key].value;
+                if (Array.isArray(selectedValue)) {
+                  if (selectedValue.length === 0) return true;
+                  return selectedValue.some((value) => {
+                    return Object.values(item).includes(value);
+                  });
+                } else if (typeof selectedValue === "object") {
+                  if (
+                    selectedValue.min !== undefined &&
+                    selectedValue.max !== undefined
+                  ) {
+                    if (selectedValue.type === "Date") {
+                      return (
+                        dayjs(item[key]).isSameOrAfter(
+                          dayjs(selectedValue.min)
+                        ) &&
+                        dayjs(item[key]).isSameOrBefore(
+                          dayjs(selectedValue.max)
+                        )
+                      );
+                    } else {
+                      return (
+                        parseInt(item[key]) >= parseInt(selectedValue.min) &&
+                        parseInt(item[key]) <= parseInt(selectedValue.max)
+                      );
+                    }
+                  }
+                }
+              });
+            });
+            totalVolume += filteredData.length;
+            allFilteredData.push(...filteredData)
+            return filteredData.map((item: any) => item[col.tableColumn]);
+          })
+        );
+        setFilteredData(allFilteredData);
         setVolume(totalVolume);
       } catch (error) {
         console.error("Error fetching table data:", error);
@@ -118,7 +171,7 @@ export default memo(function ColumnBuild({
         (Array.isArray(selectedData[column.name].value) &&
           selectedData[column.name].value.length === 0)
       ) {
-        handleParentChange(column.name, [item]);
+        setColumns(column.type, column.name, [item]);
       } else if (
         Array.isArray(selectedData[column.name].value) &&
         selectedData[column.name]?.value?.includes(item)
@@ -126,9 +179,9 @@ export default memo(function ColumnBuild({
         const newItems = selectedData[column.name]?.value?.filter(
           (c: string) => c !== item
         );
-        handleParentChange(column.name, newItems || []);
+        setColumns(column.type, column.name, newItems || []);
       } else {
-        handleParentChange(column.name, [
+        setColumns(column.type, column.name, [
           ...(Array.isArray(selectedData[column.name].value)
             ? selectedData[column.name].value
             : []),
@@ -139,31 +192,15 @@ export default memo(function ColumnBuild({
     [selectedData, column.name]
   );
 
-  const handleParentChange = useCallback(
-    (columnName: string, selectedValue: any) => {
-      setColumns(columnName, selectedValue);
-    },
-    [setColumns]
-  );
-
   const handleRangeChange = useCallback(
-    (name: string, value: string) => {
+    (name: string, value: number | string) => {
       const updatedValue = {
         ...selectedData[column.name]?.value,
         [name]: value,
       };
-      handleParentChange(column.name, updatedValue);
-
-      // Recalculate volume based on the updated range
-      const filteredData = initialValues.filter((item) => {
-        const itemValue = parseInt(item);
-        const min = parseInt(updatedValue.min);
-        const max = parseInt(updatedValue.max);
-        return itemValue >= min && itemValue <= max;
-      });
-      setVolume(filteredData.length);
+      setColumns(column.type, column.name, updatedValue);
     },
-    [column.name, selectedData, initialValues, handleParentChange, setVolume]
+    [column.name, selectedData, initialValues, setColumns]
   );
 
   const toggleShowAllCountries = useCallback(() => {
@@ -186,7 +223,7 @@ export default memo(function ColumnBuild({
             }
             disabled={disabled}
             isCurrency={false}
-            onChange={(value) => handleRangeChange("min", value.toString())}
+            onChange={(value) => handleRangeChange("min", value)}
             error=""
           />
           <NumberInput
@@ -198,7 +235,7 @@ export default memo(function ColumnBuild({
             }
             disabled={disabled}
             isCurrency={false}
-            onChange={(value) => handleRangeChange("max", value.toString())}
+            onChange={(value) => handleRangeChange("max", value)}
             error=""
           />
         </div>

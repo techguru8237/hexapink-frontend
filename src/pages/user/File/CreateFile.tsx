@@ -49,6 +49,7 @@ export default function CreateFile() {
   const [selectedData, setSelectedData] = useState<
     Record<string, { value: any; stepName: string }>
   >({});
+  const [filteredData, setFilteredData] = useState<any[]>([]);
 
   const [paymentMethod, setPaymentMethod] = useState<string>(paymentMethods[0]);
   const [selectedBank, setSelectedBank] = useState<BankItem>();
@@ -132,6 +133,7 @@ export default function CreateFile() {
           unitPrice: cart.unitPrice,
           volume: cart.volume,
           columns: JSON.stringify(cart.columns),
+          data: JSON.stringify(cart.filteredData),
         }));
       } else {
         if (selectedCollection) {
@@ -143,6 +145,7 @@ export default function CreateFile() {
             image: selectedCollection.image,
             unitPrice: selectedCollection.fee,
             columns: JSON.stringify(selectedData),
+            data: JSON.stringify(filteredData),
             volume,
           });
         }
@@ -198,7 +201,23 @@ export default function CreateFile() {
     } else {
       setStep(step + 1);
     }
-  }, [step, steps, selectedCartIds, carts, selectedCollection, type, selectedCountries, selectedData, volume, paymentMethod, stripe, elements, currentUser, navigate, removeCarts]);
+  }, [
+    step,
+    steps,
+    selectedCartIds,
+    carts,
+    selectedCollection,
+    type,
+    selectedCountries,
+    selectedData,
+    volume,
+    paymentMethod,
+    stripe,
+    elements,
+    currentUser,
+    navigate,
+    removeCarts,
+  ]);
 
   const handleAddCart = useCallback(() => {
     if (selectedCollection) {
@@ -217,6 +236,7 @@ export default function CreateFile() {
         unitPrice: selectedCollection.fee || 1,
         collection: selectedCollection,
         columns: selectedData,
+        filteredData,
         volume,
       };
 
@@ -225,7 +245,15 @@ export default function CreateFile() {
       );
       setCarts([...updatedCarts, newCart]);
     }
-  }, [selectedCollection, volume, type, selectedCountries, selectedData, carts, setCarts]);
+  }, [
+    selectedCollection,
+    volume,
+    type,
+    selectedCountries,
+    selectedData,
+    carts,
+    setCarts,
+  ]);
 
   const createOrder = async (files: any[], volume: number, prix: number) => {
     const response = await api.post("/api/order/create", {
@@ -247,10 +275,19 @@ export default function CreateFile() {
   };
 
   const handleColumnChange = useCallback(
-    (columnName: string, selectedValue: any, stepName: string) => {
+    (
+      columnType: string,
+      columnName: string,
+      selectedValue: any,
+      stepName: string
+    ) => {
       setSelectedData((prev) => ({
         ...prev,
-        [columnName]: { value: selectedValue, stepName: stepName },
+        [columnName]: {
+          value: selectedValue,
+          stepName: stepName,
+          type: columnType,
+        },
       }));
     },
     []
@@ -339,14 +376,16 @@ export default function CreateFile() {
                   index={index}
                   column={column}
                   selectedData={selectedData}
-                  setColumns={(columnName, selectedValue) =>
+                  setColumns={(columnType, columnName, selectedValue) =>
                     handleColumnChange(
+                      columnType,
                       columnName,
                       selectedValue,
                       steps[step - 1].name
                     )
                   }
                   setVolume={setVolume}
+                  setFilteredData={setFilteredData}
                 />
               ))}
             </div>

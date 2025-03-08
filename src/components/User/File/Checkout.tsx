@@ -165,7 +165,9 @@ export default function Checkout({
                 </tr>
                 <tr>
                   <td className="label">Balance After Order</td>
-                  <td>{(currentUser?.balance ?? 0) - orderPrice}</td>
+                  <td className={`${(currentUser?.balance ?? 0) - orderPrice < 0 ? "text-red" : ""}`}>
+                    {(currentUser?.balance ?? 0) - orderPrice}
+                  </td>
                 </tr>
               </tbody>
             </table>

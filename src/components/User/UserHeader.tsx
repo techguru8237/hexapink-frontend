@@ -31,9 +31,9 @@ export default function UserHeader({ icon, label }: UserHeaderProps) {
     <div className="h-20 min-h-20 max-h-20 box-border px-4 sm:px-8 border-b border-light-gray-3 flex justify-between items-center font-raleway">
       <div className="flex-1 flex items-center gap-2 text-xl">
         {React.cloneElement(icon, {
-          style: { color: "#4040BF" },
+          style: { color: "#4040BF", fontSize: "1.8rem" },
         })}
-        <span className="text-dark-blue text-xl">{label}</span>
+        <span className="text-dark-blue text-2xl font-medium">{label}</span>
       </div>
 
       <div className="flex items-center gap-2">
@@ -50,7 +50,7 @@ export default function UserHeader({ icon, label }: UserHeaderProps) {
           className={`p-2 flex items-center gap-2 cursor-pointer whitespace-nowrap box-border ${
             isCart
               ? "bg-light-gray-2 border border-light-gray-3 rounded-lg"
-              : ""
+              : "hover:border border-light-gray-3 rounded-lg"
           }`}
         >
           {isCart ? (
@@ -75,7 +75,7 @@ export default function UserHeader({ icon, label }: UserHeaderProps) {
           className={`p-2 flex items-center gap-2 cursor-pointer box-border ${
             isWallet
               ? "bg-light-gray-2 border border-light-gray-3 rounded-lg"
-              : ""
+              : "hover:border border-light-gray-3 rounded-lg"
           }`}
         >
           {isWallet ? (

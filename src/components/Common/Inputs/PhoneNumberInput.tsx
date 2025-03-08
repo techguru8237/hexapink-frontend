@@ -78,7 +78,7 @@ export default function PhoneNumberInput({
       <div className="flex justify-center items-bottom divide-x border border-light-gray-3 rounded-lg">
         <div className="relative flex p-2">
           <Combobox.Input
-            className="w-28 bg-transparent placeholder:text-gray-400 focus:outline-none text-dark-blue font-bold"
+            className="w-20 bg-transparent placeholder:text-gray-400 focus:outline-none text-dark-blue font-bold"
             onChange={(event) => {
               setQuery(event.target.value);
             }}

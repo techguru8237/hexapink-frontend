@@ -99,6 +99,7 @@ function App() {
           <Route path="orders/:page?" element={<UserOrders />} />
           <Route path="lookup" element={<Lookup />} />
           <Route path="wallet/:page?" element={<Wallet />} />
+          <Route path="lookup/:page?" element={<Lookup />} />
           <Route path="cart" element={<Cart />} />
         </Route>
 

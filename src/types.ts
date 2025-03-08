@@ -167,6 +167,7 @@ export interface Cart {
   image: string;
   unitPrice: number;
   columns: Record<string, { value: any; stepName: string }>;
+  filteredData: any[];
   volume: number;
 }
 
@@ -181,6 +182,7 @@ export interface File {
   volume: number;
   columns: Record<string, { value: any; stepName: string }>;
   status: string;
+  path: string;
   createdAt?: string;
 }
 
