@@ -21,7 +21,6 @@ export const useUploadForm = (url: string) => {
         if (progressEvent.total) {
           const progress =
             50 + (progressEvent.loaded / progressEvent.total) * 50;
-          console.log(progress);
           setProgress(progress);
         }
       },

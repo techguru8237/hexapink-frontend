@@ -64,8 +64,6 @@ export default function ColumnMappingItem({
     }
   };
 
-  console.log('columns', columns)
-
   const handleUnmapColumn = () => {
     const updatedColumns = columns.map((item) => {
       if (item.id === column.id) {

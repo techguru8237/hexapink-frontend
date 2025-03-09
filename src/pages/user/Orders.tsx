@@ -16,9 +16,9 @@ import LoadingElement from "../../components/Common/LoadingElement";
 export default function UserOrders() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [loading, setLoading] = useState<boolean>(false);
   const [orders, setOrders] = useState<Order[]>([]);
   const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState<boolean>(false);
   const [isFilterPanelVisible, setIsFilterPanelVisible] = useState(false);
 
   const [itemsPerPage, setItemsPerPage] = useState<number>(6);
@@ -31,9 +31,9 @@ export default function UserOrders() {
 
       try {
         setLoading(true);
-        const response = await api.get(`/api/order?${queryParams.toString()}`);
-
-        console.log(response.data.orders);
+        const response = await api.get(
+          `/api/order/by-user?${queryParams.toString()}`
+        );
 
         setOrders(response.data.orders);
         setTotalPages(response.data.totalPages);

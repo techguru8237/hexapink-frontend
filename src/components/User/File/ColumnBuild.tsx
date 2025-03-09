@@ -7,7 +7,7 @@ import { Column } from "../../../types";
 import NumberInput from "../../Common/Inputs/NumberInput";
 import DateInput from "../../Common/Inputs/DateInput";
 import dayjs from "dayjs";
-import useFileDataStore from "../../../Store/userFileDataStore";
+import useFileDataStore from "../../../Store/useFileDataStore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 dayjs.extend(isSameOrAfter);
@@ -36,7 +36,7 @@ export default memo(function ColumnBuild({
   selectedData,
   setColumns,
   setVolume,
-  setFilteredData
+  setFilteredData,
 }: ColumnBuildProps) {
   const { fileData } = useFileDataStore((state) => state);
 
@@ -88,7 +88,7 @@ export default memo(function ColumnBuild({
                         );
                       }
                     }
-                    return true
+                    return true;
                   }
                 });
             });
@@ -100,7 +100,7 @@ export default memo(function ColumnBuild({
         setSearchResults(uniqueValues);
 
         let totalVolume = 0;
-        let allFilteredData: any[] = []
+        let allFilteredData: any[] = [];
         await Promise.all(
           column.tableColumns.map(async (col) => {
             const data = fileData.find((file) => file.id === col.tableId)?.data;
@@ -138,7 +138,7 @@ export default memo(function ColumnBuild({
               });
             });
             totalVolume += filteredData.length;
-            allFilteredData.push(...filteredData)
+            allFilteredData.push(...filteredData);
             return filteredData.map((item: any) => item[col.tableColumn]);
           })
         );

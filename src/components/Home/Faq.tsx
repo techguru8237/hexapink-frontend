@@ -23,7 +23,6 @@ export default function Faq() {
 
   const toggleFaq = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index);
-    console.log("---------------faq is clicked------------------")
   };
   return (
     <div className="w-full px-8 sm:px-12 md:px-20 lg:px-28 xl:px-36 2xl:px-48 bg-[#FFF5F8] h-[600px] lg:h-[700px] flex justify-center items-center">

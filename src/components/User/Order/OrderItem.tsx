@@ -56,7 +56,7 @@ export default function OrderItem({ orderData }: OrderItemProps) {
   };
 
   return (
-    <div className="min-w-min bg-white border border-light-gray-3 rounded-lg flex flex-col text-xs">
+    <div className="min-w-[500px] bg-white border border-light-gray-3 rounded-lg flex flex-col text-xs">
       <div className="flex items-center border-b border-dashed border-light-gray-3 p-4">
         {/* Header */}
         <div className="w-full flex items-center justify-between text-sm">

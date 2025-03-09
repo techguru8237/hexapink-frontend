@@ -188,6 +188,14 @@ export interface File {
 
 export interface Order {
   _id: string;
+  user: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    country: string;
+  };
   files: File[];
   volume: number;
   prix: number;

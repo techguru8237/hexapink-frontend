@@ -36,7 +36,6 @@ const TagModal = ({
     const fetchTags = async () => {
       try {
         const response = await api.get("/api/tag");
-        console.log("response.data", response.data);
         setTags(response.data);
       } catch (error: any) {
         console.log(

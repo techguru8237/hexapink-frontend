@@ -4,14 +4,17 @@ import { CiCircleInfo } from "react-icons/ci";
 import { FaRegUserCircle } from "react-icons/fa";
 import { GoPaperclip } from "react-icons/go";
 import Checkbox from "../Common/Checkbox";
+import { Order } from "../../types";
 
 interface OrderListItemProps {
-  index: number;
+  data: Order;
+  index: string;
   isSelected: boolean;
-  onCheckboxChange: (index: number) => void;
+  onCheckboxChange: (index: string) => void;
 }
 
 export const OrderListItem: React.FC<OrderListItemProps> = ({
+  data,
   index,
   isSelected,
   onCheckboxChange,
@@ -27,34 +30,45 @@ export const OrderListItem: React.FC<OrderListItemProps> = ({
       >
         <div className="w-full p-3 flex items-center">
           <PiPackage className="text-2xl mr-2" />
-          <span>ord_{index + 1}</span>
+          <span>ord_{data._id.slice(-5)}</span>
         </div>
         <div className="w-full p-3 flex items-center border-l border-dashed border-light-gray-3">
-          <FaRegUserCircle className="text-2xl mr-2" />
-          <span>Unreal User</span>
+          <FaRegUserCircle className="text-xl mr-2" />
+          <span>{data.user.firstName + " " + data.user.lastName}</span>
         </div>
         <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
-          <span>2</span>
-          <CiCircleInfo className="text-xl ml-auto border rounded-md p-1 box-content" /> 
+          <span>{data.files.length}</span>
+          <CiCircleInfo className="text-xl ml-auto border rounded-md p-1 box-content" />
         </div>
         <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
-          <span>1538</span>
+          <span>{data.volume}</span>
         </div>
         <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
-          <span>$3,599.4</span>
+          <span>{data.prix}</span>
         </div>
         <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
-          <span>Credit Card</span>
+          <span>{}</span>
         </div>
         <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
-          <button className="bg-light-green rounded-lg px-2 py-1 text-green">
-            Ready
-          </button>
-          <Checkbox checked={isSelected} onChange={() => onCheckboxChange(index)} />
-          <GoPaperclip className="text-xl ml-auto border rounded-md p-1 box-content" /> 
+          {data.paid === "Paid" ? (
+            <span className="text-green border border-light-green-1 bg-light-green-2 p-1 rounded-md">
+              Paid
+            </span>
+          ) : (
+            <div className="flex items-center gap-1">
+              <span className="border border-light-gray-1 bg-light-gray-2 p-1 rounded-sm">
+                Waiting
+              </span>
+              <Checkbox
+                checked={isSelected}
+                onChange={() => onCheckboxChange(index)}
+              />
+              <GoPaperclip className="text-xl ml-auto border rounded-md p-1 box-content" />
+            </div>
+          )}
         </div>
         <div className="w-full p-3 flex items-center border-l border-dashed border-light-gray-3">
-          11 Nov 2024
+          {data.createdAt.split("T")[0]}
         </div>
       </div>
     </div>

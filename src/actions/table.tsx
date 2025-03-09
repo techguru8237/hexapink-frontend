@@ -7,9 +7,8 @@ export const createTable = async (
   onSuccess: () => void
 ) => {
   try {
-    const response = await formApi.post("/api/table/create", fileData);
+    await formApi.post("/api/table/create", fileData);
     onSuccess();
-    console.log("response.data", response.data);
     toast.success("Successfully created table.");
   } catch (error: any) {
     handleError(error, "Unable to create table.");
@@ -22,11 +21,9 @@ export const updateTableName = async (
   updatedData: { tableName: string },
   onSuccess: () => void
 ) => {
-  console.log("tableId, updatedData", tableId, updatedData);
   try {
-    const response = await api.put(`/api/table/update/${tableId}`, updatedData);
+    await api.put(`/api/table/update/${tableId}`, updatedData);
     onSuccess();
-    console.log("Table updated successfully:", response.data);
     toast.success("Table name updated successfully.");
   } catch (error: any) {
     handleError(error, "Unable to update table name.");
@@ -39,14 +36,12 @@ export const updateTableTags = async (
   updatedData: { tags: string[] },
   onSuccess: () => void
 ) => {
-  console.log("tableId, updatedData", tableId, updatedData);
   try {
-    const response = await api.put(
+    await api.put(
       `/api/table/updateTags/${tableId}`,
       updatedData
     );
     onSuccess();
-    console.log("Tags updated successfully:", response.data);
     toast.success("Tags updated successfully.");
   } catch (error: any) {
     handleError(error, "Unable to update tags.");
@@ -67,9 +62,8 @@ export const deleteTableById = async (id: string, onSuccess: () => void) => {
 // Action to add a tag
 export const addTag = async (tableId: string, tag: string, onSuccess: () => void) => {
   try {
-    const response = await api.post(`/api/table/addTag/${tableId}`, { tag });
+    await api.post(`/api/table/addTag/${tableId}`, { tag });
     onSuccess();
-    console.log("Tag added successfully:", response.data);
   } catch (error: any) {
     handleError(error, "Unable to add tag.");
   }
@@ -78,9 +72,8 @@ export const addTag = async (tableId: string, tag: string, onSuccess: () => void
 // Action to update a tag
 export const updateTag = async (tableId: string, oldTag: string, newTag: string, onSuccess: () => void) => {
   try {
-    const response = await api.put(`/api/table/updateTag/${tableId}`, { oldTag, newTag });
+    await api.put(`/api/table/updateTag/${tableId}`, { oldTag, newTag });
     onSuccess();
-    console.log("Tag updated successfully:", response.data);
   } catch (error: any) {
     handleError(error, "Unable to update tag.");
   }

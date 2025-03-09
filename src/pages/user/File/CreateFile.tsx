@@ -21,7 +21,7 @@ import CollectionView from "../../../components/User/File/CollectionView";
 
 import CartAddIcon from "../../../assets/icons/ShoppingCart.svg";
 import { getTotalLeads } from "../../../actions/collection";
-import useFileDataStore from "../../../Store/userFileDataStore";
+import useFileDataStore from "../../../Store/useFileDataStore";
 
 const types = ["Business", "Client"];
 const defaultStep = { id: 1, name: "Collection" };
@@ -90,9 +90,10 @@ export default function CreateFile() {
         setVolume(response);
       };
       const fetchRelatedTables = async () => {
-        const tableIds = selectedCollection.columns.map((col) =>
-          col.tableColumns?.map((tc) => tc.tableId)
-        );
+        const tableIds = selectedCollection.columns
+          .flatMap((col) => col.tableColumns?.map((tc) => tc.tableId) || [])
+          .filter((id, index, self) => id && self.indexOf(id) === index);
+
         const response = await api.post("/api/table/tables", { tableIds });
         if (response.status === 200) {
           setFileData(response.data);

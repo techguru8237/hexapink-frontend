@@ -1,5 +1,4 @@
 import { JSX, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import Input from "../Common/Inputs/Input";
@@ -17,17 +16,17 @@ import { TagOption } from "../../types";
 
 interface CreateTableProps {
   onClose: () => void;
+  onTableCreated: () => void; // Add this line
 }
 
-const CreateTable = ({onClose}: CreateTableProps): JSX.Element => {
-  const navigate = useNavigate();
+const CreateTable = ({ onClose, onTableCreated }: CreateTableProps): JSX.Element => {
   const [loading, setLoading] = useState(false);
 
-  const { uploadForm, progress } = useUploadForm(
+  const { uploadForm, progress, isSuccess } = useUploadForm(
     `${import.meta.env.VITE_BACKEND_URL}/api/table/create`
   );
 
-  const [existingTags, setExistingTags] = useState<TagOption[]>([])
+  const [existingTags, setExistingTags] = useState<TagOption[]>([]);
 
   const [tableName, setTableName] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -38,19 +37,18 @@ const CreateTable = ({onClose}: CreateTableProps): JSX.Element => {
     file: "",
   });
 
-    useEffect(() => {
-      const fetchTags = async () => {
-        try {
-          const response = await api.get("/api/tag"); // Adjust the endpoint as necessary
-          console.log('response.data', response.data)
-          setExistingTags(response.data);
-        } catch (error) {
-          console.error("Error fetching tags:", error);
-        }
-      };
-  
-      fetchTags();
-    }, []);
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const response = await api.get("/api/tag"); // Adjust the endpoint as necessary
+        setExistingTags(response.data);
+      } catch (error) {
+        console.error("Error fetching tags:", error);
+      }
+    };
+
+    fetchTags();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -82,7 +80,8 @@ const CreateTable = ({onClose}: CreateTableProps): JSX.Element => {
     try {
       await uploadForm(fileData);
       toast.success("Successfully created table.");
-      navigate("/admin/tables?page=0");
+      onTableCreated(); // Notify parent component
+      // navigate("/admin/tables?page=0");
     } catch (error) {
       toast.error("An error occurred while creating the table.");
     } finally {
@@ -144,12 +143,16 @@ const CreateTable = ({onClose}: CreateTableProps): JSX.Element => {
           {/* Tags Input */}
           <div className="w-full flex flex-col">
             <label className="text-left text-md">Add Tags</label>
-            <TagInput existingTags={existingTags} tags={tags} setTags={setTags} />
+            <TagInput
+              existingTags={existingTags}
+              tags={tags}
+              setTags={setTags}
+            />
           </div>
         </div>
 
         {/* Progress Bar */}
-        {progress > 0 && progress < 100 && (
+        {!isSuccess && progress > 0 && progress < 100 && (
           <div className="w-full p-6">
             <ProgressBar progress={progress} />
           </div>

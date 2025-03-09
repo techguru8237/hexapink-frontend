@@ -198,7 +198,6 @@ export default function SignupPageMain() {
           navigate("/signup/3");
         },
         (error: any) => {
-          console.log("error.response.data", error.response.data);
           if (error.response.data.errorType === "USER_ALREADY_EXISTS") {
             requireResendCode(
               formData.email,

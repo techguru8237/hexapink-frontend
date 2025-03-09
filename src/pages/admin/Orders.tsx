@@ -1,39 +1,55 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import { CiFilter } from "react-icons/ci";
 import { PiPackage } from "react-icons/pi";
+
+import api from "../../actions/api";
+
 import AdminHeader from "../../components/Admin/AdminHeader";
 import Pagination from "../../components/Common/Pagination";
+import LoadingElement from "../../components/Common/LoadingElement";
 import OrderListHeader from "../../components/AdminOrder/OrderListHeader";
 import { OrderListItem } from "../../components/AdminOrder/OrderListItem";
-
-const dummyData = Array.from({ length: 25 }, (_, index) => ({
-  id: index,
-  name: `file_${index + 1}`,
-  date: "11 Nov 2024",
-  status: "Ready",
-  order: `ord_${index + 124}`,
-}));
+import { Order } from "../../types";
 
 export default function Orders() {
-  const [selectedFiles, setSelectedFiles] = useState<number[]>([]);
-  const [filteredFiles, setFilteredFiles] = useState<
-    { id: number; name: string; date: string; status: string; order: string }[]
-  >([]);
+  const [searchParams] = useSearchParams();
+
+  const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilterPanelVisible, setIsFilterPanelVisible] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState<boolean>(false);
   const itemsPerPage = 3; // Number of items per page
-  const totalPages = Math.ceil(dummyData.length / itemsPerPage);
 
   useEffect(() => {
-    setFilteredFiles(dummyData);
-  }, []);
+    const fetchOrders = async () => {
+      const queryParams = new URLSearchParams(searchParams);
+      queryParams.set("limit", itemsPerPage.toString());
+
+      try {
+        setLoading(true);
+        const response = await api.get(`/api/order?${queryParams.toString()}`);
+
+        setFilteredOrders(response.data.orders);
+        setTotalPages(response.data.totalPages);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [searchParams, itemsPerPage]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  const handleCheckboxChange = (index: number) => {
+  const handleCheckboxChange = (index: string) => {
     setSelectedFiles((prevSelectedFiles) =>
       prevSelectedFiles.includes(index)
         ? prevSelectedFiles.filter((fileIndex) => fileIndex !== index)
@@ -45,10 +61,10 @@ export default function Orders() {
     setIsFilterPanelVisible(!isFilterPanelVisible);
   };
 
-  // Calculate the start and end indices for slicing the filteredFiles array
+  // Calculate the start and end indices for slicing the filteredOrders array
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentFiles = filteredFiles.slice(startIndex, endIndex);
+  const currentFiles = filteredOrders.slice(startIndex, endIndex);
 
   return (
     <div className="h-full flex flex-col">
@@ -62,8 +78,8 @@ export default function Orders() {
             )}
             <div className="ml-auto flex items-center divide-x">
               <div className="pr-4 flex items-center gap-2">
-                {filteredFiles.length > 0 && (
-                  <span>{filteredFiles.length} Results</span>
+                {filteredOrders.length > 0 && (
+                  <span>{filteredOrders.length} Results</span>
                 )}
                 <button
                   onClick={handleClickFilter}
@@ -88,14 +104,21 @@ export default function Orders() {
 
           <div className="p-8 flex flex-col gap-4">
             <OrderListHeader />
-            {currentFiles.map((item) => (
-              <OrderListItem
-                key={item.id}
-                index={item.id}
-                isSelected={selectedFiles.includes(item.id)}
-                onCheckboxChange={handleCheckboxChange}
-              />
-            ))}
+            {loading ? (
+              <div className="w-full h-full flex items-center justify-center">
+                <LoadingElement width="32" color="blue" />
+              </div>
+            ) : (
+              currentFiles.map((item) => (
+                <OrderListItem
+                  data={item}
+                  key={item._id}
+                  index={item._id}
+                  isSelected={selectedFiles.includes(item._id)}
+                  onCheckboxChange={handleCheckboxChange}
+                />
+              ))
+            )}
           </div>
         </div>
         {/* {isFilterPanelVisible && (
@@ -103,7 +126,7 @@ export default function Orders() {
             <FilterPanel
               onClose={handleClickFilter}
               items={dummyData}
-              setFilteredItems={setFilteredFiles}
+              setFilteredItems={setFilteredOrders}
             />
           </div>
         )} */}

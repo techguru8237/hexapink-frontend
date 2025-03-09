@@ -52,7 +52,7 @@ export default function Tables() {
 
   useEffect(() => {
     fetchTables();
-  }, [searchParams]); // Now depends on searchParams instead of just page
+  }, [searchParams, currentPage]); // Now depends on searchParams instead of just page
 
   const handlePageChange = (page: number) => {
     const newSearchParams = new URLSearchParams(searchParams);
@@ -156,7 +156,10 @@ export default function Tables() {
 
         {isNewTablePanelVisible && (
           <div className="w-96 px-4 py-4 border-l-2 border-light-gray-1 bg-white/80 flex justify-center">
-            <CreateTable onClose={() => setIsNewTablePanelVisible(false)} />
+            <CreateTable
+              onClose={() => setIsNewTablePanelVisible(false)}
+              onTableCreated={fetchTables} // Pass fetchTables as a prop
+            />
           </div>
         )}
 
