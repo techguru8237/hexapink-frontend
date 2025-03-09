@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { RiDashboard3Line } from "react-icons/ri";
 
 import UserHeader from "../../../components/User/UserHeader";
@@ -7,9 +8,22 @@ import RecentTopUp from "./RecentTopup";
 
 import StatCard from "./StateCard";
 import { useUserContext } from "../../../contexts/User";
+import api from "../../../actions/api";
 
 export default function Dashboard() {
   const { currentUser } = useUserContext();
+
+  const [countofFiles, setCountofFiles] = useState(0);
+  const [countofLeads, setCountofLeads] = useState(0);
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      const response = await api.get('/api/file/count');
+      setCountofFiles(response.data.totalFiles);
+      setCountofLeads(response.data.totalLeads);
+    }
+    fetchCounts();
+  }, []);
 
   return (
     <div className="max-h-screen flex flex-col">
@@ -31,9 +45,9 @@ export default function Dashboard() {
             value={currentUser?.balance ?? 0}
             link="/user/wallet"
           />
-          <StatCard title="Files" value={15} link="/user/files" />
-          <StatCard title="Leads" value={15000} />
-          <StatCard title="Look Ups" value={75} link="/user/lookups" />
+          <StatCard title="Files" value={countofFiles} link="/user/files" />
+          <StatCard title="Leads" value={countofLeads} />
+          {/* <StatCard title="Look Ups" value={0} link="/user/lookups" /> */}
         </div>
       </div>
     </div>
