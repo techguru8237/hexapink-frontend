@@ -76,7 +76,7 @@ export default function RecentFiles() {
           <thead>
             <tr className="text-left text-xs font-semibold tracking-wider">
               <th className="px-4 py-3">
-                <PiDatabaseLight className="inline-block text-xl mr-1" />#
+                <PiDatabaseLight className="inline-block text-xl mr-1" /> #
               </th>
               <th className="px-4 py-3">Collection</th>
               <th className="px-4 py-3">Volume</th>
@@ -131,7 +131,10 @@ export default function RecentFiles() {
                     <div className="w-full flex items-center gap-2 flex-wrap 2xl:divide-x">
                       <div className="flex items-center 2xl:pr-2">
                         <PiSquareSplitHorizontalThin className="text-2xl" />
-                        <span>{file.columns && Object.keys(file.columns).length || 0}</span>
+                        <span>
+                          {(file.columns && Object.keys(file.columns).length) ||
+                            0}
+                        </span>
                       </div>
                       <div className="flex items-center 2xl:pl-2">
                         <PiSquareSplitVerticalThin className="text-2xl" />

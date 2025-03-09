@@ -80,7 +80,7 @@ export default function OrdersTable() {
             <tr className="text-left text-xs font-semibold tracking-wider">
               <th className="px-4 py-3">
                 <PiPackage className="inline-block text-xl mr-1" />
-                ID
+                #
               </th>
               <th className="px-4 py-3">Files</th>
               <th className="px-4 py-3">Leads</th>

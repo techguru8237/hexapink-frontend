@@ -8,14 +8,6 @@ import api from "../../../actions/api";
 import LoadingElement from "../../../components/Common/LoadingElement";
 import { transactionItem } from "../Wallet";
 
-interface TopUp {
-  id: string;
-  paymentMethod: string;
-  price: number;
-  status: string;
-  date: string;
-}
-
 const RecentTopUp: React.FC = () => {
   const [topUps, setTopUps] = useState<transactionItem[]>([]);
   const [currentFilter, setCurrentFilter] = useState<string>("All");
@@ -39,14 +31,6 @@ const RecentTopUp: React.FC = () => {
 
     fetchOrders();
   }, [currentFilter]);
-
-  // useEffect(() => {
-  //   const filtered =
-  //     currentFilter === "All"
-  //       ? topUps
-  //       : topUps.filter((topUp) => topUp.status === currentFilter);
-  //   setFilteredTopUps(filtered);
-  // }, [currentFilter, topUps]);
 
   return (
     <div className="w-full flex flex-col gap-4 p-8 text-dark border-b-2 border-light-gray-1">
@@ -85,8 +69,7 @@ const RecentTopUp: React.FC = () => {
           <thead>
             <tr className="text-left text-xs font-semibold tracking-wider">
               <th className="px-4 py-3">
-                <PiWallet className="inline-block text-xl mr-1" />
-                ID
+                <PiWallet className="inline-block text-xl mr-1" />#
               </th>
               <th className="px-4 py-3">Payment Method</th>
               <th className="px-4 py-3">Price</th>
