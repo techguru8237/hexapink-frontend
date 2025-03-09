@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import { PiWallet } from "react-icons/pi";
 import { GoArrowUpRight } from "react-icons/go";
 
+import api from "../../../actions/api";
+
+import LoadingElement from "../../../components/Common/LoadingElement";
+import { transactionItem } from "../Wallet";
+
 interface TopUp {
   id: string;
   paymentMethod: string;
@@ -12,46 +17,36 @@ interface TopUp {
 }
 
 const RecentTopUp: React.FC = () => {
-  const [topUps, setTopUps] = useState<TopUp[]>([]);
-  const [filteredTopUps, setFilteredTopUps] = useState<TopUp[]>([]);
+  const [topUps, setTopUps] = useState<transactionItem[]>([]);
   const [currentFilter, setCurrentFilter] = useState<string>("All");
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    // Fetch top-up data from an API or other data source
-    const fetchedTopUps: TopUp[] = [
-      {
-        id: "top_255",
-        paymentMethod: "Credit Card",
-        price: 500,
-        status: "Waiting",
-        date: "11 Nov 2024",
-      },
-      {
-        id: "top_201",
-        paymentMethod: "Credit Card",
-        price: 200,
-        status: "Completed",
-        date: "11 Nov 2024",
-      },
-      {
-        id: "top_255",
-        paymentMethod: "Credit Card",
-        price: 500,
-        status: "Completed",
-        date: "11 Nov 2024",
-      },
-    ];
-    setTopUps(fetchedTopUps);
-    setFilteredTopUps(fetchedTopUps);
-  }, []);
+    const fetchOrders = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get(
+          `/api/transaction/topups?status=${currentFilter}`
+        );
 
-  useEffect(() => {
-    const filtered =
-      currentFilter === "All"
-        ? topUps
-        : topUps.filter((topUp) => topUp.status === currentFilter);
-    setFilteredTopUps(filtered);
-  }, [currentFilter, topUps]);
+        setTopUps(response.data);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [currentFilter]);
+
+  // useEffect(() => {
+  //   const filtered =
+  //     currentFilter === "All"
+  //       ? topUps
+  //       : topUps.filter((topUp) => topUp.status === currentFilter);
+  //   setFilteredTopUps(filtered);
+  // }, [currentFilter, topUps]);
 
   return (
     <div className="w-full flex flex-col gap-4 p-8 text-dark border-b-2 border-light-gray-1">
@@ -100,20 +95,28 @@ const RecentTopUp: React.FC = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-light-gray-1">
-            {filteredTopUps.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan={6} className="text-center py-4">
+                  <div className="flex justify-center">
+                    <LoadingElement width="24" color="#4040BF" />
+                  </div>
+                </td>
+              </tr>
+            ) : topUps.length === 0 ? (
               <tr>
                 <td colSpan={5} className="text-center py-3 text-gray-500">
-                  No top-ups available
+                  No orders available
                 </td>
               </tr>
             ) : (
-              filteredTopUps.slice(0, 3).map((topUp, index) => (
+              topUps.map((topUp, index) => (
                 <tr key={index} className="hover:bg-gray-50">
                   <td className="px-4 py-3 font-medium text-light-dark">
                     <PiWallet className="inline-block mr-1 text-xl" />
-                    {topUp.id}
+                    top_{topUp._id.slice(-5)}
                   </td>
-                  <td className="px-4 py-3">{topUp.paymentMethod}</td>
+                  <td className="px-4 py-3">{topUp.paymentmethod}</td>
                   <td className="px-4 py-3">${topUp.price.toFixed(2)}</td>
                   <td className="px-4 py-3">
                     <span
@@ -126,7 +129,7 @@ const RecentTopUp: React.FC = () => {
                       {topUp.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3">{topUp.date}</td>
+                  <td className="px-4 py-3">{topUp.createdAt.split("T")[0]}</td>
                 </tr>
               ))
             )}

@@ -92,7 +92,7 @@ export default function OrdersTable() {
           <tbody className="divide-y divide-light-gray-1">
             {loading ? (
               <tr>
-                <td colSpan={5} className="text-center py-4">
+                <td colSpan={6} className="text-center py-4">
                   <div className="flex justify-center">
                     <LoadingElement width="24" color="#4040BF" />
                   </div>
@@ -109,7 +109,7 @@ export default function OrdersTable() {
                 <tr key={index} className="hover:bg-gray-50">
                   <td className="px-4 py-3 font-medium text-light-dark">
                     <PiPackage className="inline-block mr-1 text-xl" />
-                    {order._id.slice(-5)}
+                    ord_{order._id.slice(-5)}
                   </td>
                   <td className="px-4 py-3">{order.files.length}</td>
                   <td className="px-4 py-3">{order.volume}</td>
