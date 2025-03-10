@@ -30,10 +30,9 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
         const response = await api.get(
           `${
             import.meta.env.VITE_BACKEND_URL
-          }/api/table/file/${filePath.replace("uploads\\", "")}`
+          }/api/table/file/${filePath.replace("uploads", "")}`
         );
         const data = await response.data;
-        console.log("data", data);
         setFileData(data);
       } catch (error) {
         console.error("Error fetching file data:", error);
