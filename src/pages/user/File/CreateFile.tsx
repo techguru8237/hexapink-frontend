@@ -185,16 +185,16 @@ export default function CreateFile() {
             console.error("Payment failed:", paymentResult.error.message);
             return;
           } else if (paymentResult.paymentIntent?.status === "succeeded") {
-            await createOrder(files, volume, prix);
+            await createOrder(files, volume, prix, "Credit Card");
           }
         } else if (paymentMethod === "Balance") {
           if ((currentUser?.balance ?? 0) < prix) {
             console.error("Insufficient balance");
             return;
           }
-          await createOrder(files, volume, prix);
+          await createOrder(files, volume, prix, "Balance");
         } else {
-          await createOrder(files, volume, prix);
+          await createOrder(files, volume, prix, "Bank Transfer");
         }
       } catch (error) {
         console.error("Error creating order:", error);
@@ -256,12 +256,13 @@ export default function CreateFile() {
     setCarts,
   ]);
 
-  const createOrder = async (files: any[], volume: number, prix: number) => {
+  const createOrder = async (files: any[], volume: number, prix: number, paymentMethod: string) => {
     const response = await api.post("/api/order/create", {
       files: JSON.stringify(files),
       volume,
       prix,
       paid: "Paid",
+      paymentMethod,
     });
     if (response.status == 201) {
       setStep(1);
