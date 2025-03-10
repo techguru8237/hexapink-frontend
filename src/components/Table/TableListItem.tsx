@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { Badge, IconButton, Tooltip } from "@mui/material";
 import { LuPlus } from "react-icons/lu";
 import { BsTrash3 } from "react-icons/bs";
@@ -11,24 +11,34 @@ import { MdOutlineModeEdit } from "react-icons/md";
 import Checkbox from "../Common/Checkbox";
 import PreviewModal from "../Common/PreviewModal"; // Import the modal
 import LoadingElement from "../Common/LoadingElement";
-import { TableListItemProps } from "../../types";
-import { deleteTableById, updateTableName } from "../../actions/table"; // Import the update function
+import { TableItem } from "../../types";
+import { deleteTableById } from "../../actions/table"; // Import the update function
 import TagModal from "../Common/TagModal";
 import ConfirmDialog from "../Common/ConfirmDialog";
+
+interface TableListItemProps {
+  data: TableItem;
+  index: string;
+  isSelected: boolean;
+  tables: TableItem[];
+  fetchTables: () => void;
+  setTables: (updatedTables: TableItem[]) => void;
+  onCheckboxChange: (index: string) => void;
+}
 
 export const TableListItem: React.FC<TableListItemProps> = ({
   data,
   index,
   isSelected,
-  fetchTables,
   tables,
   setTables,
+  fetchTables,
   onCheckboxChange,
 }) => {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [newTableName, setNewTableName] = useState(data.tableName);
+  // const [isEditing, setIsEditing] = useState(false);
+  // const [newTableName, setNewTableName] = useState(data.tableName);
   const [isTagModalOpen, setIsTagModalOpen] = useState(false);
   const [selectedTag, setSelectedTag] = useState("");
   const [actionType, setActionType] = useState("");
@@ -55,20 +65,20 @@ export const TableListItem: React.FC<TableListItemProps> = ({
     setOpenDeleteDialog(false); // Close the dialog without deleting
   };
 
-  const handleEdit = async () => {
-    setLoading(true);
-    try {
-      await updateTableName(data._id, { tableName: newTableName }, () => {
-        toast.success("Table name updated successfully.");
-        fetchTables();
-      });
-    } catch (error) {
-      toast.error("Failed to update table name.");
-    } finally {
-      setLoading(false);
-      setIsEditing(false);
-    }
-  };
+  // const handleEdit = async () => {
+  //   setLoading(true);
+  //   try {
+  //     await updateTableName(data._id, { tableName: newTableName }, () => {
+  //       toast.success("Table name updated successfully.");
+  //       fetchTables();
+  //     });
+  //   } catch (error) {
+  //     toast.error("Failed to update table name.");
+  //   } finally {
+  //     setLoading(false);
+  //     setIsEditing(false);
+  //   }
+  // };
 
   const handleCreateTag = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -96,14 +106,14 @@ export const TableListItem: React.FC<TableListItemProps> = ({
       <div
         className={`w-full bg-[#F7F7FC] flex justify-around border ${
           isSelected ? "border-dark-blue" : "border-light-gray-3"
-        } rounded-lg`}
+        } rounded-lg cursor-pointer`}
         onClick={() => onCheckboxChange(index)}
       >
         <div className="w-full bg-white flex justify-around rounded-lg">
-          <div className="w-[20%] p-3 flex items-center flex-wrap justify-between">
-            <div className="flex flex-wrap items-center">
-              <PiTableLight className="text-2xl mr-2" />
-              {isEditing ? (
+          <div className="w-[20%] min-w-min p-3 pr-0 flex items-center justify-between">
+            <div className="flex items-center">
+              <PiTableLight className="text-xl mr-2" />
+              {/* {isEditing ? (
                 <input
                   type="text"
                   value={newTableName}
@@ -121,9 +131,10 @@ export const TableListItem: React.FC<TableListItemProps> = ({
                   className="overflow-x-clip cursor-pointer"
                   onClick={() => setIsEditing(true)}
                 >
-                  {data.tableName}
+                  table_{data._id.slice(-5)}
                 </span>
-              )}
+              )} */}
+              <span>table_{data._id.slice(-5)}</span>
             </div>
             <Tooltip title="Table Preview">
               <IconButton>
@@ -132,7 +143,7 @@ export const TableListItem: React.FC<TableListItemProps> = ({
                     e.stopPropagation();
                     setIsModalOpen(true);
                   }}
-                  className="text-xl border rounded-md p-1 box-content cursor-pointer"
+                  className="text-lg border rounded-md p-0.5 box-content cursor-pointer"
                 />
               </IconButton>
             </Tooltip>
@@ -150,7 +161,7 @@ export const TableListItem: React.FC<TableListItemProps> = ({
                   key={index}
                   className="flex items-center bg-light-gray-1 rounded-full px-2 gap-2"
                 >
-                  <span>{tag}</span>
+                  <span className="uppercase text-xs font-medium">{tag}</span>
                   <div className="flex items-center gap-1">
                     <Tooltip title="Edit Tag">
                       <Badge>
@@ -176,7 +187,7 @@ export const TableListItem: React.FC<TableListItemProps> = ({
                 className="flex items-center border-2 border-light-gray-3 rounded-full px-2 gap-1 cursor-pointer"
               >
                 <LuPlus />
-                <span>Add New</span>
+                <span className="text-nowrap text-sm">Add New</span>
               </div>
             </div>
           </div>
@@ -198,7 +209,7 @@ export const TableListItem: React.FC<TableListItemProps> = ({
       {isModalOpen && (
         <PreviewModal
           onRequestClose={() => setIsModalOpen(false)}
-          data={data.data}
+          filePath={data.file}
         />
       )}
 

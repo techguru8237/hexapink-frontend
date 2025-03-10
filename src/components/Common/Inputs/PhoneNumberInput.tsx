@@ -96,7 +96,6 @@ export default function PhoneNumberInput({
           <Combobox.Button className="absolute inset-y-0 right-0 flex items-center px-2 focus:outline-none bg-transparent hover:bg-transparent hover:border-none outline-none border-none">
             <ChevronDownIcon
               className="h-5 w-5 text-gray-400 "
-              aria-hidden="true"
             />
           </Combobox.Button>
 
@@ -113,7 +112,7 @@ export default function PhoneNumberInput({
                   </span>
 
                   <span className="absolute inset-y-0 right-0 hidden items-center pr-4 text-pink-500 group-data-[selected]:flex group-data-[focus]:text-white">
-                    <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                    <CheckIcon className="h-5 w-5" />
                   </span>
                 </Combobox.Option>
               ))}

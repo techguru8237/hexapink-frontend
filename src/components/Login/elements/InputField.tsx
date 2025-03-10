@@ -32,7 +32,6 @@ const InputField: React.FC<InputFieldProps> = ({
           className="peer block w-full bg-transparent border-b focus:border-pink p-2 text-gray-900 placeholder:text-gray-500 focus:outline-none sm:text-[16px] font-raleway font-medium tracking-wider"
         />
         {/* <div
-          aria-hidden="true"
           className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-pink-500"
         /> */}
       </div>

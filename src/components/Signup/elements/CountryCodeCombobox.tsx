@@ -85,7 +85,6 @@ export default function CountryCodeCombobox({
           >
             <ChevronDownIcon
               className="h-5 w-5 text-gray-400 "
-              aria-hidden="true"
             />
           </Combobox.Button>
 
@@ -102,7 +101,7 @@ export default function CountryCodeCombobox({
                   </span>
 
                   <span className="absolute inset-y-0 right-0 hidden items-center pr-4 text-pink-500 group-data-[selected]:flex group-data-[focus]:text-white">
-                    <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                    <CheckIcon className="h-5 w-5"/>
                   </span>
                 </Combobox.Option>
               ))}

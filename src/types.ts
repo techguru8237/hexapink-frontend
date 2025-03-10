@@ -5,7 +5,7 @@ export interface TableItem {
   leads: number;
   tags: string[];
   columns: [string];
-  data: RowData[];
+  file: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -36,23 +36,8 @@ export interface UserItem {
   updatedAt?: string;
 }
 
-export interface TableListItemProps {
-  data: TableItem;
-  index: string;
-  isSelected: boolean;
-  fetchTables: () => void;
-  tables: TableItem[];
-  setTables: (updatedTables: TableItem[]) => void;
-  onCheckboxChange: (index: string) => void;
-}
-
-export interface PreviewModalProps {
-  onRequestClose: () => void;
-  data: Array<RowData>; // Adjust according to your data structure
-}
-
 export interface RowData {
-  [key: string]: string; // Allow any string key for dynamic data
+  [key: string]: string;
 }
 
 export interface TagModalProps {

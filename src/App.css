@@ -30,7 +30,7 @@ table {
 
 th {
   border: solid 2px #d9d9f2;
-  border-style: solid dashed sold none;
+  border-style: solid dashed solid none;
   border-width: 2px 1px 1px 0;
   background-color: #f7f7fc;
   color: #666666;

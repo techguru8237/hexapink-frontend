@@ -1,26 +1,56 @@
 import React, { useEffect, useState } from "react";
-import { PreviewModalProps } from "../../types";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import Pagination from "./Pagination";
+import api from "../../actions/api";
+import LoadingElement from "./LoadingElement";
+
+interface PreviewModalProps {
+  onRequestClose: () => void;
+  filePath: string;
+}
 
 const PreviewModal: React.FC<PreviewModalProps> = ({
-  data,
+  filePath,
   onRequestClose,
 }) => {
   const [search, setSearch] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [fileData, setFileData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get(
+          `${
+            import.meta.env.VITE_BACKEND_URL
+          }/api/table/file/${filePath.replace("uploads\\", "")}`
+        );
+        const data = await response.data;
+        console.log("data", data);
+        setFileData(data);
+      } catch (error) {
+        console.error("Error fetching file data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [filePath]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
 
-  const filteredData = data.filter((item) =>
-    Object.values(item).some((value) =>
+  const filteredData = fileData.filter((item) =>
+    Object.values(item).some((value: any) =>
       value.toString().toLowerCase().includes(search.toLowerCase())
     )
   );
@@ -29,90 +59,102 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
     setTotalPages(Math.ceil(filteredData.length / rowsPerPage));
   }, [filteredData, rowsPerPage]);
 
-  const columns = data[0] ? Object.keys(data[0]).map((key) => key) : [];
+  const columns = fileData[0] ? Object.keys(fileData[0]).map((key) => key) : [];
+
+  const handleClickModal = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.target === event.currentTarget) {
+      onRequestClose();
+    }
+  };
 
   return (
-    <div className="fixed inset-0 flex flex-col gap-4 bg-light-gray border border-dark-blue shadow-[0px_0px_0px_4px_#ececf8] max-w-7xl my-32 mx-auto p-8 rounded-lg overflow-x-auto z-10">
-      <div className="flex justify-between">
-        <h2 className="pb-4 text-xl font-bold font-kanit flex items-center gap-2">
-          File Data Preview (Columns: {columns.length}, Rows: {data.length})
-        </h2>
-        <IoCloseCircleOutline
-          onClick={onRequestClose}
-          className="text-2xl cursor-pointer"
-        />
-      </div>
-      <div className="flex items-center justify-between">
-        <input
-          value={search}
-          placeholder="Search by any field"
-          onChange={handleSearchChange}
-          className="bg-white p-1 border border-gray-300 rounded-lg"
-        />
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          rowsPerPage={rowsPerPage}
-          pageSizeOptions={[25, 100, 500, 1000]}
-          onPageChange={(value) => setCurrentPage(value)}
-          onPageSizeChange={(value) => setRowsPerPage(value)}
-        />
-      </div>
-
-      <div className="w-full flex flex-col gap-4 font-raleway">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="border border-gray-300 rounded-lg">
-              {columns.map((col, index) => (
-                <th
-                  className={`h-full bg-white px-2 py-1 text-center font-bold ${
-                    index == 0 ? "rounded-l-lg" : ""
-                  } ${
-                    index < columns.length - 1
-                      ? "border-r border-dashed border-gray-300"
-                      : "rounded-r-lg"
-                  }`}
-                  key={col}
-                >
-                  {col}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData.slice(startIndex, endIndex).map((row, index) => (
-              <tr
-                className="border border-gray-300 rounded-lg"
-                key={index}
-              >
-                {columns.map((col, colIndex) => (
-                  <td
-                    className={`h-full bg-white px-2 py-1 text-left ${
-                      colIndex == 0 ? "rounded-l-lg" : ""
-                    } ${
-                      colIndex < columns.length - 1
-                        ? "border-r border-dashed border-gray-300"
-                        : "rounded-r-lg"
-                    }`}
-                    key={col}
-                  >
-                    <span className="text-sm line-clamp-1">{row[col]}</span>
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        rowsPerPage={rowsPerPage}
-        pageSizeOptions={[25, 100, 500, 1000]}
-        onPageChange={(value) => setCurrentPage(value)}
-        onPageSizeChange={(value) => setRowsPerPage(value)}
-      />
+    <div
+      className="w-full h-full fixed inset-0 z-50 bg-dark/70 p-24 flex items-center justify-center"
+      onClick={handleClickModal}
+    >
+      {/* Modal Content */}
+      {loading ? (
+        <LoadingElement width="32" color="blue" />
+      ) : (
+        <div className="w-full flex flex-col gap-4 bg-light-gray shadow-xl max-w-7xl max-h-[800px] p-8 rounded-lg overflow-x-auto">
+          <div className="w-full flex justify-between">
+            <h2 className="pb-4 text-xl font-medium font-kanit flex items-center gap-2">
+              File Data Preview (Columns: {columns.length}, Rows:{" "}
+              {fileData.length})
+            </h2>
+            <IoCloseCircleOutline
+              onClick={onRequestClose}
+              className="text-2xl cursor-pointer"
+            />
+          </div>
+          <div className="w-full flex flex-col gap-2">
+            <div className="w-full flex items-center justify-between">
+              <input
+                value={search}
+                placeholder="Search by any field"
+                onChange={handleSearchChange}
+                className="bg-white p-1 border border-light-gray-3 rounded-md"
+              />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                rowsPerPage={rowsPerPage}
+                pageSizeOptions={[25, 100, 500, 1000]}
+                onPageChange={(value) => setCurrentPage(value)}
+                onPageSizeChange={(value) => setRowsPerPage(value)}
+              />
+            </div>
+            <div className="w-full flex flex-col gap-4 font-raleway overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr>
+                    {columns.map((col) => (
+                      <th
+                        className="h-full bg-white px-2 py-1 text-center font-bold text-nowrap"
+                        key={col}
+                      >
+                        {col}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredData
+                    .slice(startIndex, endIndex)
+                    .map((row, index) => (
+                      <tr key={index}>
+                        {columns.map((col, colIndex) => (
+                          <td
+                            className={`h-full bg-white px-2 py-1 text-left ${
+                              colIndex == 0 ? "rounded-l-lg" : ""
+                            } ${
+                              colIndex < columns.length - 1
+                                ? "border-r border-dashed border-gray-300"
+                                : "rounded-r-lg"
+                            }`}
+                            key={col}
+                          >
+                            <span className="text-sm line-clamp-1">
+                              {row[col]}
+                            </span>
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              rowsPerPage={rowsPerPage}
+              pageSizeOptions={[25, 100, 500, 1000]}
+              onPageChange={(value) => setCurrentPage(value)}
+              onPageSizeChange={(value) => setRowsPerPage(value)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

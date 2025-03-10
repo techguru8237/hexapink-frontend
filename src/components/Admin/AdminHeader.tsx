@@ -42,7 +42,6 @@ export default function Header({ icon, label }: HeaderProps) {
         <div className="flex items-center gap-2 cursor-pointer">
           <PiWalletLight className="text-2xl" />
           <span>Wallet</span>
-          <span className="bg-light-gray-3 px-2 rounded-md">$1200</span>
         </div>
         <div className="flex items-center gap-2 cursor-pointer">
           <PiUserCircleLight className="text-2xl" />
