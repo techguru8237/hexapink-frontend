@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import Pagination from "./Pagination";
 import api from "../../actions/api";
-import LoadingElement from "./LoadingElement";
 
 interface PreviewModalProps {
   onRequestClose: () => void;
@@ -18,7 +17,6 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
   const [totalPages, setTotalPages] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [fileData, setFileData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
 
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
@@ -26,18 +24,16 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
         const response = await api.get(
           `${
             import.meta.env.VITE_BACKEND_URL
-          }/api/table/file/${filePath.replace("uploads", "")}`
+          }/api/table/file/${filePath.replace("uploads\\", "")}`
         );
         const data = await response.data;
+        console.log("data", data);
         setFileData(data);
       } catch (error) {
         console.error("Error fetching file data:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -68,92 +64,82 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
 
   return (
     <div
-      className="w-full h-full fixed inset-0 z-50 bg-dark/70 p-24 flex items-center justify-center"
+      className="w-full h-full fixed inset-0 z-50 bg-white/80 p-24 flex items-center justify-center"
       onClick={handleClickModal}
     >
       {/* Modal Content */}
-      {loading ? (
-        <LoadingElement width="32" color="blue" />
-      ) : (
-        <div className="w-full flex flex-col gap-4 bg-light-gray shadow-xl max-w-7xl max-h-[800px] p-8 rounded-lg overflow-x-auto">
-          <div className="w-full flex justify-between">
-            <h2 className="pb-4 text-xl font-medium font-kanit flex items-center gap-2">
-              File Data Preview (Columns: {columns.length}, Rows:{" "}
-              {fileData.length})
-            </h2>
-            <IoCloseCircleOutline
-              onClick={onRequestClose}
-              className="text-2xl cursor-pointer"
-            />
-          </div>
-          <div className="w-full flex flex-col gap-2">
-            <div className="w-full flex items-center justify-between">
-              <input
-                value={search}
-                placeholder="Search by any field"
-                onChange={handleSearchChange}
-                className="bg-white p-1 border border-light-gray-3 rounded-md"
-              />
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                rowsPerPage={rowsPerPage}
-                pageSizeOptions={[25, 100, 500, 1000]}
-                onPageChange={(value) => setCurrentPage(value)}
-                onPageSizeChange={(value) => setRowsPerPage(value)}
-              />
-            </div>
-            <div className="w-full flex flex-col gap-4 font-raleway overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr>
-                    {columns.map((col) => (
-                      <th
-                        className="h-full bg-white px-2 py-1 text-center font-bold text-nowrap"
-                        key={col}
-                      >
-                        {col}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredData
-                    .slice(startIndex, endIndex)
-                    .map((row, index) => (
-                      <tr key={index}>
-                        {columns.map((col, colIndex) => (
-                          <td
-                            className={`h-full bg-white px-2 py-1 text-left ${
-                              colIndex == 0 ? "rounded-l-lg" : ""
-                            } ${
-                              colIndex < columns.length - 1
-                                ? "border-r border-dashed border-gray-300"
-                                : "rounded-r-lg"
-                            }`}
-                            key={col}
-                          >
-                            <span className="text-sm line-clamp-1">
-                              {row[col]}
-                            </span>
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              rowsPerPage={rowsPerPage}
-              pageSizeOptions={[25, 100, 500, 1000]}
-              onPageChange={(value) => setCurrentPage(value)}
-              onPageSizeChange={(value) => setRowsPerPage(value)}
-            />
-          </div>
+      <div className="w-full flex flex-col gap-4 bg-light-gray shadow-xl max-w-7xl max-h-[800px] p-8 rounded-lg overflow-x-auto">
+        <div className="w-full flex justify-between">
+          <h2 className="pb-4 text-xl font-medium font-kanit flex items-center gap-2">
+            File Data Preview (Columns: {columns.length}, Rows:{" "}
+            {fileData.length})
+          </h2>
+          <IoCloseCircleOutline
+            onClick={onRequestClose}
+            className="text-2xl cursor-pointer"
+          />
         </div>
-      )}
+        <div className="w-full flex items-center justify-between">
+          <input
+            value={search}
+            placeholder="Search by any field"
+            onChange={handleSearchChange}
+            className="bg-white p-1"
+          />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            rowsPerPage={rowsPerPage}
+            pageSizeOptions={[25, 100, 500, 1000]}
+            onPageChange={(value) => setCurrentPage(value)}
+            onPageSizeChange={(value) => setRowsPerPage(value)}
+          />
+        </div>
+        <div className="w-full flex flex-col gap-4 font-raleway overflow-x-auto p-4">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr>
+                {columns.map((col) => (
+                  <th
+                    className="h-full bg-white px-2 py-1 text-center font-bold"
+                    key={col}
+                  >
+                    {col}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData.slice(startIndex, endIndex).map((row, index) => (
+                <tr key={index}>
+                  {columns.map((col, colIndex) => (
+                    <td
+                      className={`h-full bg-white px-2 py-1 text-left ${
+                        colIndex == 0 ? "rounded-l-lg" : ""
+                      } ${
+                        colIndex < columns.length - 1
+                          ? "border-r border-dashed border-gray-300"
+                          : "rounded-r-lg"
+                      }`}
+                      key={col}
+                    >
+                      <span className="text-sm line-clamp-1">{row[col]}</span>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          rowsPerPage={rowsPerPage}
+          pageSizeOptions={[25, 100, 500, 1000]}
+          onPageChange={(value) => setCurrentPage(value)}
+          onPageSizeChange={(value) => setRowsPerPage(value)}
+        />
+      </div>
     </div>
   );
 };

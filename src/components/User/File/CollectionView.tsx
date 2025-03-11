@@ -66,8 +66,7 @@ export default function CollectionView({
               ""
             )}`}
             alt="file image"
-            className="rounded-lg"
-          />
+            className="rounded-lg object-cover w-full h-full          />
         </div>
         <div className="flex flex-1 flex-col">
           <span className="font-bold text-left">{data.title}</span>

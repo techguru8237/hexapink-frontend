@@ -129,7 +129,7 @@ export default function CollectionSelect({
                         import.meta.env.VITE_BACKEND_URL
                       }/${collection.image?.replace("uploads", "")}`}
                       alt="Collection image"
-                      className="w-16 h-16 object-contain border border-light-gray-1 rounded-lg"
+                      className="w-16 h-16 object-cover border border-light-gray-1 rounded-lg"
                     />
                     <div className="flex flex-col gap-1">
                       <span

@@ -37,6 +37,7 @@ export const CartListItem: React.FC<CartListItemProps> = ({
                 cart.image?.replace("uploads", "")
               }
               alt="file image"
+              className="object-cover w-full h-full"
             />
           </div>
           <div className="flex flex-col items-start">

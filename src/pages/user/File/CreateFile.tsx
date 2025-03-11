@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
@@ -8,7 +8,7 @@ import { GoArrowRight, GoArrowLeft } from "react-icons/go";
 
 import api from "../../../actions/api";
 import { useUserContext } from "../../../contexts/User";
-import { BankItem, Collection, Column, Step } from "../../../types";
+import { BankItem, Collection} from "../../../types";
 import VerticalStepBar from "../../../components/Collection/VerticalStepbar";
 import CountrySelect from "../../../components/Common/CountrySelect";
 import TypeSelect from "../../../components/Admin/User/TypeSelect";
@@ -36,7 +36,6 @@ export default function CreateFile() {
   const { carts, setCarts, removeCarts } = useCartStore((state) => state);
   const { setFileData } = useFileDataStore((state) => state);
 
-  const [steps, setSteps] = useState<Step[]>([defaultStep]);
   const [step, setStep] = useState(1);
   const [type, setType] = useState(types[0]);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
@@ -45,7 +44,6 @@ export default function CreateFile() {
   >(undefined);
   const [volume, setVolume] = useState<number>(0);
   const [totalPrice, setTotalPrice] = useState<number>(0);
-  const [selectedStepColumns, setSelectedStepColumns] = useState<Column[]>([]);
   const [selectedData, setSelectedData] = useState<
     Record<string, { value: any; stepName: string }>
   >({});
@@ -59,9 +57,34 @@ export default function CreateFile() {
   const stripe = useStripe();
   const elements = useElements();
 
+  const steps = useMemo(() => {
+    if (selectedCartIds && selectedCartIds.length && carts.length) {
+      return [defaultStep, { id: 2, name: "Checkout" }];
+    }
+    if (selectedCollection && Array.isArray(selectedCollection.columns)) {
+      const stepItems = Array.from(
+        new Set(selectedCollection.columns.map((col) => col.stepName))
+      ).map((name, index) => ({ id: index + 2, name: name || "" }));
+      return [
+        defaultStep,
+        ...stepItems,
+        { id: stepItems.length + 2, name: "Checkout" },
+      ];
+    }
+    return [defaultStep];
+  }, [selectedCartIds, carts, selectedCollection]);
+
+  const selectedStepColumns = useMemo(() => {
+    if (selectedCollection) {
+      return selectedCollection.columns.filter(
+        (col) => col.stepName === steps[step - 1].name
+      );
+    }
+    return [];
+  }, [step, selectedCollection, steps]);
+
   useEffect(() => {
     if (selectedCartIds && selectedCartIds.length && carts.length) {
-      setSteps([defaultStep, { id: 2, name: "Checkout" }]);
       setStep(2);
       const selectedCarts = carts.filter((cart) =>
         selectedCartIds.includes(cart.id)
@@ -75,16 +98,7 @@ export default function CreateFile() {
   }, [selectedCartIds, carts]);
 
   useEffect(() => {
-    if (selectedCollection && Array.isArray(selectedCollection.columns)) {
-      const stepItems = Array.from(
-        new Set(selectedCollection.columns.map((col) => col.stepName))
-      ).map((name, index) => ({ id: index + 2, name: name || "" }));
-      setSteps([
-        defaultStep,
-        ...stepItems,
-        { id: stepItems.length + 2, name: "Checkout" },
-      ]);
-
+    if (selectedCollection) {
       const fetchTotalLeads = async () => {
         const response = await getTotalLeads(selectedCollection);
         setVolume(response);
@@ -103,15 +117,6 @@ export default function CreateFile() {
       fetchRelatedTables();
     }
   }, [selectedCollection]);
-
-  useEffect(() => {
-    if (selectedCollection) {
-      const relatedColumns = selectedCollection.columns.filter(
-        (col) => col.stepName === steps[step - 1].name
-      );
-      setSelectedStepColumns(relatedColumns);
-    }
-  }, [step, selectedCollection, steps]);
 
   const handleClickBackStep = useCallback(() => {
     if (step === 1) {
@@ -266,7 +271,6 @@ export default function CreateFile() {
     });
     if (response.status == 201) {
       setStep(1);
-      setSteps([defaultStep]);
       setSelectedData({});
       setSelectedCollection(undefined);
       setSelectedCountries([]);

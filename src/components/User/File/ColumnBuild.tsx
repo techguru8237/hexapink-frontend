@@ -1,5 +1,4 @@
-import { useState, memo, useEffect, useCallback } from "react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { useState, memo, useEffect, useCallback, useMemo } from "react";
 import { IoMdRadioButtonOn } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import { LiaSearchSolid } from "react-icons/lia";
@@ -40,10 +39,42 @@ export default memo(function ColumnBuild({
 }: ColumnBuildProps) {
   const { fileData } = useFileDataStore((state) => state);
 
+  console.log("fileData", fileData);
+
   const [initialValues, setInitialValues] = useState<string[]>([]);
-  const [searchResults, setSearchResults] = useState<string[]>([]);
-  const [showAllCountries, setShowAllCountries] = useState<boolean>(false);
   const [search, setSearch] = useState("");
+
+  const filterData = useCallback(
+    (data: any[], selectedData: Record<string, { value: any }>, columnName: string) => {
+      return data.filter((item) => {
+        return Object.keys(selectedData)
+          .filter((key) => key !== columnName)
+          .every((key) => {
+            const selectedValue = selectedData[key].value;
+            if (Array.isArray(selectedValue)) {
+              if (selectedValue.length === 0) return true;
+              return selectedValue.some((value) => Object.values(item).includes(value));
+            } else if (typeof selectedValue === "object") {
+              if (selectedValue.min !== undefined && selectedValue.max !== undefined) {
+                if (selectedValue.type === "Date") {
+                  return (
+                    dayjs(item[key]).isSameOrAfter(dayjs(selectedValue.min)) &&
+                    dayjs(item[key]).isSameOrBefore(dayjs(selectedValue.max))
+                  );
+                } else {
+                  return (
+                    parseInt(item[key]) >= parseInt(selectedValue.min) &&
+                    parseInt(item[key]) <= parseInt(selectedValue.max)
+                  );
+                }
+              }
+              return true;
+            }
+          });
+      });
+    },
+    []
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,87 +87,19 @@ export default memo(function ColumnBuild({
         const allTableData = await Promise.all(
           column.tableColumns.map(async (col) => {
             const data = fileData.find((file) => file.id === col.tableId)?.data;
-
-            const filteredData = data.filter((item: any) => {
-              return Object.keys(selectedData)
-                .filter((selectedDataKey) => selectedDataKey !== column.name)
-                .every((key) => {
-                  const selectedValue = selectedData[key].value;
-                  if (Array.isArray(selectedValue)) {
-                    if (selectedValue.length === 0) return true;
-                    return selectedValue.some((value) => {
-                      return Object.values(item).includes(value);
-                    });
-                  } else if (typeof selectedValue === "object") {
-                    if (
-                      selectedValue.min !== undefined &&
-                      selectedValue.max !== undefined
-                    ) {
-                      if (selectedValue.type === "Date") {
-                        return (
-                          dayjs(item[key]).isSameOrAfter(
-                            dayjs(selectedValue.min)
-                          ) &&
-                          dayjs(item[key]).isSameOrBefore(
-                            dayjs(selectedValue.max)
-                          )
-                        );
-                      } else {
-                        return (
-                          parseInt(item[key]) >= parseInt(selectedValue.min) &&
-                          parseInt(item[key]) <= parseInt(selectedValue.max)
-                        );
-                      }
-                    }
-                    return true;
-                  }
-                });
-            });
+            const filteredData = filterData(data, selectedData, column.name);
             return filteredData.map((item: any) => item[col.tableColumn]);
           })
         );
         const uniqueValues = [...new Set(allTableData.flat())];
         setInitialValues(uniqueValues);
-        setSearchResults(uniqueValues);
 
         let totalVolume = 0;
         let allFilteredData: any[] = [];
         await Promise.all(
           column.tableColumns.map(async (col) => {
             const data = fileData.find((file) => file.id === col.tableId)?.data;
-
-            const filteredData = data.filter((item: any) => {
-              return Object.keys(selectedData).every((key) => {
-                const selectedValue = selectedData[key].value;
-                if (Array.isArray(selectedValue)) {
-                  if (selectedValue.length === 0) return true;
-                  return selectedValue.some((value) => {
-                    return Object.values(item).includes(value);
-                  });
-                } else if (typeof selectedValue === "object") {
-                  if (
-                    selectedValue.min !== undefined &&
-                    selectedValue.max !== undefined
-                  ) {
-                    if (selectedValue.type === "Date") {
-                      return (
-                        dayjs(item[key]).isSameOrAfter(
-                          dayjs(selectedValue.min)
-                        ) &&
-                        dayjs(item[key]).isSameOrBefore(
-                          dayjs(selectedValue.max)
-                        )
-                      );
-                    } else {
-                      return (
-                        parseInt(item[key]) >= parseInt(selectedValue.min) &&
-                        parseInt(item[key]) <= parseInt(selectedValue.max)
-                      );
-                    }
-                  }
-                }
-              });
-            });
+            const filteredData = filterData(data, selectedData, column.name);
             totalVolume += filteredData.length;
             allFilteredData.push(...filteredData);
             return filteredData.map((item: any) => item[col.tableColumn]);
@@ -150,17 +113,15 @@ export default memo(function ColumnBuild({
     };
 
     fetchData();
-  }, [column, index, step, selectedData, fileData, setVolume]);
+  }, [column, index, step, selectedData, fileData, setVolume, filterData]);
 
-  useEffect(() => {
+  const searchResults = useMemo(() => {
     if (search !== "") {
-      const results = initialValues.filter((item) =>
+      return initialValues.filter((item) =>
         item.toLowerCase().includes(search.toLowerCase())
       );
-      setSearchResults(results);
-    } else {
-      setSearchResults(initialValues);
     }
+    return initialValues;
   }, [search, initialValues]);
 
   const handleClickSearchedItem = useCallback(
@@ -202,10 +163,6 @@ export default memo(function ColumnBuild({
     },
     [column.name, selectedData, initialValues, setColumns]
   );
-
-  const toggleShowAllCountries = useCallback(() => {
-    setShowAllCountries((prev) => !prev);
-  }, []);
 
   return (
     <div className="max-w-3xl bg-white border border-light-gray-1 rounded-lg flex flex-col text-dark">
@@ -282,16 +239,6 @@ export default memo(function ColumnBuild({
                 className="bg-transparent border-none outline-none"
               />
             </div>
-            <button
-              onClick={toggleShowAllCountries}
-              className="ml-auto px-2 py-1 border flex items-center rounded-full text-dark"
-            >
-              {showAllCountries ? (
-                <FaChevronUp className="text-sm" />
-              ) : (
-                <FaChevronDown className="text-sm" />
-              )}
-            </button>
           </div>
           <div className="max-h-48 overflow-y-auto flex flex-wrap gap-2 p-6 border-b border-dashed border-light-gray-1">
             {searchResults.map((item) => (
