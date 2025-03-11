@@ -6,6 +6,7 @@ export interface TableItem {
   tags: string[];
   columns: [string];
   file: string;
+  delimiter: string;
   createdAt: string;
   updatedAt: string;
 }

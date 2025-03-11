@@ -40,8 +40,6 @@ export default memo(function ColumnBuild({
 }: ColumnBuildProps) {
   const { fileData } = useFileDataStore((state) => state);
 
-  console.log("fileData", fileData);
-
   const [initialValues, setInitialValues] = useState<string[]>([]);
   const [searchResults, setSearchResults] = useState<string[]>([]);
   const [showAllCountries, setShowAllCountries] = useState<boolean>(false);

@@ -1,7 +1,6 @@
 import React, { JSX } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PiPlusCircle } from "react-icons/pi";
-import { useLocation } from "react-router-dom";
 import { PiWalletLight, PiUserCircleLight } from "react-icons/pi";
 
 interface HeaderProps {
@@ -11,6 +10,11 @@ interface HeaderProps {
 
 export default function Header({ icon, label }: HeaderProps) {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleClickCreateTable = () => {
+    navigate("/admin/tables", { state: { createTable: true } });
+  };
 
   return (
     <div className="h-20 min-h-20 max-h-20 box-border px-4 sm:px-8 border-b border-light-gray-3 flex justify-between items-center">
@@ -24,14 +28,14 @@ export default function Header({ icon, label }: HeaderProps) {
       <div className="flex items-center gap-8">
         {location.pathname.includes("/dashboard") && (
           <div className="hidden xl:flex justify-center items-center gap-4">
-            <Link
-              to="/admin/dashboard"
-              className="rounded-full px-4 py-2 flex items-center gap-2 bg-dark-blue text-white"
+            <button
+              onClick={handleClickCreateTable}
+              className="rounded-full px-4 py-2 flex items-center gap-2 bg-dark-blue text-white border-none"
             >
               <PiPlusCircle className="text-2xl" /> <span>Create Table</span>
-            </Link>
+            </button>
             <Link
-              to="/admin/dashboard"
+              to="/admin/collections/new"
               className="rounded-full px-4 py-2 flex items-center gap-2 bg-white text-dark-blue border border-dark-blue"
             >
               <PiPlusCircle className="text-2xl" />{" "}
@@ -45,7 +49,9 @@ export default function Header({ icon, label }: HeaderProps) {
         </div>
         <div className="flex items-center gap-2 cursor-pointer">
           <PiUserCircleLight className="text-2xl" />
-          <span className="hidden sm:flex">{localStorage.getItem("userName")}</span>
+          <span className="hidden sm:flex">
+            {localStorage.getItem("userName")}
+          </span>
         </div>
       </div>
     </div>

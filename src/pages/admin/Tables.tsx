@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 import { CiFilter } from "react-icons/ci";
 import { PiTableLight } from "react-icons/pi";
@@ -19,13 +19,17 @@ import LoadingElement from "../../components/Common/LoadingElement";
 
 export default function Tables() {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [tables, setTables] = useState<TableItem[]>([]);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [isFilterPanelVisible, setIsFilterPanelVisible] = useState(false);
-  const [isNewTablePanelVisible, setIsNewTablePanelVisible] = useState(false);
+  const [isNewTablePanelVisible, setIsNewTablePanelVisible] = useState(
+    location.state?.createTable ?? false
+  );
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleAddTableClick = () => {

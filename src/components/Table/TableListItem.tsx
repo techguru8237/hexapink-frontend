@@ -210,6 +210,7 @@ export const TableListItem: React.FC<TableListItemProps> = ({
         <PreviewModal
           onRequestClose={() => setIsModalOpen(false)}
           filePath={data.file}
+          delimiter={data.delimiter}
         />
       )}
 

@@ -41,7 +41,6 @@ formApi.interceptors.request.use(
     const currentUserString = localStorage.getItem("currentUser");
     if (currentUserString) {
       const currentUser: User = JSON.parse(currentUserString); // Parse the string into a User object
-      console.log("currentUser.token", currentUser.token);
       if (currentUser.token) {
         config.headers.authorization = `Bearer ${currentUser.token}`;
       }
