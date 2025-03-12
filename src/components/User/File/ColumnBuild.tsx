@@ -14,7 +14,7 @@ dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
 interface ColumnBuildProps {
-  selectedData: Record<string, { value: any; stepName: string }>;
+  selectedData: Record<string, { value: any; type: string }>;
   column: Column;
   index: number;
   step: number;
@@ -67,25 +67,34 @@ export default memo(function ColumnBuild({
                     return selectedValue.some((value) => {
                       return Object.values(item).includes(value);
                     });
-                  } else if (typeof selectedValue === "object") {
+                  } else {
                     if (
                       selectedValue.min !== undefined &&
                       selectedValue.max !== undefined
                     ) {
-                      if (selectedValue.type === "Date") {
-                        return (
-                          dayjs(item[key]).isSameOrAfter(
-                            dayjs(selectedValue.min)
-                          ) &&
-                          dayjs(item[key]).isSameOrBefore(
-                            dayjs(selectedValue.max)
-                          )
-                        );
+                      if (selectedData[key].type === "Date") {
+                        const itemDate = dayjs(item[key]);
+                        const minDate = selectedValue.min ? dayjs(selectedValue.min) : null;
+                        const maxDate = selectedValue.max ? dayjs(selectedValue.max) : null;
+                        if (minDate && maxDate) {
+                          return itemDate.isSameOrAfter(minDate) && itemDate.isSameOrBefore(maxDate);
+                        } else if (minDate) {
+                          return itemDate.isSameOrAfter(minDate);
+                        } else if (maxDate) {
+                          return itemDate.isSameOrBefore(maxDate);
+                        }
                       } else {
-                        return (
-                          parseInt(item[key]) >= parseInt(selectedValue.min) &&
-                          parseInt(item[key]) <= parseInt(selectedValue.max)
-                        );
+                        const itemValue = parseInt(item[key]);
+                        const minValue = selectedValue.min ? parseInt(selectedValue.min) : null;
+                        const maxValue = selectedValue.max ? parseInt(selectedValue.max) : null;
+
+                        if (minValue !== null && maxValue !== null) {
+                          return itemValue >= minValue && itemValue <= maxValue;
+                        } else if (minValue !== null) {
+                          return itemValue >= minValue;
+                        } else if (maxValue !== null) {
+                          return itemValue <= maxValue;
+                        }
                       }
                     }
                     return true;
@@ -113,25 +122,35 @@ export default memo(function ColumnBuild({
                   return selectedValue.some((value) => {
                     return Object.values(item).includes(value);
                   });
-                } else if (typeof selectedValue === "object") {
+                } else {
                   if (
                     selectedValue.min !== undefined &&
                     selectedValue.max !== undefined
                   ) {
-                    if (selectedValue.type === "Date") {
-                      return (
-                        dayjs(item[key]).isSameOrAfter(
-                          dayjs(selectedValue.min)
-                        ) &&
-                        dayjs(item[key]).isSameOrBefore(
-                          dayjs(selectedValue.max)
-                        )
-                      );
+                    if (selectedData[key].type === "Date") {
+                      const itemDate = dayjs(item[key]);
+                      const minDate = selectedValue.min ? dayjs(selectedValue.min) : null;
+                      const maxDate = selectedValue.max ? dayjs(selectedValue.max) : null;
+
+                      if (minDate && maxDate) {
+                        return itemDate.isSameOrAfter(minDate) && itemDate.isSameOrBefore(maxDate);
+                      } else if (minDate) {
+                        return itemDate.isSameOrAfter(minDate);
+                      } else if (maxDate) {
+                        return itemDate.isSameOrBefore(maxDate);
+                      }
                     } else {
-                      return (
-                        parseInt(item[key]) >= parseInt(selectedValue.min) &&
-                        parseInt(item[key]) <= parseInt(selectedValue.max)
-                      );
+                      const itemValue = parseInt(item[key]);
+                      const minValue = selectedValue.min ? parseInt(selectedValue.min) : null;
+                      const maxValue = selectedValue.max ? parseInt(selectedValue.max) : null;
+
+                      if (minValue !== null && maxValue !== null) {
+                        return itemValue >= minValue && itemValue <= maxValue;
+                      } else if (minValue !== null) {
+                        return itemValue >= minValue;
+                      } else if (maxValue !== null) {
+                        return itemValue <= maxValue;
+                      }
                     }
                   }
                 }
@@ -198,7 +217,16 @@ export default memo(function ColumnBuild({
         ...selectedData[column.name]?.value,
         [name]: value,
       };
-      setColumns(column.type, column.name, updatedValue);
+
+      if (
+        (updatedValue.min === "" && updatedValue.max === "") ||
+        (updatedValue.min === 0 && updatedValue.max === 0)
+      ) {
+        const { [column.name]: _, ...rest } = selectedData;
+        setColumns(column.type, column.name, rest);
+      } else {
+        setColumns(column.type, column.name, updatedValue);
+      }
     },
     [column.name, selectedData, initialValues, setColumns]
   );

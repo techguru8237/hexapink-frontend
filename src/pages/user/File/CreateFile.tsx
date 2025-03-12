@@ -47,7 +47,7 @@ export default function CreateFile() {
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [selectedStepColumns, setSelectedStepColumns] = useState<Column[]>([]);
   const [selectedData, setSelectedData] = useState<
-    Record<string, { value: any; stepName: string }>
+    Record<string, { value: any; stepName: string, type: string }>
   >({});
   const [filteredData, setFilteredData] = useState<any[]>([]);
 
@@ -294,6 +294,8 @@ export default function CreateFile() {
     },
     []
   );
+
+  console.log("selectedData", selectedData);
 
   return (
     <div className="h-full flex flex-col">

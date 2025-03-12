@@ -133,6 +133,7 @@ export default function OrderItem({ orderData }: OrderItemProps) {
                     fileData.image.replace("uploads", "")
                   }
                   alt="file image"
+                  className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               <div className="flex flex-col items-start">

@@ -6,6 +6,7 @@ import api from "../../../actions/api";
 import { useUserContext } from "../../../contexts/User";
 import TopUpAmountInput from "../../Common/Inputs/AmountInput";
 import { User } from "../../../types";
+import { toast } from "react-toastify";
 
 const TopUpForm: React.FC = () => {
   const { currentUser, setCurrentUser } = useUserContext();
@@ -29,12 +30,12 @@ const TopUpForm: React.FC = () => {
 
       const cardElement = elements?.getElement(CardElement);
       if (!cardElement) {
-        console.error("Card element not found");
+        toast.error("Card element not found");
         return;
       }
 
       if (!stripe) {
-        console.error("Stripe not loaded");
+        toast.error("Stripe not loaded");
         return;
       }
 
@@ -44,7 +45,7 @@ const TopUpForm: React.FC = () => {
       });
 
       if (error) {
-        console.error("Payment method creation failed:", error.message);
+        toast.error(`Payment method creation failed: ${error.message}`);
         return;
       }
 
@@ -53,7 +54,7 @@ const TopUpForm: React.FC = () => {
       });
 
       if (paymentResult.error) {
-        console.error("Payment failed:", paymentResult.error.message);
+        toast.error(`Payment failed: ${paymentResult.error.message}`);
         return;
       } else if (paymentResult.paymentIntent?.status === "succeeded") {
         const response = await api.post("/api/transaction/confirm-topup", {
@@ -70,7 +71,7 @@ const TopUpForm: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error("Top-up error:", error);
+      toast.error(`Top-up error: ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       setLoading(false);
     }

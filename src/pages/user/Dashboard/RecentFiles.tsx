@@ -110,7 +110,14 @@ export default function RecentFiles() {
                   <td className="px-4 py-3">
                     <div className="w-full flex items-center gap-2">
                       <div className="w-12 h-12 flex items-center justify-center rounded-lg">
-                        <img src={file.image} alt="file image" />
+                        <img
+                          src={
+                            import.meta.env.VITE_BACKEND_URL +
+                            file.image.replace("uploads", "")
+                          }
+                          alt="file image"
+                          className="w-full h-full object-cover rounded-lg"
+                        />
                       </div>
                       <div className="flex flex-col">
                         <span className="font-bold">Insurance Companies</span>

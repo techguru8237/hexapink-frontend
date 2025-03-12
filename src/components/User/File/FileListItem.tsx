@@ -9,7 +9,6 @@ import {
 import { GiPositionMarker } from "react-icons/gi";
 
 import { File } from "../../../types";
-import samlpeImg from "../../../assets/TheHomePage/image/HP.svg";
 import Checkbox from "../../Common/Checkbox";
 
 interface FileListItemProps {
@@ -40,7 +39,14 @@ export const FileListItem: React.FC<FileListItemProps> = ({
         </div>
         <div className="w-[30%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
           <div className="w-10 h-10 rounded-l-lg flex items-center justify-center flex-shrink-0 rounded-lg">
-            <img src={samlpeImg} alt="file image" />
+            <img
+              src={
+                import.meta.env.VITE_BACKEND_URL +
+                fileData.image.replace("uploads", "")
+              }
+              alt="file image"
+              className="w-full h-full object-cover rounded-lg"
+            />
           </div>
           <div className="flex flex-col items-start">
             <span className="font-bold">{fileData.title}</span>
