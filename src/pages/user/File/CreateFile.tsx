@@ -47,7 +47,7 @@ export default function CreateFile() {
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [selectedStepColumns, setSelectedStepColumns] = useState<Column[]>([]);
   const [selectedData, setSelectedData] = useState<
-    Record<string, { value: any; stepName: string, type: string }>
+    Record<string, { value: any; stepName: string; type: string }>
   >({});
   const [filteredData, setFilteredData] = useState<any[]>([]);
 
@@ -256,7 +256,12 @@ export default function CreateFile() {
     setCarts,
   ]);
 
-  const createOrder = async (files: any[], volume: number, prix: number, paymentMethod: string) => {
+  const createOrder = async (
+    files: any[],
+    volume: number,
+    prix: number,
+    paymentMethod: string
+  ) => {
     const response = await api.post("/api/order/create", {
       files: JSON.stringify(files),
       volume,
@@ -379,7 +384,7 @@ export default function CreateFile() {
                   step={step}
                   index={index}
                   column={column}
-                  columns={selectedStepColumns}
+                  columns={selectedCollection?.columns || []}
                   selectedData={selectedData}
                   setColumns={(columnType, columnName, selectedValue) =>
                     handleColumnChange(
