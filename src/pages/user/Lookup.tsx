@@ -5,6 +5,8 @@ import { CiFilter } from "react-icons/ci";
 import { PiArrowFatUpLight, PiBinoculars, PiPackage } from "react-icons/pi";
 
 import api from "../../actions/api";
+import { formatDate } from "../../utils/formatDate";
+
 import UserHeader from "../../components/User/UserHeader";
 import Pagination from "../../components/Common/Pagination";
 import LoadingElement from "../../components/Common/LoadingElement";
@@ -194,7 +196,7 @@ export default function Lookup() {
                         </span>
                       </td>
                       <td className="px-4 py-3">
-                        {transaction.createdAt.split("T")[0]}
+                        {formatDate(transaction.createdAt)}
                       </td>
                     </tr>
                   ))

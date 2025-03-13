@@ -5,6 +5,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { GoPaperclip } from "react-icons/go";
 import Checkbox from "../Common/Checkbox";
 import { Order } from "../../types";
+import { formatDate } from "../../utils/formatDate";
 
 interface OrderListItemProps {
   data: Order;
@@ -47,11 +48,8 @@ export const OrderListItem: React.FC<OrderListItemProps> = ({
           <span>{data.prix}</span>
         </div>
         <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
-          <span>{}</span>
-        </div>
-        <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
           {data.paid === "Paid" ? (
-            <span className="text-green border border-light-green-1 bg-light-green-2 p-1 rounded-md">
+            <span className="text-green border border-light-green-1 bg-light-green-2 p-1 rounded-md text-sm">
               Paid
             </span>
           ) : (
@@ -68,7 +66,7 @@ export const OrderListItem: React.FC<OrderListItemProps> = ({
           )}
         </div>
         <div className="w-full p-3 flex items-center border-l border-dashed border-light-gray-3">
-          {data.createdAt.split("T")[0]}
+          {formatDate(data.createdAt)}
         </div>
       </div>
     </div>

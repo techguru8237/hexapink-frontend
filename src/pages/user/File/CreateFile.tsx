@@ -77,8 +77,13 @@ export default function CreateFile() {
   useEffect(() => {
     if (selectedCollection && Array.isArray(selectedCollection.columns)) {
       const stepItems = Array.from(
-        new Set(selectedCollection.columns.map((col) => col.stepName))
-      ).map((name, index) => ({ id: index + 2, name: name || "" }));
+        new Set(
+          selectedCollection.columns
+            .map((col) => col.stepName)
+            .filter((name): name is string => name !== "" && name !== undefined)
+        )
+      ).map((name, index) => ({ id: index + 2, name }));
+
       setSteps([
         defaultStep,
         ...stepItems,

@@ -9,6 +9,8 @@ import {
 import { GiPositionMarker } from "react-icons/gi";
 
 import { File } from "../../../types";
+import { formatDate } from "../../../utils/formatDate";
+
 import Checkbox from "../../Common/Checkbox";
 
 interface FileListItemProps {
@@ -33,11 +35,11 @@ export const FileListItem: React.FC<FileListItemProps> = ({
           isSelected ? "border-dark-blue" : "border-light-gray-3"
         } rounded-lg`}
       >
-        <div className="w-[10%] p-3 flex items-center">
+        <div className="w-[10%] p-3 min-w-min flex items-center">
           <PiDatabaseLight className="text-2xl" />
           <span>file_{index.slice(-5)}</span>
         </div>
-        <div className="w-[30%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
+        <div className="w-[30%] p-3 min-w-min flex items-center gap-2 border-l border-dashed border-light-gray-3">
           <div className="w-10 h-10 rounded-l-lg flex items-center justify-center flex-shrink-0 rounded-lg">
             <img
               src={
@@ -62,7 +64,7 @@ export const FileListItem: React.FC<FileListItemProps> = ({
             </div>
           </div>
         </div>
-        <div className="w-[10%] p-3 flex items-center divide-x border-l border-dashed border-light-gray-3">
+        <div className="w-[10%] p-3 min-w-min flex items-center divide-x border-l border-dashed border-light-gray-3">
           <div className="flex items-center pr-2">
             <PiSquareSplitHorizontalThin className="text-2xl" />
             {fileData?.columns && (
@@ -74,10 +76,10 @@ export const FileListItem: React.FC<FileListItemProps> = ({
             <span>{fileData.volume}</span>
           </div>
         </div>
-        <div className="w-[10%] p-3 flex items-center border-l border-dashed border-light-gray-3">
-          {fileData.createdAt?.split("T")[0]}
+        <div className="w-[10%] p-3 min-w-min flex items-center border-l border-dashed border-light-gray-3">
+          {formatDate(fileData.createdAt)}
         </div>
-        <div className="w-[10%] p-3 flex items-center border-l border-dashed border-light-gray-3">
+        <div className="w-[10%] p-3 min-w-min flex items-center border-l border-dashed border-light-gray-3">
           <span
             className={`rounded-lg px-2 py-1 text-sm ${
               fileData.status === "Ready"
@@ -88,7 +90,7 @@ export const FileListItem: React.FC<FileListItemProps> = ({
             {fileData.status}
           </span>
         </div>
-        <div className="w-[20%] p-3 flex justify-center items-center gap-2 border-l border-dashed border-light-gray-3 text-dark-blue">
+        <div className="w-[20%] p-3 min-w-min flex flex-wrap justify-center items-center gap-2 border-l border-dashed border-light-gray-3 text-dark-blue">
           <div className="px-4 py-1 rounded-full border border-dark-blue flex items-center gap-2 font-sm">
             <PiDownloadSimpleLight />
             <span className="text-xs">CSV</span>
@@ -98,8 +100,8 @@ export const FileListItem: React.FC<FileListItemProps> = ({
             <span className="text-xs">XLS</span>
           </div>
         </div>
-        <div className="w-[10%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
-          <PiPackage className="text-2xl" />
+        <div className="w-[10%] p-3 min-w-min flex items-center gap-2 border-l border-dashed border-light-gray-3">
+          <PiPackage className="text-2xl shrink-0" />
           <span>ord_124</span>
         </div>
       </div>

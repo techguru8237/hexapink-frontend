@@ -10,20 +10,20 @@ import StepedColumnItem from "./StepedColumnItem";
 interface ColumnToStepProps {
   selectedStepId: number | null;
   steps: Step[];
+  disabled: boolean;
   columns: Column[];
   setSteps: (steps: Step[]) => void;
   setColumns: (columns: Column[]) => void;
-  disabled: boolean;
 }
 
 const ColumnToStep = React.memo(
   ({
     selectedStepId,
-    setSteps,
     steps,
     columns,
-    setColumns,
     disabled,
+    setSteps,
+    setColumns,
   }: ColumnToStepProps) => {
     const [search, setSearch] = useState<string>("");
     const [showSearch, setShowSearch] = useState<boolean>(true);

@@ -6,6 +6,8 @@ import { FaWallet } from "react-icons/fa";
 import { PiArrowFatUpLight, PiBinoculars, PiPackage } from "react-icons/pi"; // Import PiPackage
 
 import api from "../../actions/api";
+import { formatDate } from "../../utils/formatDate";
+
 import UserHeader from "../../components/User/UserHeader";
 import TopUpForm from "../../components/User/Wallet/TopUpForm";
 import Pagination from "../../components/Common/Pagination";
@@ -175,7 +177,7 @@ export default function Wallet() {
                         </span>
                       </td>
                       <td className="px-4 py-3">
-                        {transaction.createdAt.split("T")[0]}
+                        {formatDate(transaction.createdAt)}
                       </td>
                     </tr>
                   ))

@@ -8,12 +8,14 @@ import { PiTableLight } from "react-icons/pi";
 import { CiCircleInfo } from "react-icons/ci";
 import { MdOutlineModeEdit } from "react-icons/md";
 
+import { TableItem } from "../../types";
+import { formatDate } from "../../utils/formatDate";
+import { deleteTableById } from "../../actions/table"; // Import the update function
+
+import TagModal from "../Common/TagModal";
 import Checkbox from "../Common/Checkbox";
 import PreviewModal from "../Common/PreviewModal"; // Import the modal
 import LoadingElement from "../Common/LoadingElement";
-import { TableItem } from "../../types";
-import { deleteTableById } from "../../actions/table"; // Import the update function
-import TagModal from "../Common/TagModal";
 import ConfirmDialog from "../Common/ConfirmDialog";
 
 interface TableListItemProps {
@@ -110,7 +112,7 @@ export const TableListItem: React.FC<TableListItemProps> = ({
         onClick={() => onCheckboxChange(index)}
       >
         <div className="w-full bg-white flex justify-around rounded-lg">
-          <div className="w-[20%] min-w-min p-3 pr-0 flex items-center justify-between">
+          <div className="w-[15%] min-w-min p-3 pr-0 flex items-center justify-between">
             <div className="flex items-center">
               <PiTableLight className="text-xl mr-2" />
               {/* {isEditing ? (
@@ -149,9 +151,12 @@ export const TableListItem: React.FC<TableListItemProps> = ({
             </Tooltip>
           </div>
           <div className="w-[15%] p-3 flex items-center divide-x border-l border-dashed border-light-gray-3">
+            <span>{data.tableName}</span>
+          </div>
+          <div className="w-[10%] p-3 flex items-center divide-x border-l border-dashed border-light-gray-3">
             <span>{data.columns.length}</span>
           </div>
-          <div className="w-[15%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
+          <div className="w-[10%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
             <span>{data.leads}</span>
           </div>
           <div className="w-[30%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
@@ -192,7 +197,7 @@ export const TableListItem: React.FC<TableListItemProps> = ({
             </div>
           </div>
           <div className="w-[15%] p-3 flex items-center border-l border-dashed border-light-gray-3">
-            {data.createdAt.split("T")[0]}
+            {formatDate(data.createdAt)}
           </div>
         </div>
       </div>

@@ -23,6 +23,8 @@ export default function AttachedTableItem({
 
   const [showDeleteIcon, setShowDeleteIcon] = useState(false);
 
+  console.log(tableData)
+
   return (
     <div className="flex items-center">
       <div className="w-full flex items-center gap-2 cursor-pointer rounded-lg">

@@ -11,6 +11,7 @@ import { GiPositionMarker } from "react-icons/gi";
 
 import { File } from "../../../types";
 import api from "../../../actions/api";
+import { formatDate } from "../../../utils/formatDate";
 import LoadingElement from "../../../components/Common/LoadingElement";
 
 const filterOptions = ["All", "Ready", "Waiting"];
@@ -149,7 +150,9 @@ export default function RecentFiles() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3">{file.createdAt?.split("T")[0]}</td>
+                  <td className="px-4 py-3">
+                    {formatDate(file.createdAt)}
+                  </td>
                   <td className="px-4 py-3">
                     <span
                       className={`border px-2 py-1 rounded-md text-xs ${

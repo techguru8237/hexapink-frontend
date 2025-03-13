@@ -6,6 +6,7 @@ import Checkbox from "../../Common/Checkbox";
 import ConfirmDialog from "../../Common/ConfirmDialog";
 import UserPreviewModal from "./UserPreviewModal"; // Import the modal
 import { IconButton, Tooltip } from "@mui/material";
+import { formatDate } from "../../../utils/formatDate";
 
 interface UserListItemProps {
   index: number;
@@ -112,7 +113,7 @@ export const UserListItem: React.FC<UserListItemProps> = ({
               </button>
             </div>
             <div className="w-[15%] p-1 lg:p-2 xl:p-3 flex items-center border-l border-dashed border-light-gray-3">
-              {data.createdAt?.split("T")[0]}
+              {formatDate(data.createdAt)}
             </div>
             <div className="w-[10%] p-1 lg:p-2 xl:p-3 flex items-center border-l border-dashed border-light-gray-3">
               <Tooltip title="Edit User">

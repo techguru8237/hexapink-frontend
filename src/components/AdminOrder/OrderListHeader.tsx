@@ -13,7 +13,6 @@ export default function OrderListHeader() {
         <span className="w-full p-2 flex">Leads</span>
         <span className="w-full p-2 flex">Price</span>
         <span className="w-full p-2 flex">Payment Method</span>
-        <span className="w-full p-2 flex">Payment Method</span>
         <span className="w-full p-2 flex">Date</span>
       </div>
     </div>

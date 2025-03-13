@@ -10,6 +10,7 @@ import { HiArrowSmallRight, HiArrowSmallLeft } from "react-icons/hi2";
 
 import { File, Order } from "../../../types";
 import { useCurrency } from "../../../contexts/Currency";
+import { formatDate } from "../../../utils/formatDate";
 
 interface OrderItemProps {
   orderData: Order;
@@ -65,7 +66,9 @@ export default function OrderItem({ orderData }: OrderItemProps) {
               <PiPackage />
               <span>{orderData._id.slice(-4)}</span>
             </div>
-            <span className="pl-2">{orderData.createdAt.split("T")[0]}</span>
+            <span className="pl-2">
+              {formatDate(orderData.createdAt)}
+            </span>
           </div>
           <div className="text-xs">
             {orderData.paid === "Paid" ? (

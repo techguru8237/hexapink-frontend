@@ -15,14 +15,14 @@ import TableListItemSkeleton from "./TableListItemSkeleton";
 interface TableAttachmentProps {
   columns: Column[];
   selectedTable: TableItem | null;
-  setColumns: (columns: Column[]) => void;
+  // setColumns: (columns: Column[]) => void;
   setSelectedTable: (table: TableItem) => void;
   disabled: boolean;
 }
 
 export default function TableAttachment({
   columns,
-  setColumns,
+  // setColumns,
   selectedTable,
   setSelectedTable,
   disabled,
@@ -59,7 +59,7 @@ export default function TableAttachment({
       );
       setAttachedTables(attachedTables);
     }
-  }, [columns, tables]);
+  }, [tables]);
 
   useEffect(() => {
     if (search) {
@@ -82,14 +82,8 @@ export default function TableAttachment({
     }
   };
 
-
   const handleDettachTable = (id: string) => {
     const updatedTables = attachedTables.filter((table) => table._id !== id);
-    const updatedColumns = columns.map((col) => ({
-      ...col,
-      tableColumns: col.tableColumns?.filter((tc) => tc.tableId !== id),
-    }));
-    setColumns(updatedColumns);
     setAttachedTables(updatedTables);
   };
 

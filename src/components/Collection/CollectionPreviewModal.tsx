@@ -6,7 +6,9 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+
 import { Collection, Column } from "../../types";
+import { formatDate } from "../../utils/formatDate";
 
 interface CollectionPreviewModalProps {
   open: boolean;
@@ -33,7 +35,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
               Status: {collection.status}
             </Typography>
             <Typography variant="body2" color="textSecondary">
-              Created At: {collection.createdAt?.split("T")[0]}
+              Created At: {formatDate(collection.createdAt)}
             </Typography>
             <Typography variant="body2" color="textSecondary">
               Description: {collection.description || "N/A"}

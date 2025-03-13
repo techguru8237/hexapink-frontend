@@ -4,24 +4,24 @@ import StepItemSkeleton from "./StepItemSkeleton";
 
 interface StepGenerateProps {
   steps: Step[];
+  disabled: boolean;
   selectedStepId: number | null;
   setSelectedStepId: (stepId: number) => void;
   setDraggedStepId: (id: number | null) => void;
   handleDrop: (stepId: number) => void;
   onClickNewStep: () => void;
   handleDeleteStep: (stepId: number) => void;
-  disabled: boolean;
 }
 
 export default function StepGenerate({
   steps,
-  onClickNewStep,
-  handleDrop,
+  disabled,
   selectedStepId,
+  handleDrop,
+  onClickNewStep,
   setSelectedStepId,
   setDraggedStepId,
   handleDeleteStep,
-  disabled,
 }: StepGenerateProps) {
   return (
     <div className="w-96 flex flex-col gap-4 p-6">

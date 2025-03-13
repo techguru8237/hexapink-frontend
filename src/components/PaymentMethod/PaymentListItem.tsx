@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { PiTableLight } from "react-icons/pi";
 import { CiCircleInfo } from "react-icons/ci";
-import Checkbox from "../Common/Checkbox";
-import { BankItem } from "../../types";
-import ConfirmDialog from "../Common/ConfirmDialog";
-import LoadingElement from "../Common/LoadingElement";
 import { BiPencil } from "react-icons/bi";
 import { BsTrash3 } from "react-icons/bs";
 import { toast } from "react-toastify";
+
 import api from "../../actions/api";
+import { formatDate } from "../../utils/formatDate";
+import { BankItem } from "../../types";
+
+import Checkbox from "../Common/Checkbox";
+import ConfirmDialog from "../Common/ConfirmDialog";
+import LoadingElement from "../Common/LoadingElement";
 
 interface PaymentListItemProps {
   index: string;
@@ -121,7 +124,7 @@ export const PaymentListItem: React.FC<PaymentListItemProps> = ({
           </button>
         </div>
         <div className="w-full p-3 flex items-center border-l border-dashed border-light-gray-3">
-          {data.createdAt.split("T")[0]}
+          {formatDate(data.createdAt)}
         </div>
       </div>
 

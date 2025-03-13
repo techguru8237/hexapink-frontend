@@ -5,6 +5,7 @@ import { GoArrowUpRight } from "react-icons/go";
 
 import api from "../../../actions/api";
 import { Order } from "../../../types";
+import { formatDate } from "../../../utils/formatDate";
 import LoadingElement from "../../../components/Common/LoadingElement";
 
 const filterOptions = ["All", "Unpaid", "Processing", "Paid"];
@@ -79,8 +80,7 @@ export default function OrdersTable() {
           <thead>
             <tr className="text-left text-xs font-semibold tracking-wider">
               <th className="px-4 py-3">
-                <PiPackage className="inline-block text-xl mr-1" />
-                #
+                <PiPackage className="inline-block text-xl mr-1" />#
               </th>
               <th className="px-4 py-3">Files</th>
               <th className="px-4 py-3">Leads</th>
@@ -127,7 +127,9 @@ export default function OrdersTable() {
                       {order.paid}
                     </span>
                   </td>
-                  <td className="px-4 py-3">{order.createdAt.split("T")[0]}</td>
+                  <td className="px-4 py-3">
+                    {formatDate(order.createdAt)}
+                  </td>
                 </tr>
               ))
             )}

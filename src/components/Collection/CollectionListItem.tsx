@@ -10,8 +10,10 @@ import { BiPencil } from "react-icons/bi";
 import { IconButton, Tooltip } from "@mui/material";
 
 import api from "../../actions/api";
-import { getTotalLeads } from "../../actions/collection";
 import { Collection } from "../../types";
+import { getTotalLeads } from "../../actions/collection";
+import { formatDate } from "../../utils/formatDate";
+
 import Checkbox from "../Common/Checkbox";
 import LoadingElement from "../Common/LoadingElement";
 import ConfirmDialog from "../Common/ConfirmDialog";
@@ -138,7 +140,7 @@ export const CollectionListItem: React.FC<CollectionListItemProps> = ({
                 ""
               )}`}
               alt="file image"
-              className="rounded-lg"
+              className="w-full h-full object-cover rounded-lg"
             />
           </div>
           <div className="flex flex-col">
@@ -183,7 +185,7 @@ export const CollectionListItem: React.FC<CollectionListItemProps> = ({
           </div>
         </div>
         <div className="w-[15%] p-3 flex items-center border-l border-dashed border-light-gray-3">
-          {data.createdAt?.split("T")[0]}
+          {formatDate(data.createdAt)}
         </div>
       </div>
 

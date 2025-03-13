@@ -326,7 +326,7 @@ export default memo(function ColumnBuild({
             }
             disabled={disabled}
             onChange={(value) =>
-              handleRangeChange("min", value ? value.format("YYYY/MM/DD") : "")
+              handleRangeChange("min", value ? value.format("DD/MM/YYYY") : "")
             }
             error=""
           />
@@ -339,7 +339,7 @@ export default memo(function ColumnBuild({
             }
             disabled={disabled}
             onChange={(value) =>
-              handleRangeChange("max", value ? value.format("YYYY/MM/DD") : "")
+              handleRangeChange("max", value ? value.format("DD/MM/YYYY") : "")
             }
             error=""
           />

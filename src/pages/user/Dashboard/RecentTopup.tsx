@@ -4,9 +4,10 @@ import { PiWallet } from "react-icons/pi";
 import { GoArrowUpRight } from "react-icons/go";
 
 import api from "../../../actions/api";
+import { formatDate } from "../../../utils/formatDate";
 
-import LoadingElement from "../../../components/Common/LoadingElement";
 import { transactionItem } from "../Wallet";
+import LoadingElement from "../../../components/Common/LoadingElement";
 
 const RecentTopUp: React.FC = () => {
   const [topUps, setTopUps] = useState<transactionItem[]>([]);
@@ -112,7 +113,7 @@ const RecentTopUp: React.FC = () => {
                       {topUp.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3">{topUp.createdAt.split("T")[0]}</td>
+                  <td className="px-4 py-3">{formatDate(topUp.createdAt)}</td>
                 </tr>
               ))
             )}

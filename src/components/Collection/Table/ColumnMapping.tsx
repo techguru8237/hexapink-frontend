@@ -22,7 +22,7 @@ export default function ColumnMapping({
     <div className="h-full flex text-dark">
       <TableAttachment
         columns={columns}
-        setColumns={setColumns}
+        // setColumns={setColumns}
         selectedTable={selectedTable}
         setSelectedTable={setSelectedTable}
         disabled={disabled ?? false}
