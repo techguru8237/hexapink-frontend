@@ -15,6 +15,7 @@ dayjs.extend(isSameOrBefore);
 
 interface ColumnBuildProps {
   selectedData: Record<string, { value: any; type: string }>;
+  columns: Column[];
   column: Column;
   index: number;
   step: number;
@@ -30,6 +31,7 @@ interface ColumnBuildProps {
 
 export default memo(function ColumnBuild({
   column,
+  columns,
   index,
   step,
   disabled = false,
@@ -39,6 +41,8 @@ export default memo(function ColumnBuild({
   setFilteredData,
 }: ColumnBuildProps) {
   const { fileData } = useFileDataStore((state) => state);
+
+  console.log("fileData", fileData);
 
   const [initialValues, setInitialValues] = useState<string[]>([]);
   const [searchResults, setSearchResults] = useState<string[]>([]);
@@ -61,43 +65,67 @@ export default memo(function ColumnBuild({
               return Object.keys(selectedData)
                 .filter((selectedDataKey) => selectedDataKey !== column.name)
                 .every((key) => {
+                  const tableColumnNames = columns
+                    .find((col) => col.name === key)
+                    ?.tableColumns?.flatMap((tc) => tc.tableColumn);
+                  const ItemKeys = Object.keys(item);
+                  const correctTableColumName = tableColumnNames?.find((tcn) =>
+                    ItemKeys.includes(tcn)
+                  );
                   const selectedValue = selectedData[key].value;
-                  if (Array.isArray(selectedValue)) {
-                    if (selectedValue.length === 0) return true;
-                    return selectedValue.some((value) => {
-                      return Object.values(item).includes(value);
-                    });
-                  } else {
-                    if (
-                      selectedValue.min !== undefined &&
-                      selectedValue.max !== undefined
-                    ) {
-                      if (selectedData[key].type === "Date") {
-                        const itemDate = dayjs(item[key]);
-                        const minDate = selectedValue.min ? dayjs(selectedValue.min) : null;
-                        const maxDate = selectedValue.max ? dayjs(selectedValue.max) : null;
-                        if (minDate && maxDate) {
-                          return itemDate.isSameOrAfter(minDate) && itemDate.isSameOrBefore(maxDate);
-                        } else if (minDate) {
-                          return itemDate.isSameOrAfter(minDate);
-                        } else if (maxDate) {
-                          return itemDate.isSameOrBefore(maxDate);
-                        }
-                      } else {
-                        const itemValue = parseInt(item[key]);
-                        const minValue = selectedValue.min ? parseInt(selectedValue.min) : null;
-                        const maxValue = selectedValue.max ? parseInt(selectedValue.max) : null;
+                  if (correctTableColumName) {
+                    if (Array.isArray(selectedValue)) {
+                      if (selectedValue.length === 0) return true;
+                      return selectedValue.some((value) => {
+                        return Object.values(item).includes(value);
+                      });
+                    } else {
+                      if (
+                        selectedValue.min !== undefined &&
+                        selectedValue.max !== undefined
+                      ) {
+                        if (selectedData[key].type === "Date") {
+                          const itemDate = dayjs(item[correctTableColumName]);
+                          const minDate = selectedValue.min
+                            ? dayjs(selectedValue.min)
+                            : null;
+                          const maxDate = selectedValue.max
+                            ? dayjs(selectedValue.max)
+                            : null;
+                          if (minDate && maxDate) {
+                            return (
+                              itemDate.isSameOrAfter(minDate) &&
+                              itemDate.isSameOrBefore(maxDate)
+                            );
+                          } else if (minDate) {
+                            return itemDate.isSameOrAfter(minDate);
+                          } else if (maxDate) {
+                            return itemDate.isSameOrBefore(maxDate);
+                          }
+                        } else {
+                          const itemValue = parseInt(
+                            item[correctTableColumName]
+                          );
+                          const minValue = selectedValue.min
+                            ? parseInt(selectedValue.min)
+                            : null;
+                          const maxValue = selectedValue.max
+                            ? parseInt(selectedValue.max)
+                            : null;
 
-                        if (minValue !== null && maxValue !== null) {
-                          return itemValue >= minValue && itemValue <= maxValue;
-                        } else if (minValue !== null) {
-                          return itemValue >= minValue;
-                        } else if (maxValue !== null) {
-                          return itemValue <= maxValue;
+                          if (minValue !== null && maxValue !== null) {
+                            return (
+                              itemValue >= minValue && itemValue <= maxValue
+                            );
+                          } else if (minValue !== null) {
+                            return itemValue >= minValue;
+                          } else if (maxValue !== null) {
+                            return itemValue <= maxValue;
+                          }
                         }
                       }
+                      return true;
                     }
-                    return true;
                   }
                 });
             });
@@ -116,42 +144,62 @@ export default memo(function ColumnBuild({
 
             const filteredData = data.filter((item: any) => {
               return Object.keys(selectedData).every((key) => {
+                const tableColumnNames = columns
+                  .find((col) => col.name === key)
+                  ?.tableColumns?.flatMap((tc) => tc.tableColumn);
+                const ItemKeys = Object.keys(item);
+                const correctTableColumName = tableColumnNames?.find((tcn) =>
+                  ItemKeys.includes(tcn)
+                );
                 const selectedValue = selectedData[key].value;
-                if (Array.isArray(selectedValue)) {
-                  if (selectedValue.length === 0) return true;
-                  return selectedValue.some((value) => {
-                    return Object.values(item).includes(value);
-                  });
-                } else {
-                  if (
-                    selectedValue.min !== undefined &&
-                    selectedValue.max !== undefined
-                  ) {
-                    if (selectedData[key].type === "Date") {
-                      const itemDate = dayjs(item[key]);
-                      const minDate = selectedValue.min ? dayjs(selectedValue.min) : null;
-                      const maxDate = selectedValue.max ? dayjs(selectedValue.max) : null;
+                if (correctTableColumName) {
+                  if (Array.isArray(selectedValue)) {
+                    if (selectedValue.length === 0) return true;
+                    return selectedValue.some((value) => {
+                      return Object.values(item).includes(value);
+                    });
+                  } else {
+                    if (
+                      selectedValue.min !== undefined &&
+                      selectedValue.max !== undefined
+                    ) {
+                      if (selectedData[key].type === "Date") {
+                        const itemDate = dayjs(item[correctTableColumName]);
+                        const minDate = selectedValue.min
+                          ? dayjs(selectedValue.min)
+                          : null;
+                        const maxDate = selectedValue.max
+                          ? dayjs(selectedValue.max)
+                          : null;
+                        if (minDate && maxDate) {
+                          return (
+                            itemDate.isSameOrAfter(minDate) &&
+                            itemDate.isSameOrBefore(maxDate)
+                          );
+                        } else if (minDate) {
+                          return itemDate.isSameOrAfter(minDate);
+                        } else if (maxDate) {
+                          return itemDate.isSameOrBefore(maxDate);
+                        }
+                      } else {
+                        const itemValue = parseInt(item[correctTableColumName]);
+                        const minValue = selectedValue.min
+                          ? parseInt(selectedValue.min)
+                          : null;
+                        const maxValue = selectedValue.max
+                          ? parseInt(selectedValue.max)
+                          : null;
 
-                      if (minDate && maxDate) {
-                        return itemDate.isSameOrAfter(minDate) && itemDate.isSameOrBefore(maxDate);
-                      } else if (minDate) {
-                        return itemDate.isSameOrAfter(minDate);
-                      } else if (maxDate) {
-                        return itemDate.isSameOrBefore(maxDate);
-                      }
-                    } else {
-                      const itemValue = parseInt(item[key]);
-                      const minValue = selectedValue.min ? parseInt(selectedValue.min) : null;
-                      const maxValue = selectedValue.max ? parseInt(selectedValue.max) : null;
-
-                      if (minValue !== null && maxValue !== null) {
-                        return itemValue >= minValue && itemValue <= maxValue;
-                      } else if (minValue !== null) {
-                        return itemValue >= minValue;
-                      } else if (maxValue !== null) {
-                        return itemValue <= maxValue;
+                        if (minValue !== null && maxValue !== null) {
+                          return itemValue >= minValue && itemValue <= maxValue;
+                        } else if (minValue !== null) {
+                          return itemValue >= minValue;
+                        } else if (maxValue !== null) {
+                          return itemValue <= maxValue;
+                        }
                       }
                     }
+                    return true;
                   }
                 }
               });

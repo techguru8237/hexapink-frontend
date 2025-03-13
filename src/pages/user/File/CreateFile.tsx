@@ -379,6 +379,7 @@ export default function CreateFile() {
                   step={step}
                   index={index}
                   column={column}
+                  columns={selectedStepColumns}
                   selectedData={selectedData}
                   setColumns={(columnType, columnName, selectedValue) =>
                     handleColumnChange(
