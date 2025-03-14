@@ -6,9 +6,7 @@ import { PiCheckBold } from "react-icons/pi";
 import { FaRegFolderOpen } from "react-icons/fa";
 import { GoArrowRight, GoArrowLeft } from "react-icons/go";
 
-import api from "../../../actions/api";
 import { useUserContext } from "../../../contexts/User";
-import { BankItem, Collection, Column, Step } from "../../../types";
 import VerticalStepBar from "../../../components/Collection/VerticalStepbar";
 import CountrySelect from "../../../components/Common/CountrySelect";
 import TypeSelect from "../../../components/Admin/User/TypeSelect";
@@ -19,9 +17,11 @@ import useCartStore from "../../../Store/useCartStore";
 import UserHeader from "../../../components/User/UserHeader";
 import CollectionView from "../../../components/User/File/CollectionView";
 
-import CartAddIcon from "../../../assets/icons/ShoppingCart.svg";
+import api from "../../../actions/api";
 import { getTotalLeads } from "../../../actions/collection";
+import { BankItem, Collection, Column, Step } from "../../../types";
 import useFileDataStore from "../../../Store/useFileDataStore";
+import CartAddIcon from "../../../assets/icons/ShoppingCart.svg";
 
 const types = ["Business", "Client"];
 const defaultStep = { id: 1, name: "Collection" };
@@ -304,8 +304,6 @@ export default function CreateFile() {
     },
     []
   );
-
-  console.log("selectedData", selectedData);
 
   return (
     <div className="h-full flex flex-col">

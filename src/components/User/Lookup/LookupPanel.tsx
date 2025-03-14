@@ -73,7 +73,7 @@ export default function LookupPanel({ onLookup }: LookupPanelProps) {
         />
         <button
           onClick={handleLookupClick}
-          className="flex items-center justify-center border rounded-full px-2 py-2 bg-dark-blue text-white"
+          className="flex items-center justify-center border rounded-full px-2 py-2 mt-2 bg-dark-blue text-white"
         >
           <PiBinoculars className="mr-2 text-xl" />
           Look Up

@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import useFileDataStore from "../../../Store/useFileDataStore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import { useLoading } from "../../../contexts/Loading";
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
@@ -41,7 +42,9 @@ export default memo(function ColumnBuild({
   setFilteredData,
 }: ColumnBuildProps) {
   const { fileData } = useFileDataStore((state) => state);
+  const { loading, showLoading, hideLoading } = useLoading();
 
+  console.log("loading, ===> ", loading);
   const [initialValues, setInitialValues] = useState<string[]>([]);
   const [searchResults, setSearchResults] = useState<string[]>([]);
   const [showAllCountries, setShowAllCountries] = useState<boolean>(false);
@@ -50,6 +53,7 @@ export default memo(function ColumnBuild({
   useEffect(() => {
     const fetchData = async () => {
       try {
+        showLoading();
         if (!column.tableColumns) {
           console.warn("No table columns available.");
           return;
@@ -211,6 +215,8 @@ export default memo(function ColumnBuild({
         setVolume(totalVolume);
       } catch (error) {
         console.error("Error fetching table data:", error);
+      } finally {
+        hideLoading();
       }
     };
 
