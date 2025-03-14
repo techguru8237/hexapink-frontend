@@ -10,6 +10,7 @@ import { GiPositionMarker } from "react-icons/gi";
 
 import { File } from "../../../types";
 import { formatDate } from "../../../utils/formatDate";
+import { handleDownloadToCSV } from "../../../utils/fileDownload";
 
 import Checkbox from "../../Common/Checkbox";
 
@@ -91,10 +92,13 @@ export const FileListItem: React.FC<FileListItemProps> = ({
           </span>
         </div>
         <div className="w-[20%] p-3 min-w-min flex flex-wrap justify-center items-center gap-2 border-l border-dashed border-light-gray-3 text-dark-blue">
-          <div className="px-4 py-1 rounded-full border border-dark-blue flex items-center gap-2 font-sm">
+          <button
+            onClick={() => handleDownloadToCSV(fileData.path)}
+            className="px-4 py-1 rounded-full border border-dark-blue flex items-center gap-2 font-sm"
+          >
             <PiDownloadSimpleLight />
             <span className="text-xs">CSV</span>
-          </div>
+          </button>
           <div className="px-4 py-1 rounded-full border border-dark-blue flex items-center gap-2 font-sm">
             <PiDownloadSimpleLight />
             <span className="text-xs">XLS</span>
@@ -102,7 +106,7 @@ export const FileListItem: React.FC<FileListItemProps> = ({
         </div>
         <div className="w-[10%] p-3 min-w-min flex items-center gap-2 border-l border-dashed border-light-gray-3">
           <PiPackage className="text-2xl shrink-0" />
-          <span>ord_124</span>
+          <span>ord_{fileData.orderId?.slice(-5)}</span>
         </div>
       </div>
     </div>

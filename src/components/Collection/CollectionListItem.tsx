@@ -119,21 +119,22 @@ export const CollectionListItem: React.FC<CollectionListItemProps> = ({
           isSelected ? "border-dark-blue" : "border-light-gray-3"
         } rounded-lg`}
       >
-        <div className="w-[25%] p-3 flex items-center">
-          <FaRegFolderOpen className="text-2xl mr-2" />
-          <span>col_{id.slice(-5)}</span>
+        <div className="w-[25%] p-3 flex justify-between items-center">
+          <div className="flex items-center">
+            <FaRegFolderOpen className="text-2xl mr-2" />
+            <span>col_{id.slice(-5)}</span>
+          </div>
           <Tooltip title="Collection Preview">
             <IconButton>
               <CiCircleInfo
                 onClick={handleShowPreview}
-                className="text-xl border rounded-md p-1 box-content"
+                className="text-lg border rounded-md p-0.5 box-content cursor-pointer"
               />
             </IconButton>
           </Tooltip>
         </div>
         <div className="w-[30%] p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
           <div className="w-12 h-12 bg-[#F0F0FA] border border-light-gray-3 rounded-l-lg flex items-center justify-center rounded-lg">
-            {/* <PiImageSquareLight className="text-2xl" /> */}
             <img
               src={`${import.meta.env.VITE_BACKEND_URL}/${data.image?.replace(
                 "uploads",

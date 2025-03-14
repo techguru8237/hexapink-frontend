@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { X, RotateCcw, Filter, Check, ChevronDown } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
+import { useCurrency } from "../../../contexts/Currency";
 
 interface FilterPanelProps {
   onClose: () => void;
@@ -51,7 +52,7 @@ const OrderFilterPanel: React.FC<FilterPanelProps> = ({
   onFilterChange,
 }) => {
   const [searchParams] = useSearchParams();
-
+  const { currency } = useCurrency();
   // Initialize state from URL params
   const [paymentStatus, setPaymentStatus] = useState<string[]>(
     searchParams.get("paid")?.split(",") || ["Processing", "Paid"]
@@ -176,12 +177,12 @@ const OrderFilterPanel: React.FC<FilterPanelProps> = ({
       <div className="space-y-4">
         {/* Payment Status */}
         <div>
-          <p className="text-sm text-gray-500 mb-2">Payment Status</p>
+          <p className="text-sm text-gray-500 mb-2 text-left">Payment Status</p>
           <div className="space-y-2">
             {["Unpaid", "Processing", "Paid"].map((status) => (
               <div
                 key={status}
-                className={`flex items-center p-3 rounded-md border cursor-pointer ${
+                className={`flex items-center p-2 rounded-md border cursor-pointer ${
                   paymentStatus.includes(status)
                     ? "bg-[#4040BF] text-white"
                     : "bg-white text-gray-700 border-gray-200"
@@ -208,21 +209,21 @@ const OrderFilterPanel: React.FC<FilterPanelProps> = ({
         {/* Volume Range */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <p className="text-sm text-gray-500 mb-2">Volume Min</p>
+            <p className="text-sm text-gray-500 mb-2 text-left">Volume Min</p>
             <input
               type="text"
               value={volumeMin}
               onChange={(e) => setVolumeMin(e.target.value)}
-              className="w-full p-3 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-transparent"
+              className="w-full p-2 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-transparent"
             />
           </div>
           <div>
-            <p className="text-sm text-gray-500 mb-2">Volume Max</p>
+            <p className="text-sm text-gray-500 mb-2 text-left">Volume Max</p>
             <input
               type="text"
               value={volumeMax}
               onChange={(e) => setVolumeMax(e.target.value)}
-              className="w-full p-3 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-transparent"
+              className="w-full p-2 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-transparent"
             />
           </div>
         </div>
@@ -230,30 +231,30 @@ const OrderFilterPanel: React.FC<FilterPanelProps> = ({
         {/* Prix Range */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <p className="text-sm text-gray-500 mb-2">Prix Min</p>
+            <p className="text-sm text-gray-500 mb-2 text-left">Prix Min</p>
             <div className="relative">
               <input
                 type="text"
                 value={prixMin}
                 onChange={(e) => setPrixMin(e.target.value)}
-                className="w-full p-3 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-transparent"
+                className="w-full p-2 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-transparent"
               />
               <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#4040BF]">
-                €
+                {currency}
               </span>
             </div>
           </div>
           <div>
-            <p className="text-sm text-gray-500 mb-2">Prix Max</p>
+            <p className="text-sm text-gray-500 mb-2 text-left">Prix Max</p>
             <div className="relative">
               <input
                 type="text"
                 value={prixMax}
                 onChange={(e) => setPrixMax(e.target.value)}
-                className="w-full p-3 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-transparent"
+                className="w-full p-2 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-transparent"
               />
               <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#4040BF]">
-                €
+                {currency}
               </span>
             </div>
           </div>
@@ -261,7 +262,7 @@ const OrderFilterPanel: React.FC<FilterPanelProps> = ({
 
         {/* Date Min */}
         <div>
-          <p className="text-sm text-gray-500 mb-2">Date Min</p>
+          <p className="text-sm text-gray-500 mb-2 text-left">Date Min</p>
           <div className="grid grid-cols-3 gap-2">
             <div className="relative">
               <select
@@ -269,7 +270,7 @@ const OrderFilterPanel: React.FC<FilterPanelProps> = ({
                 onChange={(e) =>
                   setDateMin({ ...dateMin, day: e.target.value })
                 }
-                className="w-full appearance-none p-3 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-white"
+                className="w-full appearance-none p-2 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-white"
               >
                 {Array.from({ length: 31 }, (_, i) =>
                   String(i + 1).padStart(2, "0")
@@ -290,7 +291,7 @@ const OrderFilterPanel: React.FC<FilterPanelProps> = ({
                 onChange={(e) =>
                   setDateMin({ ...dateMin, month: e.target.value })
                 }
-                className="w-full appearance-none p-3 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-white"
+                className="w-full appearance-none p-2 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-white"
               >
                 {months.map((month) => (
                   <option key={`min-month-${month}`} value={month}>
@@ -309,7 +310,7 @@ const OrderFilterPanel: React.FC<FilterPanelProps> = ({
                 onChange={(e) =>
                   setDateMin({ ...dateMin, year: e.target.value })
                 }
-                className="w-full appearance-none p-3 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-white"
+                className="w-full appearance-none p-2 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-white"
               >
                 {Array.from({ length: 10 }, (_, i) => String(2020 + i)).map(
                   (year) => (
@@ -329,7 +330,7 @@ const OrderFilterPanel: React.FC<FilterPanelProps> = ({
 
         {/* Date Max */}
         <div>
-          <p className="text-sm text-gray-500 mb-2">Date Max</p>
+          <p className="text-sm text-gray-500 mb-2 text-left">Date Max</p>
           <div className="grid grid-cols-3 gap-2">
             <div className="relative">
               <select
@@ -337,7 +338,7 @@ const OrderFilterPanel: React.FC<FilterPanelProps> = ({
                 onChange={(e) =>
                   setDateMax({ ...dateMax, day: e.target.value })
                 }
-                className="w-full appearance-none p-3 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-white"
+                className="w-full appearance-none p-2 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-white"
               >
                 {Array.from({ length: 31 }, (_, i) =>
                   String(i + 1).padStart(2, "0")
@@ -358,7 +359,7 @@ const OrderFilterPanel: React.FC<FilterPanelProps> = ({
                 onChange={(e) =>
                   setDateMax({ ...dateMax, month: e.target.value })
                 }
-                className="w-full appearance-none p-3 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-white"
+                className="w-full appearance-none p-2 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-white"
               >
                 {months.map((month) => (
                   <option key={`max-month-${month}`} value={month}>
@@ -377,7 +378,7 @@ const OrderFilterPanel: React.FC<FilterPanelProps> = ({
                 onChange={(e) =>
                   setDateMax({ ...dateMax, year: e.target.value })
                 }
-                className="w-full appearance-none p-3 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-white"
+                className="w-full appearance-none p-2 border border-gray-200 rounded-md text-[#4040BF] focus:outline-none focus:ring-1 focus:ring-[#4040BF] bg-white"
               >
                 {Array.from({ length: 10 }, (_, i) => String(2020 + i)).map(
                   (year) => (

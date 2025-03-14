@@ -11,6 +11,7 @@ import { HiArrowSmallRight, HiArrowSmallLeft } from "react-icons/hi2";
 import { File, Order } from "../../../types";
 import { useCurrency } from "../../../contexts/Currency";
 import { formatDate } from "../../../utils/formatDate";
+import { handleDownloadToCSV } from "../../../utils/fileDownload";
 
 interface OrderItemProps {
   orderData: Order;
@@ -28,33 +29,6 @@ export default function OrderItem({ orderData }: OrderItemProps) {
   if (!fileData) {
     return null; // or some loading state
   }
-
-  const handleDownload = (filePath: string) => {
-    const fileUrl = `${import.meta.env.VITE_BACKEND_URL}${filePath.replace(
-      "uploads",
-      ""
-    )}`;
-    const fileName = filePath.split("/").pop(); // Extract file name from path
-
-    fetch(fileUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to download file");
-        }
-        return response.blob();
-      })
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = fileName || "download"; // Use extracted name or fallback
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      })
-      .catch((error) => console.error("Error downloading file:", error));
-  };
 
   return (
     <div className="min-w-[500px] bg-white border border-light-gray-3 rounded-lg flex flex-col text-xs">
@@ -156,7 +130,7 @@ export default function OrderItem({ orderData }: OrderItemProps) {
             <div className="flex items-center gap-2 p-4">
               {/* Download file from path (fileData.path) */}
               <button
-                onClick={() => handleDownload(fileData.path)}
+                onClick={() => handleDownloadToCSV(fileData.path)}
                 className="p-0.5 bg-white border border-light-gray-3 rounded-md"
               >
                 <PiDownloadSimpleLight className="text-lg" />

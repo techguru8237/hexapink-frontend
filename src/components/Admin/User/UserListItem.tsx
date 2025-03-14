@@ -77,7 +77,7 @@ export const UserListItem: React.FC<UserListItemProps> = ({
                 <IconButton>
                   <CiCircleInfo
                     onClick={showPreviewDialog}
-                    className="text-xl border rounded-md p-1 box-content"
+                    className="text-lg border rounded-md p-0.5 box-content cursor-pointer"
                   />
                 </IconButton>
               </Tooltip>

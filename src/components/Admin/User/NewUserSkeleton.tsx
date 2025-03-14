@@ -17,7 +17,7 @@ export default function NewUserSkeleton({
         <div className="w-[15%] p-1 xl:p-3 flex flex-wrap gap-2 items-center">
           <FaRegUserCircle className="text-2xl mr-2" />
           <span>user_id</span>
-          <CiCircleInfo className="text-xl border rounded-md p-1 box-content" />
+          <CiCircleInfo className="text-lg border rounded-md p-0.5 box-content cursor-pointer" />
         </div>
         <div className="w-[15%] p-1 xl:p-3 flex items-center border-l border-dashed border-light-gray-3">
           <span>Unreal User</span>
@@ -40,7 +40,7 @@ export default function NewUserSkeleton({
           11 Nov 2024
         </div>
         <div className="w-[10%] p-1 xl:p-3 flex items-center border-l border-dashed border-light-gray-3">
-          <PiPencilSimpleLight className="text-xl border rounded-md p-1 box-content" />
+          <PiPencilSimpleLight className="text-lg border rounded-md p-0.5 box-content cursor-pointer" />
         </div>
       </div>
 

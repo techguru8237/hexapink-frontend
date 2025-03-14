@@ -37,9 +37,9 @@ export const OrderListItem: React.FC<OrderListItemProps> = ({
           <FaRegUserCircle className="text-xl mr-2" />
           <span>{data.user.firstName + " " + data.user.lastName}</span>
         </div>
-        <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
+        <div className="w-full p-3 flex justify-between items-center gap-2 border-l border-dashed border-light-gray-3">
           <span>{data.files.length}</span>
-          <CiCircleInfo className="text-xl ml-auto border rounded-md p-1 box-content" />
+          <CiCircleInfo className="text-lg border rounded-md p-0.5 box-content cursor-pointer" />
         </div>
         <div className="w-full p-3 flex items-center gap-2 border-l border-dashed border-light-gray-3">
           <span>{data.volume}</span>

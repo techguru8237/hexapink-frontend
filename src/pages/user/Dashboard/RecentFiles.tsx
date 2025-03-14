@@ -40,6 +40,8 @@ export default function RecentFiles() {
     fetchOrders();
   }, [currentFilter]);
 
+  console.log("files", files);
+
   return (
     <div className="w-full flex flex-col gap-4 p-8 text-dark border-b-2 border-light-gray-1">
       <div className="w-full flex items-center">

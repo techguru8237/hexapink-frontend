@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material";
+import * as Sentry from "@sentry/react";
 
 import { UserProvider } from "./contexts/User.tsx";
 import { LoadingProvider } from "./contexts/Loading.tsx";
@@ -66,6 +67,16 @@ const theme = createTheme({
       },
     },
   },
+});
+
+
+Sentry.init({
+  dsn: "https://71cd25b489800b1cdb8fcb970d6ce595@o4508972035604480.ingest.de.sentry.io/4508972039733328",
+  integrations: [Sentry.browserTracingIntegration()],
+  // Tracing
+  tracesSampleRate: 1.0, //  Capture 100% of the transactions
+  // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
+  tracePropagationTargets: ["localhost", "https://hexapink.fr"],
 });
 
 // Ensure that the custom theme is applied correctly

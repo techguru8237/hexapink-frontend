@@ -169,6 +169,7 @@ export interface File {
   columns: Record<string, { value: any; stepName: string }>;
   status: string;
   path: string;
+  orderId: string;
   createdAt?: string;
 }
 
